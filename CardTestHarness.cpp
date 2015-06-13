@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <array>
+#include <list>
 #include "Card.h"
 #include "Command.h"
 #include "shuffle.h"
@@ -71,6 +72,17 @@ int main(int argc, char const *argv[])
 		currentPlayer->getDeck().push_back (myDeck[i]); 
 	}
 
+	//3. Gameplay — Start
+	Card sevenSpade = Card(SPADE, SEVEN);
+	int theChosenOne;
+	for (int i = 0; i < 52; i ++) {
+		if (*myDeck[i] == sevenSpade) {
+			theChosenOne = i/13;
+		}
+	}
+	cout << "A new round begins. It’s player " << theChosenOne << "’s turn to play" << endl;
+
+	//4. Gameplay — Human Player
 	
 
 
