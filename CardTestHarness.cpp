@@ -16,8 +16,6 @@
 
 using namespace std;
 
-bool printed = false;
-
 bool isLegalPlay (int itRank, int it2Rank, int itSuit, int it2Suit) {
 	if (itRank == 7 || 
 	(itRank -1 == it2Rank && itSuit == it2Suit) ||
@@ -27,84 +25,42 @@ bool isLegalPlay (int itRank, int it2Rank, int itSuit, int it2Suit) {
 	return false;
 }
 
-struct lex_compare {
-    bool operator() (const Card *lhs, const Card *rhs) const{
-		return (int)(lhs->getRank()) < (int)(rhs->getRank());
-    }
-};
-
-void printLegalPlays (std::list<Card*> currentPlayerDeck, std::set<Card*, lex_compare> setOfClubs, std::set<Card*, lex_compare> setOfDiamonds, std::set<Card*, lex_compare> setOfHearts, std::set<Card*, lex_compare> setOfSpades) {
+bool checkLegalPlaysInDeck (std::list<Card*> currentPlayerDeck, array<set<Card*, Players::lex_compare>, 4> arrayOfSets) {
 	for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
-		printed = false;
-		if (!setOfClubs.empty() && !printed) {
-			for (std::set<Card*, lex_compare>::iterator it2 = setOfClubs.begin(); it2 != setOfClubs.end(); it2++) {
-				if (isLegalPlay((int)((*it)->getRank()), (int)((*it2)->getRank()), (int)((*it)->getSuit()), (int)((*it2)->getSuit()))) {
-					cout << " " << (**it);
-					printed = true;
-				}
-			}
-		}
-		if (!setOfDiamonds.empty() && !printed) {
-			for (std::set<Card*, lex_compare>::iterator it2 = setOfDiamonds.begin(); it2 != setOfDiamonds.end(); it2++) {
-				if (isLegalPlay((int)(*it)->getRank(), (int)(*it2)->getRank(), (int)(*it)->getSuit(), (int)(*it2)->getSuit())) {
-					cout << " " << (**it);
-					printed = true;
-				}
-			}
-		}
-		if (!setOfHearts.empty() && !printed) {
-			for (std::set<Card*, lex_compare>::iterator it2 = setOfHearts.begin(); it2 != setOfHearts.end(); it2++) {
-				if (isLegalPlay((int)(*it)->getRank(), (int)(*it2)->getRank(), (int)(*it)->getSuit(), (int)(*it2)->getSuit())) {
-					cout << " " << (**it);
-					printed = true;
-				}
-			}
-		}
-		if (!setOfSpades.empty() && !printed) {
-			for (std::set<Card*, lex_compare>::iterator it2 = setOfSpades.begin(); it2 != setOfSpades.end(); it2++) {
-				if (isLegalPlay((int)(*it)->getRank(), (int)(*it2)->getRank(), (int)(*it)->getSuit(), (int)(*it2)->getSuit())) {
-					cout << " " << (**it);
-					printed = true;
+		for (int i = 0; i < 4; i ++) {
+			set<Card*, Players::lex_compare> setOfSuit = arrayOfSets[i];
+			if (!setOfSuit.empty()) {
+				for (std::set<Card*, Players::lex_compare>::iterator it2 = setOfSuit.begin(); it2 != setOfSuit.end(); it2++) {
+					if (isLegalPlay((int)((*it)->getRank()), (int)((*it2)->getRank()), (int)((*it)->getSuit()), (int)((*it2)->getSuit()))) {
+						return true;
+					}
 				}
 			}
 		}
 	}
+	return false;
 }
 
-bool isLegalPlayInCommand (Card theCard, std::set<Card*, lex_compare> &setOfClubs, std::set<Card*, lex_compare> &setOfDiamonds, std::set<Card*, lex_compare> &setOfHearts, std::set<Card*, lex_compare> &setOfSpades, bool &firstTurn) {
+bool isLegalPlayInCommand (Card theCard, array<set<Card*, Players::lex_compare>, 4> &arrayOfSets, bool &firstTurn) {
 	Card sevenSpade = Card(SPADE, SEVEN);
 	Card *newCard = new Card(theCard.getSuit(), theCard.getRank());
+	
 	if (firstTurn && theCard == sevenSpade) {
 		firstTurn = false;
+		arrayOfSets[3].insert(newCard); //insert sevenSpade into setOfSpade
+		return true;
 	} else {
 		return false;
 	}
-	if (!setOfClubs.empty()) { 
-		for (std::set<Card*, lex_compare>::iterator it2 = setOfClubs.begin(); it2 != setOfClubs.end(); it2++) {
-			if (isLegalPlay((int)theCard.getRank(), (int)(*it2)->getRank(), (int)theCard.getSuit(), (int)(*it2)->getSuit())) {
-				setOfClubs.insert(newCard);
-				return true;
-			}
-		}
-	}
-	if (!setOfDiamonds.empty()) {
-		for (std::set<Card*, lex_compare>::iterator it2 = setOfDiamonds.begin(); it2 != setOfDiamonds.end(); it2++) {
-			if (isLegalPlay((int)theCard.getRank(), (int)(*it2)->getRank(), (int)theCard.getSuit(), (int)(*it2)->getSuit())) {
-				return true;
-			}
-		}
-	}
-	if (!setOfHearts.empty()) {
-		for (std::set<Card*, lex_compare>::iterator it2 = setOfHearts.begin(); it2 != setOfHearts.end(); it2++) {
-			if (isLegalPlay((int)theCard.getRank(), (int)(*it2)->getRank(), (int)theCard.getSuit(), (int)(*it2)->getSuit())) {
-				return true;
-			}
-		}
-	}
-	if (!setOfSpades.empty()) {
-		for (std::set<Card*, lex_compare>::iterator it2 = setOfSpades.begin(); it2 != setOfSpades.end(); it2++) {
-			if (isLegalPlay((int)theCard.getRank(), (int)(*it2)->getRank(), (int)theCard.getSuit(), (int)(*it2)->getSuit())) {
-				return true;
+
+	for (int i = 0; i < 4; i++) {
+		set<Card*, Players::lex_compare> setOfSuit = arrayOfSets[i];
+		if (!setOfSuit.empty()) { 
+			for (std::set<Card*, Players::lex_compare>::iterator it2 = setOfSuit.begin(); it2 != setOfSuit.end(); it2++) {
+				if (isLegalPlay((int)theCard.getRank(), (int)(*it2)->getRank(), (int)theCard.getSuit(), (int)(*it2)->getSuit())) {
+					setOfSuit.insert(newCard); //insert into the sets
+					return true;
+				}
 			}
 		}
 	}
@@ -122,7 +78,6 @@ int main(int argc, char const *argv[])
 
 	//1. Invite Players
 	array<Players*, 4> allPlayers; //keep track of all 4 players
-
 	for (int i = 0; i < 4; i++){
 		cout << "Is player " << i << " a human(h) or a computer(c)?" << endl;
 		string playerChoice;
@@ -151,21 +106,11 @@ int main(int argc, char const *argv[])
 	}
 	shuffle(myDeck); //shuffle the cards
 	Players* currentPlayer; 
-	currentPlayer = allPlayers[0]; //cards for the first player
-	for (int i = 0; i < 13; i ++) {
-		currentPlayer->getDeck().push_back (myDeck[i]); 
-	}
-	currentPlayer = allPlayers[1]; //cards for second player
-	for (int i = 13; i < 26; i ++) {
-		currentPlayer->getDeck().push_back (myDeck[i]); 
-	}
-	currentPlayer = allPlayers[2]; //cards for third player
-	for (int i = 26; i < 39; i ++) {
-		currentPlayer->getDeck().push_back (myDeck[i]); 
-	}
-	currentPlayer = allPlayers[3]; //cards for fourth player
-	for (int i = 39; i < 52; i ++) {
-		currentPlayer->getDeck().push_back (myDeck[i]); 
+	for (int i = 0; i < 4; i ++) {
+		currentPlayer = allPlayers[i]; //cards for each player
+		for (int j = 0; j < 13; j ++) {
+			currentPlayer->getDeck().push_back (myDeck[i*13+j]); 
+		}
 	}
 
 	//3. Gameplay — Start
@@ -179,83 +124,63 @@ int main(int argc, char const *argv[])
 	cout << "A new round begins. It's player " << theChosenOne << "'s turn to play" << endl;
 
 	//4. Gameplay — Human Player
-	set<Card*, lex_compare> setOfClubs;
-	set<Card*, lex_compare> setOfDiamonds;
-	set<Card*, lex_compare> setOfHearts;
-	set<Card*, lex_compare> setOfSpades;
-
-	cout << "Card on the table:" << endl;
-	cout << "Clubs:";
-	if (!setOfClubs.empty()) {
-		for (std::set<Card*, lex_compare>::iterator it = setOfClubs.begin(); it != setOfClubs.end(); it++) {
-			cout << " " << ((*it)->getRankInString());
-		}
-		cout << endl;
-	} else {
-		cout << "" << endl;
-	}
-	cout << "Diamonds:";
-	if (!setOfDiamonds.empty()) {
-		for (std::set<Card*, lex_compare>::iterator it = setOfDiamonds.begin(); it != setOfDiamonds.end(); it++) {
-			cout << " " << ((*it)->getRankInString());
-		}
-		cout << endl;
-	} else {
-		cout << "" << endl;
-	}
-	cout << "Hearts:";
-	if (!setOfHearts.empty()) {
-		for (std::set<Card*, lex_compare>::iterator it = setOfHearts.begin(); it != setOfHearts.end(); it++) {
-			cout << " " << ((*it)->getRankInString());
-		}
-		cout << endl;
-	} else {
-		cout << "" << endl;
-	}
-	cout << "Spades:";
-	if (!setOfSpades.empty()) {
-		for (std::set<Card*, lex_compare>::iterator it = setOfSpades.begin(); it != setOfSpades.end(); it++) {
-			cout << " " << ((*it)->getRankInString());
-		}
-		cout << endl;
-	} else {
-		cout << "" << endl;
-	}
-	std::list<Card*> currentPlayerDeck = allPlayers[theChosenOne]->getDeck();
-	cout << "Your hand:";
-	if (!currentPlayerDeck.empty()) {
-		for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
-			cout << " " << (**it);
-		}
-		cout << endl;
-	} else {
-		cout << "" << endl;
-	}
-
-	cout << "Legal Plays:";
-	if (!currentPlayerDeck.empty()) {
-		printLegalPlays(currentPlayerDeck, setOfClubs, setOfDiamonds, setOfHearts, setOfSpades);
-		cout << endl;
-	} else {
-		cout << "" << endl;
-	}
+	set<Card*, Players::lex_compare> setOfClubs;
+	set<Card*, Players::lex_compare> setOfDiamonds;
+	set<Card*, Players::lex_compare> setOfHearts;
+	set<Card*, Players::lex_compare> setOfSpades;
+	array< set<Card*, Players::lex_compare>, 4> arrayOfSets;
+	arrayOfSets[0] = setOfClubs;
+	arrayOfSets[0] = setOfDiamonds;
+	arrayOfSets[0] = setOfHearts;
+	arrayOfSets[0] = setOfSpades;
 
 	// 5. Gameplay — Commands
 	Command command;
 	cin >> command;
-
+	std::list<Card*> currentPlayerDeck;
+	std::list<Card*> currentPlayerDiscards;
 	bool firstTurn = true;
+
 	while (!cin.eof()) {
-		if (command.type == PLAY) {
-			while (!isLegalPlayInCommand(command.card, setOfClubs, setOfDiamonds, setOfHearts, setOfSpades, firstTurn)){
+		currentPlayerDeck = allPlayers[theChosenOne]->getDeck();
+		currentPlayerDiscards = allPlayers[theChosenOne]->getDiscards();
+		allPlayers[theChosenOne]->PrintOutTable(currentPlayerDeck, arrayOfSets);
+
+		if (command.type == PLAY) { //a) play <card>
+			while (!isLegalPlayInCommand(command.card, arrayOfSets, firstTurn)){
 				cout << "This is not a legal play." << endl;
 				cin >> command;
 			}
+			// legal play, tuck this card into one of the sets
 			cout << "Player " << theChosenOne << " plays " << command.card << "." << endl;
+			// delete this card from the hand 
+			for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
+				if ((**it) == command.card) currentPlayerDeck.erase(it);
+			}
+			theChosenOne = (theChosenOne + 1) % 4;
 
-		} else if (command.type == DISCARD) {
+		} else if (command.type == DISCARD) { //b) discard <card>
+			while (checkLegalPlaysInDeck(currentPlayerDeck, arrayOfSets)){
+				cout << "You have a legal play. You may not discard." << endl;
+				cin >> command;
+			}
+			for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
+				if ((**it) == command.card) currentPlayerDeck.erase(it);
+			}
+			Card *newDiscard = new Card((command.card).getSuit(), (command.card).getRank());
+			currentPlayerDiscards.push_back(newDiscard); 
+			cout << "Player " << theChosenOne << " discards " << command.card << "." << endl;
+			theChosenOne = (theChosenOne + 1) % 4;
 
-		} else if (command.type == DECK) {
+		} else if (command.type == DECK) { //c) print out the deck
+			for (int i = 0; i < 52; i ++) {
+				cout << *myDeck[i]; 
+				if ((i%13)==0 && i!=0) {
+					cout << endl;
+				} else {
+					cout << " ";
+				}
+			}
 
 		} else if (command.type == QUIT) {
 
