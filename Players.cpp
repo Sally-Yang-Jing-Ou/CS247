@@ -12,6 +12,11 @@ Players::~Players() {
 	playersDiscards_.clear();
 }
 
+Players::Players( Players& copyPlayer ) {
+	playersDeck_ = copyPlayer.getDeck();
+	playersDiscards_ = copyPlayer.getDiscards();
+}
+
 std::list<Card*> &Players::getDeck() {
 	return playersDeck_;
 }

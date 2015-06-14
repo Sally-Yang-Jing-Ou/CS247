@@ -182,8 +182,7 @@ int main(int argc, char const *argv[])
 				}
 			}
 
-		} else if (command.type == QUIT) {
-			//clean up memory first
+		} else if (command.type == QUIT) { //quit: clean up memory first
 			for(int i=0; i<4; i++) {
 				delete allPlayers[i];
 			}    
@@ -192,11 +191,14 @@ int main(int argc, char const *argv[])
 			}
 			return 0;
 
-		} else if (command.type == RAGEQUIT) {
-
-		} else if (command.type == BAD_COMMAND){
+		} else if (command.type == RAGEQUIT) { //e) ragequit
+			PlayersComputer* computerPlayer = new PlayersComputer (*allPlayers[theChosenOne]);
+			allPlayers[theChosenOne] = computerPlayer;
+			cout << "Player " << theChosenOne << " ragequits. A computer will now take over." << endl;
 
 		}
+
+        cin >> command;
 	}
 	return 0;
 }

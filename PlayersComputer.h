@@ -13,6 +13,7 @@ class PlayersComputer : public Players { //inherits from Players
 public:
 	PlayersComputer();
 	~PlayersComputer();
+	PlayersComputer( Players& copyPlayer );
 	void PrintOutTable (std::list<Card*> currentPlayerDeck, std::array<std::set<Card*, Players::lex_compare>, 4> arrayOfSets);
 
 private:

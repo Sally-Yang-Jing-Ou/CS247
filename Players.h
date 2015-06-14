@@ -10,7 +10,8 @@
 class Players {
 public: 
 	Players();// constructor
-    ~Players();  // destructor
+    virtual ~Players();  // destructor
+    Players( Players& copyPlayer );  // copy constructor
     std::list<Card*> &getDeck(); //getter for player's deck
     std::list<Card*> &getDiscards(); //getter for the discards
     struct lex_compare {
