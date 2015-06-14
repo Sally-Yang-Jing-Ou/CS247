@@ -3,6 +3,7 @@
 
 #include <ostream>
 #include <istream>
+#include <string>
 
 enum Suit { CLUB, DIAMOND, HEART, SPADE, SUIT_COUNT };
 enum Rank { ACE, TWO, THREE, FOUR, FIVE, SIX, SEVEN,
@@ -15,6 +16,7 @@ public:
 	Card(Suit, Rank);
 	Suit getSuit() const;
 	Rank getRank() const;
+	std::string getRankInString () const;
 	
 private:
 	Suit suit_;

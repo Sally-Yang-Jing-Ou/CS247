@@ -6,6 +6,7 @@
 #include <ctype.h>
 #include <array>
 #include <list>
+#include <set>
 #include "Card.h"
 #include "Command.h"
 #include "shuffle.h"
@@ -14,6 +15,87 @@
 #include "PlayersComputer.h"
 
 using namespace std;
+
+bool printed = false;
+
+bool isLegalPlay (int itRank, int it2Rank, int itSuit, int it2Suit) {
+	if (itRank == 7 || 
+	(itRank -1 == it2Rank && itSuit == it2Suit) ||
+	(itRank +1 == it2Rank && itSuit == it2Suit)) {
+		return true;
+	}
+	return false;
+}
+
+void printLegalPlays (std::list<Card*> currentPlayerDeck, std::set<Card*> setOfClubs, std::set<Card*> setOfDiamonds, std::set<Card*> setOfHearts, std::set<Card*> setOfSpades) {
+	for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
+		printed = false;
+		if (!setOfClubs.empty() && !printed) {
+			for (std::set<Card*>::iterator it2 = setOfClubs.begin(); it2 != setOfClubs.end(); it2++) {
+				if (isLegalPlay((int)((*it)->getRank()), (int)((*it2)->getRank()), (int)((*it)->getSuit()), (int)((*it2)->getSuit()))) {
+					cout << " " << (**it);
+					printed = true;
+				}
+			}
+		}
+		if (!setOfDiamonds.empty() && !printed) {
+			for (std::set<Card*>::iterator it2 = setOfDiamonds.begin(); it2 != setOfDiamonds.end(); it2++) {
+				if (isLegalPlay((int)(*it)->getRank(), (int)(*it2)->getRank(), (int)(*it)->getSuit(), (int)(*it2)->getSuit())) {
+					cout << " " << (**it);
+					printed = true;
+				}
+			}
+		}
+		if (!setOfHearts.empty() && !printed) {
+			for (std::set<Card*>::iterator it2 = setOfHearts.begin(); it2 != setOfHearts.end(); it2++) {
+				if (isLegalPlay((int)(*it)->getRank(), (int)(*it2)->getRank(), (int)(*it)->getSuit(), (int)(*it2)->getSuit())) {
+					cout << " " << (**it);
+					printed = true;
+				}
+			}
+		}
+		if (!setOfSpades.empty() && !printed) {
+			for (std::set<Card*>::iterator it2 = setOfSpades.begin(); it2 != setOfSpades.end(); it2++) {
+				if (isLegalPlay((int)(*it)->getRank(), (int)(*it2)->getRank(), (int)(*it)->getSuit(), (int)(*it2)->getSuit())) {
+					cout << " " << (**it);
+					printed = true;
+				}
+			}
+		}
+	}
+}
+
+bool isLegalPlayInCommand (Card* theCard, std::set<Card*> setOfClubs, std::set<Card*> setOfDiamonds, std::set<Card*> setOfHearts, std::set<Card*> setOfSpades) {
+	if (!setOfClubs.empty()) {
+		for (std::set<Card*>::iterator it2 = setOfClubs.begin(); it2 != setOfClubs.end(); it2++) {
+			if (isLegalPlay((int)theCard->getRank(), (int)(*it2)->getRank(), (int)theCard->getSuit(), (int)(*it2)->getSuit())) {
+				return true;
+			}
+		}
+	}
+	if (!setOfDiamonds.empty()) {
+		for (std::set<Card*>::iterator it2 = setOfDiamonds.begin(); it2 != setOfDiamonds.end(); it2++) {
+			if (isLegalPlay((int)theCard->getRank(), (int)(*it2)->getRank(), (int)theCard->getSuit(), (int)(*it2)->getSuit())) {
+				return true;
+			}
+		}
+	}
+	if (!setOfHearts.empty()) {
+		for (std::set<Card*>::iterator it2 = setOfHearts.begin(); it2 != setOfHearts.end(); it2++) {
+			if (isLegalPlay((int)theCard->getRank(), (int)(*it2)->getRank(), (int)theCard->getSuit(), (int)(*it2)->getSuit())) {
+				return true;
+			}
+		}
+	}
+	if (!setOfSpades.empty()) {
+		for (std::set<Card*>::iterator it2 = setOfSpades.begin(); it2 != setOfSpades.end(); it2++) {
+			if (isLegalPlay((int)theCard->getRank(), (int)(*it2)->getRank(), (int)theCard->getSuit(), (int)(*it2)->getSuit())) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
 
 int main(int argc, char const *argv[])
 {
@@ -80,16 +162,86 @@ int main(int argc, char const *argv[])
 			theChosenOne = i/13;
 		}
 	}
-	cout << "A new round begins. It’s player " << theChosenOne << "’s turn to play" << endl;
+	cout << "A new round begins. It's player " << theChosenOne << "'s turn to play" << endl;
 
 	//4. Gameplay — Human Player
-	
+	std::set<Card*> setOfClubs;
+	std::set<Card*> setOfDiamonds;
+	std::set<Card*> setOfHearts;
+	std::set<Card*> setOfSpades;
 
+	cout << "Card on the table:" << endl;
+	cout << "Clubs:";
+	if (!setOfClubs.empty()) {
+		for (std::set<Card*>::iterator it = setOfClubs.begin(); it != setOfClubs.end(); it++) {
+			cout << " " << ((*it)->getRankInString());
+		}
+		cout << endl;
+	} else {
+		cout << "" << endl;
+	}
+	cout << "Diamonds:";
+	if (!setOfDiamonds.empty()) {
+		for (std::set<Card*>::iterator it = setOfDiamonds.begin(); it != setOfDiamonds.end(); it++) {
+			cout << " " << ((*it)->getRankInString());
+		}
+		cout << endl;
+	} else {
+		cout << "" << endl;
+	}
+	cout << "Hearts:";
+	if (!setOfHearts.empty()) {
+		for (std::set<Card*>::iterator it = setOfHearts.begin(); it != setOfHearts.end(); it++) {
+			cout << " " << ((*it)->getRankInString());
+		}
+		cout << endl;
+	} else {
+		cout << "" << endl;
+	}
+	cout << "Spades:";
+	if (!setOfSpades.empty()) {
+		for (std::set<Card*>::iterator it = setOfSpades.begin(); it != setOfSpades.end(); it++) {
+			cout << " " << ((*it)->getRankInString());
+		}
+		cout << endl;
+	} else {
+		cout << "" << endl;
+	}
+	std::list<Card*> currentPlayerDeck = allPlayers[theChosenOne]->getDeck();
+	cout << "Your hand:";
+	if (!currentPlayerDeck.empty()) {
+		for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
+			cout << " " << (**it);
+		}
+		cout << endl;
+	} else {
+		cout << "" << endl;
+	}
 
-	
+	cout << "Legal Plays:";
+	if (!currentPlayerDeck.empty()) {
+		printLegalPlays(currentPlayerDeck, setOfClubs, setOfDiamonds, setOfHearts, setOfSpades);
+		cout << endl;
+	} else {
+		cout << "" << endl;
+	}
 
-
-
+	// 5. Gameplay — Commands
+	Command* command;
+	cin >> command;
 	
 	return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
