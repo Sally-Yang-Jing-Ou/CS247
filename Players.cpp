@@ -7,7 +7,10 @@ using namespace std;
 
 Players::Players() {}
 
-Players::~Players() {}
+Players::~Players() {
+	playersDeck_.clear();
+	playersDiscards_.clear();
+}
 
 std::list<Card*> &Players::getDeck() {
 	return playersDeck_;

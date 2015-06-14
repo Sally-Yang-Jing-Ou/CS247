@@ -183,6 +183,14 @@ int main(int argc, char const *argv[])
 			}
 
 		} else if (command.type == QUIT) {
+			//clean up memory first
+			for(int i=0; i<4; i++) {
+				delete allPlayers[i];
+			}    
+			for (int i=0; i<52; i++) {
+				delete myDeck[i];
+			}
+			return 0;
 
 		} else if (command.type == RAGEQUIT) {
 
