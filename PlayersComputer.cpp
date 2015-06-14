@@ -10,3 +10,7 @@ PlayersComputer::PlayersComputer() {}
 
 
 PlayersComputer::~PlayersComputer() {}
+
+void PlayersComputer::PrintOutTable (std::list<Card*> currentPlayerDeck, std::array<std::set<Card*, Players::lex_compare>, 4> arrayOfSets) {
+
+}

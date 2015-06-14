@@ -12,3 +12,7 @@ Players::~Players() {}
 std::list<Card*> &Players::getDeck() {
 	return playersDeck_;
 }
+
+std::list<Card*> &Players::getDiscards() {
+	return playersDiscards_;
+}
