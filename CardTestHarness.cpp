@@ -16,57 +16,6 @@
 
 using namespace std;
 
-bool isLegalPlay (int itRank, int it2Rank, int itSuit, int it2Suit) {
-	if (itRank == 7 || 
-	(itRank -1 == it2Rank && itSuit == it2Suit) ||
-	(itRank +1 == it2Rank && itSuit == it2Suit)) {
-		return true;
-	}
-	return false;
-}
-
-bool checkLegalPlaysInDeck (std::list<Card*> currentPlayerDeck, array<set<Card*, Players::lex_compare>, 4> arrayOfSets) {
-	for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
-		for (int i = 0; i < 4; i ++) {
-			set<Card*, Players::lex_compare> setOfSuit = arrayOfSets[i];
-			if (!setOfSuit.empty()) {
-				for (std::set<Card*, Players::lex_compare>::iterator it2 = setOfSuit.begin(); it2 != setOfSuit.end(); it2++) {
-					if (isLegalPlay((int)((*it)->getRank()), (int)((*it2)->getRank()), (int)((*it)->getSuit()), (int)((*it2)->getSuit()))) {
-						return true;
-					}
-				}
-			}
-		}
-	}
-	return false;
-}
-
-bool isLegalPlayInCommand (Card theCard, array<set<Card*, Players::lex_compare>, 4> &arrayOfSets, bool &firstTurn) {
-	Card sevenSpade = Card(SPADE, SEVEN);
-	Card *newCard = new Card(theCard.getSuit(), theCard.getRank());
-	
-	if (firstTurn && theCard == sevenSpade) {
-		firstTurn = false;
-		arrayOfSets[3].insert(newCard); //insert sevenSpade into setOfSpade
-		return true;
-	} else {
-		return false;
-	}
-
-	for (int i = 0; i < 4; i++) {
-		set<Card*, Players::lex_compare> setOfSuit = arrayOfSets[i];
-		if (!setOfSuit.empty()) { 
-			for (std::set<Card*, Players::lex_compare>::iterator it2 = setOfSuit.begin(); it2 != setOfSuit.end(); it2++) {
-				if (isLegalPlay((int)theCard.getRank(), (int)(*it2)->getRank(), (int)theCard.getSuit(), (int)(*it2)->getSuit())) {
-					setOfSuit.insert(newCard); //insert into the sets
-					return true;
-				}
-			}
-		}
-	}
-	return false;
-}
-
 int main(int argc, char const *argv[])
 {
 
@@ -130,13 +79,11 @@ int main(int argc, char const *argv[])
 	set<Card*, Players::lex_compare> setOfSpades;
 	array< set<Card*, Players::lex_compare>, 4> arrayOfSets;
 	arrayOfSets[0] = setOfClubs;
-	arrayOfSets[0] = setOfDiamonds;
-	arrayOfSets[0] = setOfHearts;
-	arrayOfSets[0] = setOfSpades;
+	arrayOfSets[1] = setOfDiamonds;
+	arrayOfSets[2] = setOfHearts;
+	arrayOfSets[3] = setOfSpades;
 
-	// 5. Gameplay — Commands
-	Command command;
-	cin >> command;
+	// 5. Gameplay
 	std::list<Card*> currentPlayerDeck;
 	std::list<Card*> currentPlayerDiscards;
 	bool firstTurn = true;
@@ -144,62 +91,9 @@ int main(int argc, char const *argv[])
 	while (!cin.eof()) {
 		currentPlayerDeck = allPlayers[theChosenOne]->getDeck();
 		currentPlayerDiscards = allPlayers[theChosenOne]->getDiscards();
-		allPlayers[theChosenOne]->PrintOutTable(currentPlayerDeck, arrayOfSets);
-
-		if (command.type == PLAY) { //a) play <card>
-			while (!isLegalPlayInCommand(command.card, arrayOfSets, firstTurn)){
-				cout << "This is not a legal play." << endl;
-				cin >> command;
-			}
-			// legal play, tuck this card into one of the sets
-			cout << "Player " << theChosenOne << " plays " << command.card << "." << endl;
-			// delete this card from the hand 
-			for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
-				if ((**it) == command.card) currentPlayerDeck.erase(it);
-			}
-			theChosenOne = (theChosenOne + 1) % 4;
-
-		} else if (command.type == DISCARD) { //b) discard <card>
-			while (checkLegalPlaysInDeck(currentPlayerDeck, arrayOfSets)){
-				cout << "You have a legal play. You may not discard." << endl;
-				cin >> command;
-			}
-			for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
-				if ((**it) == command.card) currentPlayerDeck.erase(it);
-			}
-			Card *newDiscard = new Card((command.card).getSuit(), (command.card).getRank());
-			currentPlayerDiscards.push_back(newDiscard); 
-			cout << "Player " << theChosenOne << " discards " << command.card << "." << endl;
-			theChosenOne = (theChosenOne + 1) % 4;
-
-		} else if (command.type == DECK) { //c) print out the deck
-			for (int i = 0; i < 52; i ++) {
-				cout << *myDeck[i]; 
-				if ((i%13)==0 && i!=0) {
-					cout << endl;
-				} else {
-					cout << " ";
-				}
-			}
-
-		} else if (command.type == QUIT) { //quit: clean up memory first
-			for(int i=0; i<4; i++) {
-				delete allPlayers[i];
-			}    
-			for (int i=0; i<52; i++) {
-				delete myDeck[i];
-			}
-			return 0;
-
-		} else if (command.type == RAGEQUIT) { //e) ragequit
-			PlayersComputer* computerPlayer = new PlayersComputer (*allPlayers[theChosenOne]);
-			allPlayers[theChosenOne] = computerPlayer;
-			cout << "Player " << theChosenOne << " ragequits. A computer will now take over." << endl;
-
-		}
-
-        cin >> command;
+		allPlayers[theChosenOne]->DoAction(firstTurn, currentPlayerDeck, arrayOfSets, currentPlayerDiscards, theChosenOne, allPlayers, myDeck);	
 	}
+
 	return 0;
 }
 
