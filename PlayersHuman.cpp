@@ -1,6 +1,7 @@
 #include "PlayersHuman.h"
 #include "PlayersComputer.h"
 #include <cassert>
+#include <cstdlib>
 
 using namespace std;
 
@@ -171,7 +172,7 @@ void PlayersHuman::DoAction (bool &firstTurn, std::list<Card*> &currentPlayerDec
 		for (int i=0; i<52; i++) {
 			delete myDeck[i];
 		}
-		return;
+		exit(0);
 
 	} else if (command.type == RAGEQUIT) { //e) ragequit
 		PlayersComputer* computerPlayer = new PlayersComputer (*allPlayers[theChosenOne]);
