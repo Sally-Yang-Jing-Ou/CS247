@@ -15,6 +15,11 @@ public:
     Players( Players& copyPlayer );  // copy constructor
     std::list<Card*> &getDeck(); //getter for player's deck
     std::list<Card*> &getDiscards(); //getter for the discards
+    int &getOldScore();
+    void setNewScore();
+    bool isDeckEmpty();
+    int scoreGained();
+    void roundEndsMessage(int i);
     struct lex_compare {
     	bool operator() (const Card *lhs, const Card *rhs) const{
 			return (int)(lhs->getRank()) < (int)(rhs->getRank());
@@ -26,6 +31,8 @@ public:
 private: 
 	std::list<Card*> playersDeck_; //each player's deck of cards
 	std::list<Card*> playersDiscards_; //each player's deck of discards
+	int oldScore_;
+
 };
 
 #endif
