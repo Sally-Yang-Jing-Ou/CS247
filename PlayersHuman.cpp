@@ -2,6 +2,7 @@
 #include "PlayersComputer.h"
 #include <cassert>
 #include <cstdlib>
+#include "table.h"
 
 using namespace std;
 
@@ -81,22 +82,8 @@ bool checkLegalPlaysInDeck (std::list<Card*> currentPlayerDeck, array<set<Card*,
 }
 
 void PrintOutTable (std::list<Card*> currentPlayerDeck, array<set<Card*, Players::lex_compare>, 4> arrayOfSets) {
-	cout << "Card on the table:" << endl;
-	cout << "Clubs:";
-	for (int i = 0; i < 4; i ++) {
-		set<Card*, Players::lex_compare> setOfSuit = arrayOfSets[i];
-		if (i==1) cout << "Diamonds:";
-		else if (i==2) cout << "Hearts:";
-		else if (i==3) cout << "Spades:";
-		if (!setOfSuit.empty()) {
-			for (std::set<Card*, Players::lex_compare>::iterator it = setOfSuit.begin(); it != setOfSuit.end(); it++) {
-				cout << " " << ((*it)->getRankInString());
-			}
-			cout << endl;
-		} else {
-			cout << "" << endl;
-		}
-	}
+	Table table;
+	table.printTable();
 	cout << "Your hand:";
 	if (!currentPlayerDeck.empty()) {
 		for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
