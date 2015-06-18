@@ -61,7 +61,7 @@ bool lessThan(const Card *lhs, const Card *rhs)
 }
 
 void Table::printTable() {
-	cout << "Card on the table:" << endl;
+	cout << "Cards on the table:" << endl;
 	cout << "Clubs:";
 	array< vector<Card*>, 4> arrayOfSets = returnArrayOfSets();
 	for (int i = 0; i < 4; i ++) {

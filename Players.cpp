@@ -73,8 +73,3 @@ void Players::eraseCardFromHand (Card *card) {
 void Players::addCardToDiscards (Card *card) {
 	playersDiscards_.push_back(card);
 }
-
-
-
-
-

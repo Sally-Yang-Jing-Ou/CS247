@@ -94,13 +94,14 @@ void printOutTable (Table &table, std::list<Card*> currentPlayerDeck, bool first
 		cout << "" << endl;
 	}
 
-	cout << "Legal Plays:";
+	cout << "Legal plays:";
 	if (!currentPlayerDeck.empty()) {
 		printLegalPlays(currentPlayerDeck, table, firstTurn);
 		cout << endl;
 	} else {
 		cout << "" << endl;
 	}
+	cout << ">";
 }
 
 void PlayersHuman::DoActionPlay ( Command &command, Table &table, bool &firstTurn, std::list<Card*> &currentPlayerDeck, int &theChosenOne ){
@@ -157,7 +158,7 @@ void PlayersHuman::DoAction (Table &table, bool &firstTurn, std::list<Card*> &cu
 	} else if (command.type == DECK) { //c) print out the deck
 		for (int i = 0; i < 52; i ++) {
 			cout << *myDeck[i]; 
-			if ((i%13)==0 && i!=0) {
+			if (((i+1)%13)==0) {
 				cout << endl;
 			} else {
 				cout << " ";
@@ -176,7 +177,7 @@ void PlayersHuman::DoAction (Table &table, bool &firstTurn, std::list<Card*> &cu
 	} else if (command.type == RAGEQUIT) { //e) ragequit
 		PlayersComputer* computerPlayer = new PlayersComputer (*allPlayers[theChosenOne]);
 		allPlayers[theChosenOne] = computerPlayer;
-		cout << "Player " << theChosenOne << " ragequits. A computer will now take over." << endl;
+		cout << "Player " << theChosenOne + 1 << " ragequits. A computer will now take over." << endl;
 	}
 
 }
