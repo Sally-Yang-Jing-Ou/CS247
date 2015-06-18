@@ -23,7 +23,7 @@ istream &operator>>(istream &in, Command &c){
 		c.type = RAGEQUIT;
 	}
 	
-	assert(!in.fail() && c.type != BAD_COMMAND);
+	assert(!in.fail() && c.type != BAD_COMMAND && (int)c.card.getSuit() != -1);
 	
 	return in;
 }

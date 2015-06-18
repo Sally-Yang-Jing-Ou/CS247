@@ -4,13 +4,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include <array>
 #include <list>
 #include <set>
 #include <vector>
 #include "Card.h"
 #include "Command.h"
-#include "shuffle.h"
 #include "Players.h"
 #include "PlayersHuman.h"
 #include "PlayersComputer.h"
