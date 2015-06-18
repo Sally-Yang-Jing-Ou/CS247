@@ -4,9 +4,10 @@
 #include <istream>
 #include <list>
 #include <array>
-#include <set>
+#include <vector>
 #include "Card.h"
 #include "Command.h"
+#include "Table.h"
 
 class Players {
 public: 
@@ -20,12 +21,8 @@ public:
     bool isDeckEmpty();
     int scoreGained();
     void roundEndsMessage(int i);
-    struct lex_compare {
-    	bool operator() (const Card *lhs, const Card *rhs) const{
-			return (int)(lhs->getRank()) < (int)(rhs->getRank());
-    	}
-	};
-	virtual void DoAction (bool &firstTurn, std::list<Card*> &currentPlayerDeck, std::array<std::set<Card*, lex_compare>, 4> &arrayOfSets, 
+    
+	virtual void DoAction (Table &table, bool &firstTurn, std::list<Card*> &currentPlayerDeck,
 					std::list<Card*> &currentPlayerDiscards, int &theChosenOne, std::array<Players*, 4> &allPlayers, std::array<Card*, 52> myDeck) = 0; 
 
 private: 

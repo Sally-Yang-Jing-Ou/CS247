@@ -1,6 +1,5 @@
 #include <iostream>
 #include <list>
-#include "Card.h"
 #include "Players.h"
 
 using namespace std;
@@ -63,16 +62,4 @@ void Players::roundEndsMessage(int i) {
 	setNewScore();
  	cout << getOldScore() << endl;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 

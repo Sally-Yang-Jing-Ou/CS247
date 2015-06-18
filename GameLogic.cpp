@@ -22,11 +22,12 @@ int &GameLogic::theChosenOne() {
 }
 
 void GameLogic::invitePlayers(char playerChoice, int i){
+	Players* newPlayer;
 	if (playerChoice == 'h') { //human player
-		PlayersHuman* newPlayer = new PlayersHuman();
+		newPlayer = new PlayersHuman();
 		allPlayers_[i] = newPlayer; //put it in the array
 	} else if (playerChoice == 'c') { //computer player
-		PlayersComputer* newPlayer = new PlayersComputer();
+		newPlayer = new PlayersComputer();
 		allPlayers_[i] = newPlayer;
 	} else {
 		cerr << "invalid command" << endl;
@@ -61,8 +62,10 @@ void GameLogic::beginGame() {
 	while (!(allPlayers_[theChosenOne_]->isDeckEmpty())) { //continue to play game if no players have run out the cards
 		currentPlayerDeck = allPlayers_[theChosenOne_]->getDeck();
 		currentPlayerDiscards = allPlayers_[theChosenOne_]->getDiscards();
-		allPlayers_[theChosenOne_]->DoAction(firstTurn, currentPlayerDeck, table_.returnArrayOfSets(), currentPlayerDiscards, theChosenOne_, allPlayers_, deck_.getMyDeck());	
+		cout << "GameLogic::beginGame->DoAction" << endl;
+		allPlayers_[theChosenOne_]->DoAction(table(), firstTurn, currentPlayerDeck, currentPlayerDiscards, theChosenOne_, allPlayers_, deck_.getMyDeck());
 	}
+			cout << "GameLogic::beginGame->DoAction?!?!" << endl;
 
 	for (int i = 0; i < PLAYER_COUNT; i ++) {
 		allPlayers_[i]->roundEndsMessage(i);
@@ -103,6 +106,7 @@ vector<int> GameLogic::winners() const {
 
 	return winningPlayerNumbers;
 }
+
 
 
 

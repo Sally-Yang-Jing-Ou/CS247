@@ -1,46 +1,72 @@
 #include "Table.h"
 #include <cassert>
+#include <algorithm>
 
 using namespace std;	
 
 Table::Table() {};
 Table::~Table() {};
 
-array< set<Card*, Players::lex_compare>, 4> &Table::returnArrayOfSets() {
-	arrayOfSets_[0] = returnSetOfClubs();
-	arrayOfSets_[1] = returnSetOfDiamonds();
-	arrayOfSets_[2] = returnSetOfHearts();
-	arrayOfSets_[3] = returnSetOfSpades();
+array< vector<Card*>, 4> &Table::returnArrayOfSets() {
+	arrayOfSets_[0] = returnVectorOfClubs();
+	arrayOfSets_[1] = returnVectorOfDiamonds();
+	arrayOfSets_[2] = returnVectorOfHearts();
+	arrayOfSets_[3] = returnVectorOfSpades();
 	return arrayOfSets_;
 }
 
-set<Card*, Players::lex_compare> &Table::returnSetOfClubs() {
-	return setOfClubs_;
+vector<Card*> &Table::returnVectorOfClubs() {
+	return vectorOfClubs_;
 }
 
-set<Card*, Players::lex_compare> &Table::returnSetOfDiamonds() {
-	return setOfDiamonds_;
+vector<Card*> &Table::returnVectorOfDiamonds() {
+	return vectorOfDiamonds_;
 }
 
-set<Card*, Players::lex_compare> &Table::returnSetOfHearts() {
-	return setOfHearts_;
+vector<Card*> &Table::returnVectorOfHearts() {
+	return vectorOfHearts_;
 }
 
-set<Card*, Players::lex_compare> &Table::returnSetOfSpades() {
-	return setOfSpades_;
+vector<Card*> &Table::returnVectorOfSpades() {
+	return vectorOfSpades_;
+}
+
+void Table::placeCardsOnTable (vector<Card*> &vectorOfCard, Card *card) {
+    vectorOfCard.push_back(card);
+}
+
+void Table::placeCard(Card *card) {
+	
+	switch(card->getSuit()) {
+		case CLUB:
+			placeCardsOnTable(vectorOfClubs_, card);
+			break;
+		case DIAMOND:
+			placeCardsOnTable(vectorOfDiamonds_, card);
+			break;
+		case HEART:
+			placeCardsOnTable(vectorOfHearts_, card);
+			break;
+		case SPADE:
+			placeCardsOnTable(vectorOfSpades_, card);
+			break;
+		default:
+			break;
+	}
 }
 
 void Table::printTable() {
 	cout << "Card on the table:" << endl;
 	cout << "Clubs:";
-	array< set<Card*, Players::lex_compare>, 4> arrayOfSets = returnArrayOfSets();
+	array< vector<Card*>, 4> arrayOfSets = returnArrayOfSets();
 	for (int i = 0; i < 4; i ++) {
-		set<Card*, Players::lex_compare> setOfSuit = arrayOfSets[i];
+		vector<Card*> setOfSuit = arrayOfSets[i];
 		if (i==1) cout << "Diamonds:";
 		else if (i==2) cout << "Hearts:";
 		else if (i==3) cout << "Spades:";
 		if (!setOfSuit.empty()) {
-			for (std::set<Card*, Players::lex_compare>::iterator it = setOfSuit.begin(); it != setOfSuit.end(); it++) {
+			sort(setOfSuit.begin(), setOfSuit.end());
+			for (std::vector<Card*>::iterator it = setOfSuit.begin(); it != setOfSuit.end(); it++) {
 				cout << " " << ((*it)->getRankInString());
 			}
 			cout << endl;
