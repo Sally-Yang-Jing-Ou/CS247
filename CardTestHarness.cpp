@@ -18,14 +18,14 @@
 
 using namespace std;
 
+int seed = 0;
+
 int main(int argc, char const *argv[])
 {
 	GameLogic* newGame = new GameLogic();
 
 	if (argc > 1) {
-		if (isdigit(atoi(argv[1]))) {
-			seed = atoi(argv[1]); //0. Command Line Parameter
-		}
+		seed = atoi(argv[1]); //0. Command Line Parameter
 	}
 	
 	for (int i = 0; i < 4; i++){

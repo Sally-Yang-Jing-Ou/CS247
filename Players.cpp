@@ -48,7 +48,7 @@ int Players::scoreGained() {
 }
 
 void Players::roundEndsMessage(int i) {
-	cout << "Player " << i << "'s discards:";
+	cout << "Player " << i + 1<< "'s discards:";
 	if (!(getDiscards().empty())){
 		for (std::list<Card*>::iterator it = getDiscards().begin(); it != getDiscards().end(); it++) {
 			cout << " " << (**it); //list of discards
@@ -57,7 +57,7 @@ void Players::roundEndsMessage(int i) {
 		cout << "";
 	}
 	cout << endl;
-	cout << "Player " << i << "'s score: ";
+	cout << "Player " << i + 1<< "'s score: ";
 	cout << getOldScore() << " + " << scoreGained() << " = ";
 	setNewScore();
  	cout << getOldScore() << endl;
