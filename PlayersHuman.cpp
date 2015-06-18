@@ -30,9 +30,9 @@ bool isLegalPlayInCommand (Card theCard, Table &table, bool &firstTurn) {
 	}
 
 	for (int i = 0; i < 4; i++) {
-		vector<Card*> setOfSuit = table.returnArrayOfSets()[i];
-		if (!setOfSuit.empty()) { 
-			for (std::vector<Card*>::iterator it2 = setOfSuit.begin(); it2 != setOfSuit.end(); it2++) {
+		vector<Card*>* setOfSuit = table.returnArrayOfSets()->at(i);
+		if (!setOfSuit->empty()) {
+			for (std::vector<Card*>::iterator it2 = setOfSuit->begin(); it2 != setOfSuit->end(); it2++) {
 				if (isLegalPlay((int)theCard.getRank(), (int)(*it2)->getRank(), (int)theCard.getSuit(), (int)(*it2)->getSuit())) {
 					table.placeCard(newCard); //insert into the sets, legal play, tuck this card into one of the sets
 					return true;
@@ -51,10 +51,10 @@ void printLegalPlays (std::list<Card*> currentPlayerDeck, Table &table, bool fir
 		} 
 		printed = false;
 		for (int i = 0; i < 4; i ++) {
-			vector<Card*> setOfSuit = table.returnArrayOfSets()[i];
-			if (!setOfSuit.empty() && !printed) {
+			vector<Card*>* setOfSuit = table.returnArrayOfSets()->at(i);
+			if (!setOfSuit->empty() && !printed) {
 
-				for (std::vector<Card*>::iterator it2 = setOfSuit.begin(); it2 != setOfSuit.end(); it2++) {
+				for (std::vector<Card*>::iterator it2 = setOfSuit->begin(); it2 != setOfSuit->end(); it2++) {
 					if (isLegalPlay((int)((*it)->getRank()), (int)((*it2)->getRank()), (int)((*it)->getSuit()), (int)((*it2)->getSuit()))) {
 						cout << " " << (**it);
 						printed = true;
@@ -69,9 +69,9 @@ void printLegalPlays (std::list<Card*> currentPlayerDeck, Table &table, bool fir
 bool checkLegalPlaysInDeck (std::list<Card*> currentPlayerDeck, Table &table) {
 	for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
 		for (int i = 0; i < 4; i ++) {
-			vector<Card*> setOfSuit = table.returnArrayOfSets()[i];
-			if (!setOfSuit.empty()) {
-				for (std::vector<Card*>::iterator it2 = setOfSuit.begin(); it2 != setOfSuit.end(); it2++) {
+			vector<Card*>* setOfSuit = table.returnArrayOfSets()->at(i);
+			if (!setOfSuit->empty()) {
+				for (std::vector<Card*>::iterator it2 = setOfSuit->begin(); it2 != setOfSuit->end(); it2++) {
 					if (isLegalPlay((int)((*it)->getRank()), (int)((*it2)->getRank()), (int)((*it)->getSuit()), (int)((*it2)->getSuit()))) {
 						return true;
 					}
@@ -82,11 +82,11 @@ bool checkLegalPlaysInDeck (std::list<Card*> currentPlayerDeck, Table &table) {
 	return false;
 }
 
-void printOutTable (Table &table, std::list<Card*> currentPlayerDeck, bool firstTurn) {
+void PlayersHuman::printOutTable (Table &table, bool firstTurn) {
 	table.printTable();
 	cout << "Your hand:";
-	if (!currentPlayerDeck.empty()) {
-		for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
+	if (!this->getDeck().empty()) {
+		for (std::list<Card*>::iterator it = this->getDeck().begin(); it != this->getDeck().end(); it++) {
 			cout << " " << (**it);
 		}
 		cout << endl;
@@ -95,23 +95,20 @@ void printOutTable (Table &table, std::list<Card*> currentPlayerDeck, bool first
 	}
 
 	cout << "Legal plays:";
-	if (!currentPlayerDeck.empty()) {
-		printLegalPlays(currentPlayerDeck, table, firstTurn);
+	if (!this->getDeck().empty()) {
+		printLegalPlays(this->getDeck(), table, firstTurn);
 		cout << endl;
 	} else {
 		cout << "" << endl;
 	}
-	cout << ">";
 }
 
-void PlayersHuman::DoActionPlay ( Command &command, Table &table, bool &firstTurn, std::list<Card*> &currentPlayerDeck, int &theChosenOne ){
-	while (!isLegalPlayInCommand(command.card, table, firstTurn)){
+void PlayersHuman::doActionPlay ( Command &command, Table &table, bool &firstTurn, int theChosenOne ){
+	if (!isLegalPlayInCommand(command.card, table, firstTurn)){
 		cout << "This is not a legal play." << endl;
-		cout << ">";
-		cin >> command;
 	}
 
-	for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
+	for (std::list<Card*>::iterator it = this->getDeck().begin(); it != this->getDeck().end(); it++) {
         if ((**it) == command.card){
             eraseCardFromHand(*it); // delete this card from the hand
             break;
@@ -119,16 +116,15 @@ void PlayersHuman::DoActionPlay ( Command &command, Table &table, bool &firstTur
 	}
 
 	cout << "Player " << theChosenOne + 1 << " plays " << command.card << "." << endl;
-	theChosenOne = (theChosenOne + 1) % 4;
 }
 
 
-void PlayersHuman::DoActionDiscard (std::list<Card*> &currentPlayerDeck, Table &table, std::list<Card*> &currentPlayerDiscards, int &theChosenOne, Command &command){
-	while (checkLegalPlaysInDeck(currentPlayerDeck, table)){
+void PlayersHuman::doActionDiscard (Table &table, int theChosenOne, Command &command){
+	while (checkLegalPlaysInDeck(this->getDeck(), table)){
 		cout << "You have a legal play. You may not discard." << endl;
 		cin >> command;
 	}
-	for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
+	for (std::list<Card*>::iterator it = this->getDeck().begin(); it != this->getDeck().end(); it++) {
         if ((**it) == command.card) {
             eraseCardFromHand(*it);
             break;
@@ -136,50 +132,55 @@ void PlayersHuman::DoActionDiscard (std::list<Card*> &currentPlayerDeck, Table &
 	}
 
 	Card *newDiscard = new Card((command.card).getSuit(), (command.card).getRank());
-	currentPlayerDiscards.push_back(newDiscard); 
+	this->getDiscards().push_back(newDiscard);
 
 	cout << "Player " << theChosenOne + 1 << " discards " << command.card << "." << endl;
-	theChosenOne = (theChosenOne + 1) % 4;	
 }
 
-void PlayersHuman::DoAction (Table &table, bool &firstTurn, std::list<Card*> &currentPlayerDeck,
-								std::list<Card*> &currentPlayerDiscards, int &theChosenOne, array<Players*, 4> &allPlayers, array<Card*, 52> myDeck) {
+void PlayersHuman::doAction (Table &table, bool &firstTurn, int theChosenOne, vector<Players*> &allPlayers, vector<Card*> &myDeck) {
 
-	printOutTable(table, currentPlayerDeck, firstTurn);
-
-	Command command;
-	cin >> command;
-
-	if (command.type == PLAY) { //a) play <card>
-		DoActionPlay(command, table, firstTurn, currentPlayerDeck, theChosenOne);
-
-	} else if (command.type == DISCARD) { //b) discard <card>
-		DoActionDiscard(currentPlayerDeck, table, currentPlayerDiscards, theChosenOne, command);
-
-	} else if (command.type == DECK) { //c) print out the deck
-		for (int i = 0; i < 52; i ++) {
-			cout << *myDeck[i]; 
-			if (((i+1)%13)==0) {
-				cout << endl;
-			} else {
-				cout << " ";
+    
+    printOutTable(table, firstTurn);
+	bool print = false;
+    do {
+    	cout << '>';
+    	Command command;
+    	cin >> command;
+		if (command.type == PLAY) { //a) play <card>
+			doActionPlay(command, table, firstTurn, theChosenOne);
+			print = false;
+	
+		} else if (command.type == DISCARD) { //b) discard <card>
+			doActionDiscard(table, theChosenOne, command);
+			print = false;
+	
+		} else if (command.type == DECK) { //c) print out the deck
+			for (int i = 0; i < 52; i ++) {
+				cout << *myDeck[i]; 
+				if (((i+1)%13)==0) {
+					cout << endl;
+				} else {
+					cout << " ";
+				}
 			}
+    	    print = true;
+	
+		} else if (command.type == QUIT) { //quit: clean up memory first
+			for(int i=0; i<4; i++) {
+				delete allPlayers[i];
+			}    
+			for (int i=0; i<52; i++) {
+				delete myDeck[i];
+			}
+			exit(0);
+	
+		} else if (command.type == RAGEQUIT) { //e) ragequit
+			PlayersComputer* computerPlayer = new PlayersComputer(*allPlayers[theChosenOne]);
+			allPlayers[theChosenOne] = computerPlayer;
+			cout << "Player " << theChosenOne + 1 << " ragequits. A computer will now take over." << endl;
+			print = false;
 		}
-
-	} else if (command.type == QUIT) { //quit: clean up memory first
-		for(int i=0; i<4; i++) {
-			delete allPlayers[i];
-		}    
-		for (int i=0; i<52; i++) {
-			delete myDeck[i];
-		}
-		exit(0);
-
-	} else if (command.type == RAGEQUIT) { //e) ragequit
-		PlayersComputer* computerPlayer = new PlayersComputer (*allPlayers[theChosenOne]);
-		allPlayers[theChosenOne] = computerPlayer;
-		cout << "Player " << theChosenOne + 1 << " ragequits. A computer will now take over." << endl;
-	}
+    } while (print);
 
 }
 

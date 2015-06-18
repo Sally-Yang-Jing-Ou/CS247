@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <list>
-#include <array>
 #include <set>
 #include <vector>
 #include "Players.h"
@@ -27,7 +26,7 @@ public:
 
 private:
 	static const int PLAYER_COUNT = 4;
-	std::array<Players*, PLAYER_COUNT> allPlayers_; //keep track of all 4 players
+	std::vector<Players*> allPlayers_; //keep track of all 4 players
 	Deck deck_;
 	Table table_;
 	int theChosenOne_;

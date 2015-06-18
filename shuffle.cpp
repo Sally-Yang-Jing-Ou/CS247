@@ -5,17 +5,16 @@ CARD_COUNT is the constant 52
 cards_ is an array of pointers to cards
 */
 
-// #include <random>
-// #include "Card.h"
-// #include <array>
+#include <random>
+#include "shuffle.h"
 
-// using namespace std;
+using namespace std;
 
-// #define CARD_COUNT 52
+#define CARD_COUNT 52
 
 // int seed = 0;
 
-// void shuffle(array<Card*, 52> &cards_){
+// void shuffle(vector<Card*> cards_ ){
 //     static std::mt19937 rng(seed);
 
 // 	int n = CARD_COUNT;

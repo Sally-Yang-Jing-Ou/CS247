@@ -1,7 +1,6 @@
 #include "Deck.h"
 #include <iostream>
 #include <cstdlib>
-#include "shuffle.h"
 #include <random>
 
 using namespace std;
@@ -12,7 +11,7 @@ Deck::Deck() {
 	init();
 }
 
-array<Card*, 52> &Deck::getMyDeck() {
+vector<Card*> &Deck::getMyDeck() {
 	return myDeck_;
 }
 
@@ -21,7 +20,7 @@ void Deck::init() {
 	for (int suit = 0; suit < 4; suit ++ ){	//making an ordered deck of cards
 		for (int rank = 0; rank < 13; rank ++) {
 			Card* newCard = new Card((Suit)suit, (Rank)rank);
-			myDeck_[i] = newCard;
+			myDeck_.push_back(newCard);
 			i++;
 		}
 	}
@@ -30,7 +29,7 @@ void Deck::init() {
 int seed = 0;
 
 void Deck::shuffle(){
-    static std::mt19937 rng(seed);
+    static mt19937 rng(seed);
 
 	int n = CARD_COUNT;
 

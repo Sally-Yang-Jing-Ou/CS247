@@ -4,7 +4,6 @@
 #include <iostream>
 #include <string>
 #include <list>
-#include <array>
 #include <vector>
 #include "Players.h"
 #include "Card.h"
@@ -16,10 +15,10 @@ class PlayersHuman : public Players { //inherits from Players
 public:
 	PlayersHuman();
 	~PlayersHuman();
-    void DoActionPlay ( Command &command, Table &table, bool &firstTurn, std::list<Card*> &currentPlayerDeck, int &theChosenOne);
-    void DoActionDiscard (std::list<Card*> &currentPlayerDeck, Table &table, std::list<Card*> &currentPlayerDiscards, int &theChosenOne, Command &command);
-	void DoAction (Table &table, bool &firstTurn, std::list<Card*> &currentPlayerDeck,
-					std::list<Card*> &currentPlayerDiscards, int &theChosenOne, std::array<Players*, 4> &allPlayers, std::array<Card*, 52> myDeck); 
+    void printOutTable (Table &table, bool firstTurn);
+    void doActionPlay ( Command &command, Table &table, bool &firstTurn, int theChosenOne);
+    void doActionDiscard ( Table &table, int theChosenOne, Command &command);
+    void doAction (Table &table, bool &firstTurn, int theChosenOne, std::vector<Players*> &allPlayers, std::vector<Card*> &myDeck);
 
 private: 
 

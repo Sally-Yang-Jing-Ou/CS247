@@ -2,18 +2,18 @@
 #define _DECK_
 
 #include "Card.h"
-#include <array>
+#include <vector>
 
 extern int seed;
 
 class Deck {
 public:
 	Deck();
-	std::array<Card*, 52> &getMyDeck() ;	// getter for the deck
+	std::vector<Card*> &getMyDeck() ;	// getter for the deck
 	void shuffle();
 private:
 	void init();
-	std::array<Card*, 52> myDeck_;
+	std::vector<Card*> myDeck_;
 
 };
 

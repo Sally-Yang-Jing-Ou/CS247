@@ -1,6 +1,5 @@
 #include "PlayersComputer.h"
 #include "PlayersHuman.h"
-#include "shuffle.h"
 #include "GameLogic.h"
 
 using namespace std;
@@ -25,10 +24,10 @@ void GameLogic::invitePlayers(char playerChoice, int i){
 	Players* newPlayer;
 	if (playerChoice == 'h') { //human player
 		newPlayer = new PlayersHuman();
-		allPlayers_[i] = newPlayer; //put it in the array
+		allPlayers_.push_back(newPlayer); //put it in the array
 	} else if (playerChoice == 'c') { //computer player
 		newPlayer = new PlayersComputer();
-		allPlayers_[i] = newPlayer;
+		allPlayers_.push_back(newPlayer);
 	} else {
 		cerr << "invalid command" << endl;
 	}
@@ -37,7 +36,7 @@ void GameLogic::invitePlayers(char playerChoice, int i){
 void GameLogic::dealCards() {
 	deck_.shuffle(); //shuffle the cards
 	Players* currentPlayer; 
-	array<Card*, 52> deck = deck_.getMyDeck();
+	vector<Card*> deck = deck_.getMyDeck();
 	for (int i = 0; i < 4; i ++) {
 		currentPlayer = allPlayers_[i]; //cards for each player
 		for (int j = 0; j < 13; j ++) {
@@ -54,26 +53,23 @@ void GameLogic::dealCards() {
 }
 
 void GameLogic::beginGame() {
-	cout << "A new round begins. It's player " << theChosenOne_ + 1 << "'s turn to play" << endl;
+    table_.clearTable();
+	cout << "A new round begins. It's player " << theChosenOne_ + 1 << "'s turn to play." << endl;
 
-	std::list<Card*> currentPlayerDeck;
-	std::list<Card*> currentPlayerDiscards;
 	bool firstTurn = true;
+    Players* currentPlayer = allPlayers_[theChosenOne_];
 	while (!(allPlayers_[theChosenOne_]->isDeckEmpty())) { //continue to play game if no players have run out the cards
-		currentPlayerDeck = allPlayers_[theChosenOne_]->getDeck();
-		currentPlayerDiscards = allPlayers_[theChosenOne_]->getDiscards();
-
-        allPlayers_[theChosenOne_]->DoAction(table(), firstTurn, currentPlayerDeck, currentPlayerDiscards, theChosenOne_, allPlayers_, deck_.getMyDeck());
+        currentPlayer = allPlayers_[theChosenOne_];
+        currentPlayer->doAction(table_, firstTurn, theChosenOne_, allPlayers_, deck_.getMyDeck());
+        theChosenOne_ = (theChosenOne_ + 1) % 4;
 	}
 
 	for (int i = 0; i < PLAYER_COUNT; i ++) {
 		allPlayers_[i]->roundEndsMessage(i);
 		allPlayers_[i]->getDiscards().clear(); //destruct
-		(table_.returnArrayOfSets())[i].clear();
+        table_.returnArrayOfSets()->at(i)->clear();
 		allPlayersScores_[i] = allPlayers_[i]->getOldScore();
 	}
-
-	table_ = Table();
 }
 
 bool GameLogic::gameOver () {

@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <set>
-#include <array>
 #include <vector>
 #include "Card.h"
 
@@ -13,19 +12,11 @@ public:
 	~Table();
 	void printTable();
     void placeCard (Card *card);
-    void placeCardsOnTable (std::vector<Card*> &vectorOfCard, Card *card);
-	std::array< std::vector<Card*>, 4> &returnArrayOfSets();
-	std::vector<Card*> &returnVectorOfClubs();
-	std::vector<Card*> &returnVectorOfDiamonds();
-	std::vector<Card*> &returnVectorOfHearts();
-	std::vector<Card*> &returnVectorOfSpades();
+    void clearTable();
+	std::vector<std::vector<Card*>* >* returnArrayOfSets();
 
 private:
-	std::array< std::vector<Card*>, 4> arrayOfSets_;
-	std::vector<Card*> vectorOfClubs_;
-	std::vector<Card*> vectorOfDiamonds_;
-	std::vector<Card*> vectorOfHearts_;
-	std::vector<Card*> vectorOfSpades_;
+	std::vector<std::vector<Card*>* >* arrayOfSets_;
 };
 
 #endif

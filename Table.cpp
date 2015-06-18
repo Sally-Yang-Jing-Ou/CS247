@@ -4,55 +4,30 @@
 
 using namespace std;	
 
-Table::Table() {};
-Table::~Table() {};
+Table::Table() : arrayOfSets_(new vector<vector<Card*>* >()) {
+    for (int i = 0; i < 4; i++) {
+        arrayOfSets_->push_back(new vector<Card*>());
+    }
+};
+Table::~Table() {
+    for (int i = 0; i < 4; i++) {
+        delete arrayOfSets_->at(i);
+    }
+    delete arrayOfSets_;
+};
 
-array< vector<Card*>, 4> &Table::returnArrayOfSets() {
-	arrayOfSets_[0] = returnVectorOfClubs();
-	arrayOfSets_[1] = returnVectorOfDiamonds();
-	arrayOfSets_[2] = returnVectorOfHearts();
-	arrayOfSets_[3] = returnVectorOfSpades();
+vector<vector<Card*>* >* Table::returnArrayOfSets() {
 	return arrayOfSets_;
 }
 
-vector<Card*> &Table::returnVectorOfClubs() {
-	return vectorOfClubs_;
-}
-
-vector<Card*> &Table::returnVectorOfDiamonds() {
-	return vectorOfDiamonds_;
-}
-
-vector<Card*> &Table::returnVectorOfHearts() {
-	return vectorOfHearts_;
-}
-
-vector<Card*> &Table::returnVectorOfSpades() {
-	return vectorOfSpades_;
-}
-
-void Table::placeCardsOnTable (vector<Card*> &vectorOfCard, Card *card) {
-    vectorOfCard.push_back(card);
-}
-
 void Table::placeCard(Card *card) {
-	
-	switch(card->getSuit()) {
-		case CLUB:
-			placeCardsOnTable(vectorOfClubs_, card);
-			break;
-		case DIAMOND:
-			placeCardsOnTable(vectorOfDiamonds_, card);
-			break;
-		case HEART:
-			placeCardsOnTable(vectorOfHearts_, card);
-			break;
-		case SPADE:
-			placeCardsOnTable(vectorOfSpades_, card);
-			break;
-		default:
-			break;
-	}
+    arrayOfSets_->at(card->getSuit())->push_back(card);
+}
+
+void Table::clearTable() {
+    for (int i = 0; i < 4; i++) {
+        arrayOfSets_->at(i)->clear();
+    }
 }
 
 bool lessThan(const Card *lhs, const Card *rhs)
@@ -63,15 +38,15 @@ bool lessThan(const Card *lhs, const Card *rhs)
 void Table::printTable() {
 	cout << "Cards on the table:" << endl;
 	cout << "Clubs:";
-	array< vector<Card*>, 4> arrayOfSets = returnArrayOfSets();
+	vector<vector<Card*>* >* arrayOfSets = returnArrayOfSets();
 	for (int i = 0; i < 4; i ++) {
-		vector<Card*> setOfSuit = arrayOfSets[i];
+		vector<Card*>* setOfSuit = arrayOfSets->at(i);
 		if (i==1) cout << "Diamonds:";
 		else if (i==2) cout << "Hearts:";
 		else if (i==3) cout << "Spades:";
-		if (!setOfSuit.empty()) {
-			sort(setOfSuit.begin(), setOfSuit.end(), lessThan);
-			for (std::vector<Card*>::iterator it = setOfSuit.begin(); it != setOfSuit.end(); it++) {
+		if (!setOfSuit->empty()) {
+			sort(setOfSuit->begin(), setOfSuit->end(), lessThan);
+			for (std::vector<Card*>::iterator it = setOfSuit->begin(); it != setOfSuit->end(); it++) {
 				cout << " " << ((*it)->getRankInString());
 			}
 			cout << endl;

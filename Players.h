@@ -1,9 +1,8 @@
 #ifndef _PLAYERS_
 #define _PLAYERS_
 
-#include <istream>
+#include <iostream>
 #include <list>
-#include <array>
 #include <vector>
 #include "Card.h"
 #include "Command.h"
@@ -24,8 +23,7 @@ public:
     void eraseCardFromHand (Card *card);
     void addCardToDiscards (Card *card);
     
-	virtual void DoAction (Table &table, bool &firstTurn, std::list<Card*> &currentPlayerDeck,
-					std::list<Card*> &currentPlayerDiscards, int &theChosenOne, std::array<Players*, 4> &allPlayers, std::array<Card*, 52> myDeck) = 0; 
+	virtual void doAction (Table &table, bool &firstTurn, int theChosenOne, std::vector<Players*> &allPlayers, std::vector<Card*> &myDeck) = 0;
 
 private: 
 	std::list<Card*> playersDeck_; //each player's deck of cards
