@@ -199,20 +199,9 @@ void GameLogic::playTurn(Players * player, bool shouldDisplayOptions) {
 
 void GameLogic::beginGame() {
 	cout << "A new round begins. It's player " << theChosenOne_ + 1 << "'s turn to play" << endl;
-
-	// std::list<Card*> currentPlayerDeck;
-	// std::list<Card*> currentPlayerDiscards;
-	// bool firstTurn = true;
 	this->firstTurn_ = true;
 	while (!(allPlayers_[theChosenOne_]->isDeckEmpty())) { //continue to play game if no players have run out the cards
-		// currentPlayerDeck = allPlayers_[theChosenOne_]->getDeck();
-		// currentPlayerDiscards = allPlayers_[theChosenOne_]->getDiscards();
-
 		playTurn(allPlayers_[theChosenOne_], true);
-
-		// printOptions(table(), currentPlayerDeck, firstTurn);
-        // allPlayers_[theChosenOne_]->DoAction(table(), firstTurn, currentPlayerDeck, currentPlayerDiscards, theChosenOne_, allPlayers_, deck_.getMyDeck());
-
 	}
 
 	for (int i = 0; i < PLAYER_COUNT; i ++) {

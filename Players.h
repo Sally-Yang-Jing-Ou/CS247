@@ -23,10 +23,6 @@ public:
     void roundEndsMessage(int i);
     void eraseCardFromHand (Card *card);
     void addCardToDiscards (Card *card);
-    
-	virtual void DoAction (Table &table, bool &firstTurn, std::list<Card*> &currentPlayerDeck,
-					std::list<Card*> &currentPlayerDiscards, int &theChosenOne, std::array<Players*, 4> &allPlayers, std::array<Card*, 52> myDeck) = 0; 
-
 private: 
 	std::list<Card*> playersDeck_; //each player's deck of cards
 	std::list<Card*> playersDiscards_; //each player's deck of discards

@@ -11,7 +11,6 @@ PlayersHuman::PlayersHuman() {}
 
 PlayersHuman::~PlayersHuman() {}
 
-//Table &table, bool &firstTurn, std::list<Card*> &currentPlayerDeck, int &theChosenOne
 void PlayersHuman::playCard ( Card card, int &theChosenOne ){
     for (std::list<Card*>::iterator it = this->getDeck().begin(); it != this->getDeck().end(); it++) {
         if ((**it) == card){
@@ -38,6 +37,5 @@ void PlayersHuman::discardCard (Card card, int &theChosenOne){
     cout << "Player " << theChosenOne + 1 << " discards " << card << "." << endl;
     theChosenOne = (theChosenOne + 1) % 4;
 }
-
 
 
