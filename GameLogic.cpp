@@ -184,10 +184,12 @@ void GameLogic::playTurn(Players * player, bool shouldDisplayOptions) {
 			for (int i=0; i<52; i++) {
 				delete deck_.getMyDeck()[i];
 			}
-			
+
 			exit(0);
 		} else if (command.type == RAGEQUIT) { //e) ragequit
-			cout << "rage" << endl;
+			PlayersComputer* computerPlayer = new PlayersComputer(*this->allPlayers_[this->theChosenOne_]);
+			this->allPlayers_[this->theChosenOne_] = computerPlayer;
+			cout << "Player " << this->theChosenOne_ + 1 << " ragequits. A computer will now take over." << endl;
 		}
 	} else {
 		// do computer stuff
