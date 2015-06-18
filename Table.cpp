@@ -55,6 +55,11 @@ void Table::placeCard(Card *card) {
 	}
 }
 
+bool lessThan(const Card *lhs, const Card *rhs)
+{
+    return lhs->getRank( ) < rhs->getRank( );
+}
+
 void Table::printTable() {
 	cout << "Card on the table:" << endl;
 	cout << "Clubs:";
@@ -65,7 +70,7 @@ void Table::printTable() {
 		else if (i==2) cout << "Hearts:";
 		else if (i==3) cout << "Spades:";
 		if (!setOfSuit.empty()) {
-			sort(setOfSuit.begin(), setOfSuit.end());
+			sort(setOfSuit.begin(), setOfSuit.end(), lessThan);
 			for (std::vector<Card*>::iterator it = setOfSuit.begin(); it != setOfSuit.end(); it++) {
 				cout << " " << ((*it)->getRankInString());
 			}
