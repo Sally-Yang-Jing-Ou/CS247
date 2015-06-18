@@ -38,7 +38,7 @@ private:
 	void printLegalPlaysHelper (std::list<Card*> currentPlayerDeck, Table &table);
 	void printOptions (Table &table, std::list<Card*> currentPlayerDeck);
 	bool legalPlayInDeckExists (std::list<Card*> currentPlayerDeck, Table &table);
-	void playTurn(Players * player);
+	void playTurn(Players * player, bool shouldDisplayOptions);
 };
 
 #endif

@@ -148,11 +148,14 @@ void GameLogic::dealCards() {
 	}
 }
 
-void GameLogic::playTurn(Players * player) { //TODO: maybe pass in "repeating flag" for printOptions check
+void GameLogic::playTurn(Players * player, bool shouldDisplayOptions) {
 	bool isPlayerComputer = dynamic_cast<PlayersComputer*>(player) ? true : false;
 
 	if (!isPlayerComputer) {
-		printOptions(table(), player->getDeck());
+		if (shouldDisplayOptions) {
+			printOptions(table(), player->getDeck());	
+		}
+		
 		cout << ">";
 		Command command;
 		cin >> command;
@@ -162,14 +165,14 @@ void GameLogic::playTurn(Players * player) { //TODO: maybe pass in "repeating fl
 				static_cast<PlayersHuman*>(player)->playCard(command.card, theChosenOne_);
 			} else {
 				cout << "This is not a legal play." << endl;	
-				return playTurn(player);
+				return playTurn(player, false);
 			}
 		} else if (command.type == DISCARD) { //b) discard <card>
 			if (!legalPlayInDeckExists(player->getDeck(), table())) {
 				static_cast<PlayersHuman*>(player)->discardCard(command.card, theChosenOne_);
 			} else {
 				cout << "You have a legal play. You may not discard." << endl;
-				return playTurn(player);			
+				return playTurn(player, false);			
 			}
 		} else if (command.type == DECK) { //c) print out the deck
 			cout << "deck " << command.card << endl;
@@ -195,7 +198,7 @@ void GameLogic::beginGame() {
 		// currentPlayerDeck = allPlayers_[theChosenOne_]->getDeck();
 		// currentPlayerDiscards = allPlayers_[theChosenOne_]->getDiscards();
 
-		playTurn(allPlayers_[theChosenOne_]);
+		playTurn(allPlayers_[theChosenOne_], true);
 
 		// printOptions(table(), currentPlayerDeck, firstTurn);
         // allPlayers_[theChosenOne_]->DoAction(table(), firstTurn, currentPlayerDeck, currentPlayerDiscards, theChosenOne_, allPlayers_, deck_.getMyDeck());
