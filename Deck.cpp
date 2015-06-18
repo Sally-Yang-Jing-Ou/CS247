@@ -6,6 +6,8 @@
 
 using namespace std;
 
+#define CARD_COUNT 52
+
 Deck::Deck() {
 	init();
 }
@@ -25,10 +27,12 @@ void Deck::init() {
 	}
 }
 
+int seed = 0;
+
 void Deck::shuffle(){
     static std::mt19937 rng(seed);
 
-	int n = 52;
+	int n = CARD_COUNT;
 
 	while ( n > 1 ) {
 		int k = (int) (rng() % n);

@@ -107,6 +107,7 @@ void printOutTable (Table &table, std::list<Card*> currentPlayerDeck, bool first
 void PlayersHuman::DoActionPlay ( Command &command, Table &table, bool &firstTurn, std::list<Card*> &currentPlayerDeck, int &theChosenOne ){
 	while (!isLegalPlayInCommand(command.card, table, firstTurn)){
 		cout << "This is not a legal play." << endl;
+		cout << ">";
 		cin >> command;
 	}
 

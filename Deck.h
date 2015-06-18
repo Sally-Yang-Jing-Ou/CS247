@@ -4,6 +4,8 @@
 #include "Card.h"
 #include <array>
 
+extern int seed;
+
 class Deck {
 public:
 	Deck();
