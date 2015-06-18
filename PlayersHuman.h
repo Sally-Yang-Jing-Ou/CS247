@@ -21,6 +21,8 @@ public:
 	void DoAction (Table &table, bool &firstTurn, std::list<Card*> &currentPlayerDeck,
 					std::list<Card*> &currentPlayerDiscards, int &theChosenOne, std::array<Players*, 4> &allPlayers, std::array<Card*, 52> myDeck); 
 
+    void playCard(Card card, int &theChosenOne);
+    void discardCard(Card card, int &theChosenOne);
 private: 
 
 };

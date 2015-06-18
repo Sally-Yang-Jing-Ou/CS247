@@ -162,10 +162,15 @@ void GameLogic::playTurn(Players * player) { //TODO: maybe pass in "repeating fl
 				static_cast<PlayersHuman*>(player)->playCard(command.card, theChosenOne_);
 			} else {
 				cout << "This is not a legal play." << endl;	
-				playTurn(player);
+				return playTurn(player);
 			}
 		} else if (command.type == DISCARD) { //b) discard <card>
-			cout << "discard " << command.card << endl;
+			if (!legalPlayInDeckExists(player->getDeck(), table())) {
+				static_cast<PlayersHuman*>(player)->discardCard(command.card, theChosenOne_);
+			} else {
+				cout << "You have a legal play. You may not discard." << endl;
+				return playTurn(player);			
+			}
 		} else if (command.type == DECK) { //c) print out the deck
 			cout << "deck " << command.card << endl;
 		} else if (command.type == QUIT) { //quit: clean up memory first
