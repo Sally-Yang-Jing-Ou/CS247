@@ -175,7 +175,8 @@ void GameLogic::playTurn(Players * player, bool shouldDisplayOptions) {
 				return playTurn(player, false);			
 			}
 		} else if (command.type == DECK) { //c) print out the deck
-			cout << "deck " << command.card << endl;
+			this->deck_.print();
+			return playTurn(player, false);
 		} else if (command.type == QUIT) { //quit: clean up memory first
 			cout << "quit " << endl;
 		} else if (command.type == RAGEQUIT) { //e) ragequit

@@ -25,7 +25,7 @@ void Deck::init() {
 	}
 }
 
-void Deck::shuffle(){
+void Deck::shuffle() {
     static std::mt19937 rng(seed);
 
 	int n = 52;
@@ -37,4 +37,15 @@ void Deck::shuffle(){
 		myDeck_[n] = myDeck_[k];
 		myDeck_[k] = c;
 	}
+}
+
+void Deck::print() {
+	for (int i=0; i<52; ++i) {
+        cout << *myDeck_[i];
+		if (((i+1)%13)==0) {
+			cout << endl;
+		} else {
+			cout << " ";
+		}
+    }
 }

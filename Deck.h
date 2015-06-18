@@ -9,10 +9,10 @@ public:
 	Deck();
 	std::array<Card*, 52> &getMyDeck() ;	// getter for the deck
 	void shuffle();
+    void print();
 private:
 	void init();
 	std::array<Card*, 52> myDeck_;
-
 };
 
 #endif
