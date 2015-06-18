@@ -56,7 +56,7 @@ bool GameLogic::isLegalPlayInCommandHelper (Card theCard) { //TODO: this functio
 	return false;
 }
 
-void GameLogic::printLegalPlaysHelper (std::list<Card*> currentPlayerDeck, Table &table) {
+void GameLogic::printLegalPlaysHelper (std::list<Card*> currentPlayerDeck) {
 	for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
 		if (this->firstTurn_) {
 			cout << " " << "7S";
@@ -64,7 +64,7 @@ void GameLogic::printLegalPlaysHelper (std::list<Card*> currentPlayerDeck, Table
 		} 
 		options_printed = false;
 		for (int i = 0; i < 4; i ++) {
-			vector<Card*> setOfSuit = table.returnArrayOfSets()[i];
+			vector<Card*> setOfSuit = this->table().returnArrayOfSets()[i];
 			if (!setOfSuit.empty() && !options_printed) {
 
 				for (std::vector<Card*>::iterator it2 = setOfSuit.begin(); it2 != setOfSuit.end(); it2++) {
@@ -93,7 +93,7 @@ void GameLogic::printOptions (Table &table, std::list<Card*> currentPlayerDeck) 
 
 	cout << "Legal plays:";
 	if (!currentPlayerDeck.empty()) {
-		printLegalPlaysHelper(currentPlayerDeck, table);
+		printLegalPlaysHelper(currentPlayerDeck);
 		cout << endl;
 	} else {
 		cout << "" << endl;
