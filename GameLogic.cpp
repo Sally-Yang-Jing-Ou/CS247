@@ -2,6 +2,7 @@
 #include "PlayersHuman.h"
 #include "shuffle.h"
 #include "GameLogic.h"
+#include <typeinfo>
 
 using namespace std;
 
@@ -32,28 +33,27 @@ bool GameLogic::isLegalPlayHelper (int itRank, int it2Rank, int itSuit, int it2S
 	return false;
 }
 
-bool GameLogic::isLegalPlayInCommandHelper (Card theCard, Table &table) {
+bool GameLogic::isLegalPlayInCommandHelper (Card theCard) { //TODO: this function is a liar
 	Card sevenSpade = Card(SPADE, SEVEN);
 	Card *newCard = new Card(theCard.getSuit(), theCard.getRank());
 	if (this->firstTurn_ && theCard == sevenSpade) {
 		this->firstTurn_ = false;
-		table.placeCard(newCard); //insert sevenSpade into setOfSpade
+		this->table_.placeCard(newCard); //insert sevenSpade into setOfSpade
 		return true;
 	}
 
 	for (int i = 0; i < 4; i++) {
-		vector<Card*> setOfSuit = table.returnArrayOfSets()[i];
+		vector<Card*> setOfSuit = this->table_.returnArrayOfSets()[i];
 		if (!setOfSuit.empty()) { 
 			for (std::vector<Card*>::iterator it2 = setOfSuit.begin(); it2 != setOfSuit.end(); it2++) {
 				if (isLegalPlayHelper((int)theCard.getRank(), (int)(*it2)->getRank(), (int)theCard.getSuit(), (int)(*it2)->getSuit())) {
-					table.placeCard(newCard); //insert into the sets, legal play, tuck this card into one of the sets
+					this->table_.placeCard(newCard); //insert into the sets, legal play, tuck this card into one of the sets
 					return true;
 				}
 			}
 		}
 	}
 	return false;
-
 }
 
 void GameLogic::printLegalPlaysHelper (std::list<Card*> currentPlayerDeck, Table &table) {
@@ -148,23 +148,35 @@ void GameLogic::dealCards() {
 	}
 }
 
-void GameLogic::playTurn(Players * player) {
-	printOptions(table(), player->getDeck());
-	cout << ">";
-	Command command;
-	cin >> command;
+void GameLogic::playTurn(Players * player) { //TODO: maybe pass in "repeating flag" for printOptions check
+	bool isPlayerComputer = dynamic_cast<PlayersComputer*>(player) ? true : false;
 
-	if (command.type == PLAY) { //a) play <card>
-		cout << "play " << command.card << endl;
-	} else if (command.type == DISCARD) { //b) discard <card>
-		cout << "discard " << command.card << endl;
-	} else if (command.type == DECK) { //c) print out the deck
-		cout << "deck " << command.card << endl;
-	} else if (command.type == QUIT) { //quit: clean up memory first
-		cout << "quit " << endl;
-	} else if (command.type == RAGEQUIT) { //e) ragequit
-		cout << "rage" << endl;
+	if (!isPlayerComputer) {
+		printOptions(table(), player->getDeck());
+		cout << ">";
+		Command command;
+		cin >> command;
+
+		if (command.type == PLAY) { //a) play <card>
+			if (isLegalPlayInCommandHelper(command.card)) {
+				static_cast<PlayersHuman*>(player)->playCard(command.card, theChosenOne_);
+			} else {
+				cout << "This is not a legal play." << endl;	
+				playTurn(player);
+			}
+		} else if (command.type == DISCARD) { //b) discard <card>
+			cout << "discard " << command.card << endl;
+		} else if (command.type == DECK) { //c) print out the deck
+			cout << "deck " << command.card << endl;
+		} else if (command.type == QUIT) { //quit: clean up memory first
+			cout << "quit " << endl;
+		} else if (command.type == RAGEQUIT) { //e) ragequit
+			cout << "rage" << endl;
+		}
+	} else {
+		// do computer stuff
 	}
+	
 }
 
 void GameLogic::beginGame() {

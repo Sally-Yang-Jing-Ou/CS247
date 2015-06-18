@@ -33,7 +33,7 @@ private:
 	int theChosenOne_;
 	int allPlayersScores_[4];	
 	bool firstTurn_;
-	bool isLegalPlayInCommandHelper (Card theCard, Table &table);
+	bool isLegalPlayInCommandHelper (Card theCard);
 	bool isLegalPlayHelper (int itRank, int it2Rank, int itSuit, int it2Suit);
 	void printLegalPlaysHelper (std::list<Card*> currentPlayerDeck, Table &table);
 	void printOptions (Table &table, std::list<Card*> currentPlayerDeck);
