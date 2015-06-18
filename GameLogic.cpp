@@ -70,7 +70,7 @@ void GameLogic::beginGame() {
 		allPlayers_[i]->roundEndsMessage(i);
 		allPlayers_[i]->getDiscards().clear(); //destruct
 		(table_.returnArrayOfSets())[i].clear();
-		allPlayersScores_[i] += allPlayers_[i]->getOldScore();
+		allPlayersScores_[i] = allPlayers_[i]->getOldScore();
 	}
 
 	table_ = Table();

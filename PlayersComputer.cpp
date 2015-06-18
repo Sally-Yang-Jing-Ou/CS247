@@ -12,7 +12,7 @@ PlayersComputer::~PlayersComputer() {}
 PlayersComputer::PlayersComputer( Players& copyPlayer1 ):Players(copyPlayer1) {}
 
 bool isLegal (int itRank, int it2Rank, int itSuit, int it2Suit) {
-	if (itRank == 7 || 
+	if (itRank == 7 - 1||
 	(itRank -1 == it2Rank && itSuit == it2Suit) ||
 	(itRank +1 == it2Rank && itSuit == it2Suit)) {
 		return true;
@@ -21,22 +21,19 @@ bool isLegal (int itRank, int it2Rank, int itSuit, int it2Suit) {
 }
 
 Card* firstLegalCardInDeck (std::list<Card*> currentPlayerDeck, Table &table, bool &firstTurn) {
-	Card sevenSpade = Card(SPADE, SEVEN);
+	Card *sevenSpade = new Card(SPADE, SEVEN);
+    if (firstTurn) {
+        firstTurn = false;
+        return sevenSpade;
+    }
 	for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
 		for (int i = 0; i < 4; i ++) {
 			vector<Card*> setOfSuit = table.returnArrayOfSets()[i];
 			if (!setOfSuit.empty()) {
 				for (std::vector<Card*> ::iterator it2 = setOfSuit.begin(); it2 != setOfSuit.end(); it2++) {
 					if (isLegal((int)((*it)->getRank()), (int)((*it2)->getRank()), (int)((*it)->getSuit()), (int)((*it2)->getSuit()))) {
-						if (firstTurn) {
-							if ((**it)==sevenSpade) {	//if first turn, must return sevenSpade
-								firstTurn = false;
-								return (*it);
-							}
-						} else {
-							return (*it);
-						}
-					}
+                        return (*it);
+                    }
 				}
 			}
 		}
