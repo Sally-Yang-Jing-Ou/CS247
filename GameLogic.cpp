@@ -5,6 +5,8 @@
 
 using namespace std;
 
+bool options_printed = false;
+
 GameLogic::GameLogic() {}
 
 GameLogic::~GameLogic() {}
@@ -19,6 +21,99 @@ Table &GameLogic::table() {
 
 int &GameLogic::theChosenOne() {
 	return theChosenOne_;
+}
+
+bool GameLogic::isLegalPlayHelper (int itRank, int it2Rank, int itSuit, int it2Suit) {
+	if (itRank == 7 - 1 ||
+	(itRank -1 == it2Rank && itSuit == it2Suit) ||
+	(itRank +1 == it2Rank && itSuit == it2Suit)) {
+		return true;
+	}
+	return false;
+}
+
+bool GameLogic::isLegalPlayInCommandHelper (Card theCard, Table &table) {
+	Card sevenSpade = Card(SPADE, SEVEN);
+	Card *newCard = new Card(theCard.getSuit(), theCard.getRank());
+	if (this->firstTurn_ && theCard == sevenSpade) {
+		this->firstTurn_ = false;
+		table.placeCard(newCard); //insert sevenSpade into setOfSpade
+		return true;
+	}
+
+	for (int i = 0; i < 4; i++) {
+		vector<Card*> setOfSuit = table.returnArrayOfSets()[i];
+		if (!setOfSuit.empty()) { 
+			for (std::vector<Card*>::iterator it2 = setOfSuit.begin(); it2 != setOfSuit.end(); it2++) {
+				if (isLegalPlayHelper((int)theCard.getRank(), (int)(*it2)->getRank(), (int)theCard.getSuit(), (int)(*it2)->getSuit())) {
+					table.placeCard(newCard); //insert into the sets, legal play, tuck this card into one of the sets
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+
+}
+
+void GameLogic::printLegalPlaysHelper (std::list<Card*> currentPlayerDeck, Table &table) {
+	for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
+		if (this->firstTurn_) {
+			cout << " " << "7S";
+			break;
+		} 
+		options_printed = false;
+		for (int i = 0; i < 4; i ++) {
+			vector<Card*> setOfSuit = table.returnArrayOfSets()[i];
+			if (!setOfSuit.empty() && !options_printed) {
+
+				for (std::vector<Card*>::iterator it2 = setOfSuit.begin(); it2 != setOfSuit.end(); it2++) {
+					if (isLegalPlayHelper((int)((*it)->getRank()), (int)((*it2)->getRank()), (int)((*it)->getSuit()), (int)((*it2)->getSuit()))) {
+						cout << " " << (**it);
+						options_printed = true;
+						break;
+					}
+				}
+			}
+		}
+	}
+}
+
+void GameLogic::printOptions (Table &table, std::list<Card*> currentPlayerDeck) {
+	table.printTable();
+	cout << "Your hand:";
+	if (!currentPlayerDeck.empty()) {
+		for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
+			cout << " " << (**it);
+		}
+		cout << endl;
+	} else {
+		cout << "" << endl;
+	}
+
+	cout << "Legal plays:";
+	if (!currentPlayerDeck.empty()) {
+		printLegalPlaysHelper(currentPlayerDeck, table);
+		cout << endl;
+	} else {
+		cout << "" << endl;
+	}
+}
+
+bool GameLogic::legalPlayInDeckExists (std::list<Card*> currentPlayerDeck, Table &table) {
+	for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
+		for (int i = 0; i < 4; i ++) {
+			vector<Card*> setOfSuit = table.returnArrayOfSets()[i];
+			if (!setOfSuit.empty()) {
+				for (std::vector<Card*>::iterator it2 = setOfSuit.begin(); it2 != setOfSuit.end(); it2++) {
+					if (isLegalPlayHelper((int)((*it)->getRank()), (int)((*it2)->getRank()), (int)((*it)->getSuit()), (int)((*it2)->getSuit()))) {
+						return true;
+					}
+				}
+			}
+		}
+	}
+	return false;
 }
 
 void GameLogic::invitePlayers(char playerChoice, int i){
@@ -53,17 +148,41 @@ void GameLogic::dealCards() {
 	}
 }
 
+void GameLogic::playTurn(Players * player) {
+	printOptions(table(), player->getDeck());
+	cout << ">";
+	Command command;
+	cin >> command;
+
+	if (command.type == PLAY) { //a) play <card>
+		cout << "play " << command.card << endl;
+	} else if (command.type == DISCARD) { //b) discard <card>
+		cout << "discard " << command.card << endl;
+	} else if (command.type == DECK) { //c) print out the deck
+		cout << "deck " << command.card << endl;
+	} else if (command.type == QUIT) { //quit: clean up memory first
+		cout << "quit " << endl;
+	} else if (command.type == RAGEQUIT) { //e) ragequit
+		cout << "rage" << endl;
+	}
+}
+
 void GameLogic::beginGame() {
 	cout << "A new round begins. It's player " << theChosenOne_ + 1 << "'s turn to play" << endl;
 
-	std::list<Card*> currentPlayerDeck;
-	std::list<Card*> currentPlayerDiscards;
-	bool firstTurn = true;
+	// std::list<Card*> currentPlayerDeck;
+	// std::list<Card*> currentPlayerDiscards;
+	// bool firstTurn = true;
+	this->firstTurn_ = true;
 	while (!(allPlayers_[theChosenOne_]->isDeckEmpty())) { //continue to play game if no players have run out the cards
-		currentPlayerDeck = allPlayers_[theChosenOne_]->getDeck();
-		currentPlayerDiscards = allPlayers_[theChosenOne_]->getDiscards();
+		// currentPlayerDeck = allPlayers_[theChosenOne_]->getDeck();
+		// currentPlayerDiscards = allPlayers_[theChosenOne_]->getDiscards();
 
-        allPlayers_[theChosenOne_]->DoAction(table(), firstTurn, currentPlayerDeck, currentPlayerDiscards, theChosenOne_, allPlayers_, deck_.getMyDeck());
+		playTurn(allPlayers_[theChosenOne_]);
+
+		// printOptions(table(), currentPlayerDeck, firstTurn);
+        // allPlayers_[theChosenOne_]->DoAction(table(), firstTurn, currentPlayerDeck, currentPlayerDiscards, theChosenOne_, allPlayers_, deck_.getMyDeck());
+
 	}
 
 	for (int i = 0; i < PLAYER_COUNT; i ++) {
@@ -105,4 +224,5 @@ vector<int> GameLogic::winners() const {
 
 	return winningPlayerNumbers;
 }
+
 
