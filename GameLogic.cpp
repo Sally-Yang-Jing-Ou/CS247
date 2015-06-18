@@ -178,7 +178,14 @@ void GameLogic::playTurn(Players * player, bool shouldDisplayOptions) {
 			this->deck_.print();
 			return playTurn(player, false);
 		} else if (command.type == QUIT) { //quit: clean up memory first
-			cout << "quit " << endl;
+			for(int i=0; i<4; i++) {
+				delete this->allPlayers_[i];
+			}	    
+			for (int i=0; i<52; i++) {
+				delete deck_.getMyDeck()[i];
+			}
+			
+			exit(0);
 		} else if (command.type == RAGEQUIT) { //e) ragequit
 			cout << "rage" << endl;
 		}
