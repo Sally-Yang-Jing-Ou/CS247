@@ -54,7 +54,7 @@ void GameLogic::dealCards() {
 }
 
 void GameLogic::beginGame() {
-	cout << "A new round begins. It's player " << theChosenOne_ << "'s turn to play" << endl;
+	cout << "A new round begins. It's player " << theChosenOne_ + 1 << "'s turn to play" << endl;
 
 	std::list<Card*> currentPlayerDeck;
 	std::list<Card*> currentPlayerDiscards;
@@ -62,10 +62,9 @@ void GameLogic::beginGame() {
 	while (!(allPlayers_[theChosenOne_]->isDeckEmpty())) { //continue to play game if no players have run out the cards
 		currentPlayerDeck = allPlayers_[theChosenOne_]->getDeck();
 		currentPlayerDiscards = allPlayers_[theChosenOne_]->getDiscards();
-		cout << "GameLogic::beginGame->DoAction" << endl;
-		allPlayers_[theChosenOne_]->DoAction(table(), firstTurn, currentPlayerDeck, currentPlayerDiscards, theChosenOne_, allPlayers_, deck_.getMyDeck());
+
+        allPlayers_[theChosenOne_]->DoAction(table(), firstTurn, currentPlayerDeck, currentPlayerDiscards, theChosenOne_, allPlayers_, deck_.getMyDeck());
 	}
-			cout << "GameLogic::beginGame->DoAction?!?!" << endl;
 
 	for (int i = 0; i < PLAYER_COUNT; i ++) {
 		allPlayers_[i]->roundEndsMessage(i);
@@ -106,10 +105,4 @@ vector<int> GameLogic::winners() const {
 
 	return winningPlayerNumbers;
 }
-
-
-
-
-
-
 

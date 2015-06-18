@@ -47,18 +47,20 @@ Card* firstLegalCardInDeck (std::list<Card*> currentPlayerDeck, Table &table, bo
 void PlayersComputer::DoAction (Table &table, bool &firstTurn, std::list<Card*> &currentPlayerDeck,
 								std::list<Card*> &currentPlayerDiscards, int &theChosenOne, array<Players*, 4> &allPlayers, array<Card*, 52> myDeck) {
 	Card *newCard = firstLegalCardInDeck (currentPlayerDeck, table, firstTurn);
-	cout << "PlayersComputer::DoAction" << endl;
 	if (newCard!=NULL) { //there is a legal card in deck
 		table.placeCard(newCard);
 		for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
-			if ((**it) == *newCard) currentPlayerDeck.erase(it); // delete this card from the hand 
+			if ((**it) == *newCard) {
+				eraseCardFromHand(*it); // delete this card from the hand
+				break;
+			}
 		}
 		cout << "Player " << theChosenOne + 1<< " plays " << *newCard << "." << endl;
 		theChosenOne = (theChosenOne + 1) % 4;
 	} else {
 		list<Card*>::iterator it = currentPlayerDeck.begin();	//discard the first card on hand
-		currentPlayerDeck.erase(it);
-		currentPlayerDiscards.push_back(*it); 
+		eraseCardFromHand(*it);
+		addCardToDiscards(*it);
 		cout << "Player " << theChosenOne + 1 << " discards " << (**it) << "." << endl;
 		theChosenOne = (theChosenOne + 1) % 4;
 	}

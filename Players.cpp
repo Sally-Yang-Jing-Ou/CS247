@@ -63,3 +63,18 @@ void Players::roundEndsMessage(int i) {
  	cout << getOldScore() << endl;
 }
 
+void Players::eraseCardFromHand (Card *card) {
+	list<Card*>::iterator deleteCard = find(playersDeck_.begin(), playersDeck_.end(), card);
+	if(!(deleteCard == playersDeck_.end())) {
+		playersDeck_.remove(*deleteCard);
+	}
+}
+
+void Players::addCardToDiscards (Card *card) {
+	playersDiscards_.push_back(card);
+}
+
+
+
+
+

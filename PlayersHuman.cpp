@@ -12,7 +12,7 @@ PlayersHuman::PlayersHuman() {}
 PlayersHuman::~PlayersHuman() {}
 
 bool isLegalPlay (int itRank, int it2Rank, int itSuit, int it2Suit) {
-	if (itRank == 7 || 
+	if (itRank == 7 - 1 ||
 	(itRank -1 == it2Rank && itSuit == it2Suit) ||
 	(itRank +1 == it2Rank && itSuit == it2Suit)) {
 		return true;
@@ -23,10 +23,8 @@ bool isLegalPlay (int itRank, int it2Rank, int itSuit, int it2Suit) {
 bool isLegalPlayInCommand (Card theCard, Table &table, bool &firstTurn) {
 	Card sevenSpade = Card(SPADE, SEVEN);
 	Card *newCard = new Card(theCard.getSuit(), theCard.getRank());
-	cout << " IS LEGAL PLAY " << endl;
 	if (firstTurn && theCard == sevenSpade) {
 		firstTurn = false;
-		cout << "insert sevenSpade into setOfSpade" << endl;
 		table.placeCard(newCard); //insert sevenSpade into setOfSpade
 		return true;
 	}
@@ -36,7 +34,6 @@ bool isLegalPlayInCommand (Card theCard, Table &table, bool &firstTurn) {
 		if (!setOfSuit.empty()) { 
 			for (std::vector<Card*>::iterator it2 = setOfSuit.begin(); it2 != setOfSuit.end(); it2++) {
 				if (isLegalPlay((int)theCard.getRank(), (int)(*it2)->getRank(), (int)theCard.getSuit(), (int)(*it2)->getSuit())) {
-					cout << "this is a legal play~~~!!!" << endl;
 					table.placeCard(newCard); //insert into the sets, legal play, tuck this card into one of the sets
 					return true;
 				}
@@ -106,14 +103,17 @@ void printOutTable (Table &table, std::list<Card*> currentPlayerDeck, bool first
 	}
 }
 
-void DoActionPlay ( Command &command, Table &table, bool &firstTurn, std::list<Card*> &currentPlayerDeck, int &theChosenOne ){
+void PlayersHuman::DoActionPlay ( Command &command, Table &table, bool &firstTurn, std::list<Card*> &currentPlayerDeck, int &theChosenOne ){
 	while (!isLegalPlayInCommand(command.card, table, firstTurn)){
 		cout << "This is not a legal play." << endl;
 		cin >> command;
 	}
 
 	for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
-		if ((**it) == command.card) currentPlayerDeck.erase(it); // delete this card from the hand 
+        if ((**it) == command.card){
+            eraseCardFromHand(*it); // delete this card from the hand
+            break;
+        }
 	}
 
 	cout << "Player " << theChosenOne + 1 << " plays " << command.card << "." << endl;
@@ -121,13 +121,16 @@ void DoActionPlay ( Command &command, Table &table, bool &firstTurn, std::list<C
 }
 
 
-void DoActionDiscard (std::list<Card*> &currentPlayerDeck, Table &table, std::list<Card*> &currentPlayerDiscards, int &theChosenOne, Command &command){
+void PlayersHuman::DoActionDiscard (std::list<Card*> &currentPlayerDeck, Table &table, std::list<Card*> &currentPlayerDiscards, int &theChosenOne, Command &command){
 	while (checkLegalPlaysInDeck(currentPlayerDeck, table)){
 		cout << "You have a legal play. You may not discard." << endl;
 		cin >> command;
 	}
 	for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
-		if ((**it) == command.card) currentPlayerDeck.erase(it);
+        if ((**it) == command.card) {
+            eraseCardFromHand(*it);
+            break;
+        }
 	}
 
 	Card *newDiscard = new Card((command.card).getSuit(), (command.card).getRank());
@@ -139,7 +142,6 @@ void DoActionDiscard (std::list<Card*> &currentPlayerDeck, Table &table, std::li
 
 void PlayersHuman::DoAction (Table &table, bool &firstTurn, std::list<Card*> &currentPlayerDeck,
 								std::list<Card*> &currentPlayerDiscards, int &theChosenOne, array<Players*, 4> &allPlayers, array<Card*, 52> myDeck) {
-	cout << "printOutTable" <<endl;
 
 	printOutTable(table, currentPlayerDeck, firstTurn);
 
