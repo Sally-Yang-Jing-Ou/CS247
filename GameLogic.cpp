@@ -1,5 +1,5 @@
-#include "PlayersComputer.h"
-#include "PlayersHuman.h"
+#include "ComputerPlayer.h"
+#include "HumanPlayer.h"
 #include "GameLogic.h"
 #include <typeinfo>
 
@@ -126,14 +126,14 @@ bool GameLogic::legalPlayInDeckExists (std::list<Card*> currentPlayerDeck, Table
 	return false;
 }
 
-void GameLogic::invitePlayers(char playerChoice, int i){
-	Players* newPlayer;
+void GameLogic::invitePlayer(char playerChoice, int i){
+	Player* newPlayer;
 	if (playerChoice == 'h') { //human player
-		newPlayer = new PlayersHuman();
-		allPlayers_.push_back(newPlayer); //put it in the array
+		newPlayer = new HumanPlayer();
+		allPlayer_.push_back(newPlayer); //put it in the array
 	} else if (playerChoice == 'c') { //computer player
-		newPlayer = new PlayersComputer();
-		allPlayers_.push_back(newPlayer);
+		newPlayer = new ComputerPlayer();
+		allPlayer_.push_back(newPlayer);
 	} else {
 		cerr << "invalid command" << endl;
 	}
@@ -141,10 +141,10 @@ void GameLogic::invitePlayers(char playerChoice, int i){
 
 void GameLogic::dealCards() {
 	deck_.shuffle(); //shuffle the cards
-	Players* currentPlayer;
+	Player* currentPlayer;
 	vector<Card*> deck = deck_.getMyDeck();
 	for (int i = 0; i < 4; i ++) {
-		currentPlayer = allPlayers_[i]; //cards for each player
+		currentPlayer = allPlayer_[i]; //cards for each player
 		for (int j = 0; j < 13; j ++) {
 			currentPlayer->getDeck().push_back (deck[i*13+j]);
 		}
@@ -158,8 +158,8 @@ void GameLogic::dealCards() {
 	}
 }
 
-void GameLogic::playTurn(Players * player, bool shouldDisplayOptions) {
-	bool isPlayerComputer = dynamic_cast<PlayersComputer*>(player) ? true : false;
+void GameLogic::playTurn(Player * player, bool shouldDisplayOptions) {
+	bool isPlayerComputer = dynamic_cast<ComputerPlayer*>(player) ? true : false;
 	if (!isPlayerComputer) {
 		if (shouldDisplayOptions) {
 			printOptions(player->getDeck());
@@ -188,7 +188,7 @@ void GameLogic::playTurn(Players * player, bool shouldDisplayOptions) {
 			return playTurn(player, false);
 		} else if (command.type == QUIT) { //quit: clean up memory first
 			for(int i=0; i<4; i++) {
-				delete this->allPlayers_[i];
+				delete this->allPlayer_[i];
 			}
 			for (int i=0; i<52; i++) {
 				delete deck_.getMyDeck()[i];
@@ -196,12 +196,12 @@ void GameLogic::playTurn(Players * player, bool shouldDisplayOptions) {
 
 			exit(0);
 		} else if (command.type == RAGEQUIT) { //e) ragequit
-			PlayersComputer* computerPlayer = new PlayersComputer(*this->allPlayers_[this->theChosenOne_]);
-			this->allPlayers_[this->theChosenOne_] = computerPlayer;
+			ComputerPlayer* computerPlayer = new ComputerPlayer(*this->allPlayer_[this->theChosenOne_]);
+			this->allPlayer_[this->theChosenOne_] = computerPlayer;
 			cout << "Player " << this->theChosenOne_ + 1 << " ragequits. A computer will now take over." << endl;
 		}
 	} else {
-		static_cast<PlayersComputer*>(player)->makeMove(this->table(), this->firstTurn_, theChosenOne_);
+		static_cast<ComputerPlayer*>(player)->makeMove(this->table(), this->firstTurn_, theChosenOne_);
 	}
 }
 
@@ -209,21 +209,21 @@ void GameLogic::beginGame() {
 	table_.clearTable();
         cout << "A new round begins. It's player " << theChosenOne_ + 1 << "'s turn to play." << endl;
 	this->firstTurn_ = true;
-	while (!(allPlayers_[theChosenOne_]->isDeckEmpty())) { //continue to play game if no players have run out the cards
-		playTurn(allPlayers_[theChosenOne_], true);
+	while (!(allPlayer_[theChosenOne_]->isDeckEmpty())) { //continue to play game if no players have run out the cards
+		playTurn(allPlayer_[theChosenOne_], true);
 	}
 
 	for (int i = 0; i < PLAYER_COUNT; i ++) {
-		allPlayers_[i]->roundEndsMessage(i);
-		allPlayers_[i]->getDiscards().clear(); //destruct
+		allPlayer_[i]->roundEndsMessage(i);
+		allPlayer_[i]->getDiscards().clear(); //destruct
                 table_.returnArrayOfSets()->at(i)->clear();
-		allPlayersScores_[i] = allPlayers_[i]->getOldScore();
+		allPlayerScores_[i] = allPlayer_[i]->getOldScore();
 	}
 }
 
 bool GameLogic::gameOver () {
 	for(int i = 0; i < PLAYER_COUNT; i++) {
-		if(allPlayersScores_[i] >= 80) {
+		if(allPlayerScores_[i] >= 80) {
 			return true;
 		}
 	}
@@ -232,18 +232,18 @@ bool GameLogic::gameOver () {
 }
 
 vector<int> GameLogic::winners() const {
-	int min = allPlayersScores_[0];
+	int min = allPlayerScores_[0];
 
 	for(int i = 1; i < PLAYER_COUNT; i++) {
-		if(allPlayersScores_[i] < min) {
-			min = allPlayersScores_[i];
+		if(allPlayerScores_[i] < min) {
+			min = allPlayerScores_[i];
 		}
 	}
 
 	vector<int> winningPlayerNumbers = vector<int>();
 
 	for(int i = 0; i < PLAYER_COUNT; i++) {
-		if(allPlayersScores_[i] == min) {
+		if(allPlayerScores_[i] == min) {
 			winningPlayerNumbers.push_back(i + 1);
 		}
 	}

@@ -1,20 +1,20 @@
-#ifndef _PLAYERSCOMPUTER_
-#define _PLAYERSCOMPUTER_
+#ifndef _ComputerPlayer_
+#define _ComputerPlayer_
 
 #include <iostream>
 #include <string>
 #include <list>
-#include "Players.h"
+#include "Player.h"
 #include "Card.h"
 #include "Command.h"
 #include "Table.h"
 
-class PlayersComputer : public Players { //inherits from Players
+class ComputerPlayer : public Player { //inherits from Player
 public:
-	PlayersComputer();
-	~PlayersComputer();
+	ComputerPlayer();
+	~ComputerPlayer();
     Card* firstLegalCardInDeck (Table &table, bool &firstTurn);
-	PlayersComputer( Players& copyPlayer );
+	ComputerPlayer( Player& copyPlayer );
     void makeMove(Table &table, bool &firstTurn, int &theChosenOne);
 };
 

@@ -5,7 +5,7 @@
 #include <list>
 #include <set>
 #include <vector>
-#include "Players.h"
+#include "Player.h"
 #include "Deck.h"
 #include "Table.h"
 #include "Card.h"
@@ -15,7 +15,7 @@ class GameLogic {
 public:
 	GameLogic();
 	~GameLogic();
-	void invitePlayers(char playerChoice, int i);
+	void invitePlayer(char playerChoice, int i);
 	Deck &deck();
 	Table &table();
 	int &theChosenOne ();
@@ -26,18 +26,18 @@ public:
 
 private:
 	static const int PLAYER_COUNT = 4;
-	std::vector<Players*> allPlayers_; //keep track of all 4 players
+	std::vector<Player*> allPlayer_; //keep track of all 4 players
 	Deck deck_;
 	Table table_;
 	int theChosenOne_;
-	int allPlayersScores_[4];
+	int allPlayerScores_[4];
 	bool firstTurn_;
 	bool isLegalPlayInCommand (Card theCard);
 	bool isLegalPlay (int itRank, int it2Rank, int itSuit, int it2Suit);
 	void printLegalPlays (std::list<Card*> currentPlayerDeck);
 	void printOptions (std::list<Card*> currentPlayerDeck);
 	bool legalPlayInDeckExists (std::list<Card*> currentPlayerDeck, Table &table);
-	void playTurn(Players * player, bool shouldDisplayOptions);
+	void playTurn(Player * player, bool shouldDisplayOptions);
 };
 
 #endif

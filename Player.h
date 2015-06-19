@@ -1,5 +1,5 @@
-#ifndef _PLAYERS_
-#define _PLAYERS_
+#ifndef _Player_
+#define _Player_
 
 #include <iostream>
 #include <list>
@@ -8,11 +8,11 @@
 #include "Command.h"
 #include "Table.h"
 
-class Players {
+class Player {
 public:
-	Players();// constructor
-    virtual ~Players();  // destructor
-    Players( Players& copyPlayer );  // copy constructor
+	Player();// constructor
+    virtual ~Player();  // destructor
+    Player( Player& copyPlayer );  // copy constructor
     std::list<Card*> &getDeck(); //getter for player's deck
     std::list<Card*> &getDiscards(); //getter for the discards
     int &getOldScore();
@@ -25,8 +25,8 @@ public:
     void playCard(Card card, Table &table, int &theChosenOne);
     void discardCard(Card card, Table &table, int &theChosenOne);
 private:
-	std::list<Card*> playersDeck_; //each player's deck of cards
-	std::list<Card*> playersDiscards_; //each player's deck of discards
+	std::list<Card*> PlayerDeck_; //each player's deck of cards
+	std::list<Card*> PlayerDiscards_; //each player's deck of discards
 	int oldScore_;
 
 };

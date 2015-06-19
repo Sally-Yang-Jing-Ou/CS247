@@ -1,45 +1,45 @@
 #include <list>
-#include "Players.h"
+#include "Player.h"
 #include <cstdlib>
 #include <algorithm>
 #include <cassert>
 
 using namespace std;
 
-Players::Players(): oldScore_(0) {}
+Player::Player(): oldScore_(0) {}
 
-Players::~Players() {
-	playersDeck_.clear();
-	playersDiscards_.clear();
+Player::~Player() {
+	PlayerDeck_.clear();
+	PlayerDiscards_.clear();
 }
 
-Players::Players( Players& copyPlayer ) {
-	playersDeck_ = copyPlayer.getDeck();
-	playersDiscards_ = copyPlayer.getDiscards();
+Player::Player( Player& copyPlayer ) {
+	PlayerDeck_ = copyPlayer.getDeck();
+	PlayerDiscards_ = copyPlayer.getDiscards();
 	oldScore_ = copyPlayer.getOldScore();
 }
 
-std::list<Card*> &Players::getDeck() {
-	return playersDeck_;
+std::list<Card*> &Player::getDeck() {
+	return PlayerDeck_;
 }
 
-std::list<Card*> &Players::getDiscards() {
-	return playersDiscards_;
+std::list<Card*> &Player::getDiscards() {
+	return PlayerDiscards_;
 }
 
-int &Players::getOldScore() {
+int &Player::getOldScore() {
 	return oldScore_;
 }
 
-void Players::setNewScore (){
+void Player::setNewScore (){
 	oldScore_ = getOldScore() + scoreGained();
 }
 
-bool Players::isDeckEmpty () {
+bool Player::isDeckEmpty () {
 	return getDeck().empty();
 }
 
-int Players::scoreGained() {
+int Player::scoreGained() {
 	int gains = 0;
 	if (!(getDiscards().empty())){
 		for (std::list<Card*>::iterator it = getDiscards().begin(); it != getDiscards().end(); it++) {
@@ -49,7 +49,7 @@ int Players::scoreGained() {
 	return gains;
 }
 
-void Players::roundEndsMessage(int i) {
+void Player::roundEndsMessage(int i) {
 	cout << "Player " << i + 1<< "'s discards:";
 	if (!(getDiscards().empty())){
 		for (std::list<Card*>::iterator it = getDiscards().begin(); it != getDiscards().end(); it++) {
@@ -65,18 +65,18 @@ void Players::roundEndsMessage(int i) {
  	cout << getOldScore() << endl;
 }
 
-void Players::eraseCardFromHand (Card *card) {
-	list<Card*>::iterator deleteCard = find(playersDeck_.begin(), playersDeck_.end(), card);
-	if(!(deleteCard == playersDeck_.end())) {
-		playersDeck_.remove(*deleteCard);
+void Player::eraseCardFromHand (Card *card) {
+	list<Card*>::iterator deleteCard = find(PlayerDeck_.begin(), PlayerDeck_.end(), card);
+	if(!(deleteCard == PlayerDeck_.end())) {
+		PlayerDeck_.remove(*deleteCard);
 	}
 }
 
-void Players::addCardToDiscards (Card *card) {
-	playersDiscards_.push_back(card);
+void Player::addCardToDiscards (Card *card) {
+	PlayerDiscards_.push_back(card);
 }
 
-void Players::playCard ( Card card, Table &table, int &theChosenOne ) {
+void Player::playCard ( Card card, Table &table, int &theChosenOne ) {
 	bool inHand = true;
 
     for (std::list<Card*>::iterator it = this->getDeck().begin(); it != this->getDeck().end(); it++) {
@@ -94,7 +94,7 @@ void Players::playCard ( Card card, Table &table, int &theChosenOne ) {
     theChosenOne = (theChosenOne + 1) % 4;
 }
 
-void Players::discardCard (Card card, Table &table, int &theChosenOne) {
+void Player::discardCard (Card card, Table &table, int &theChosenOne) {
 	bool inHand = true;
 
     for (std::list<Card*>::iterator it = this->getDeck().begin(); it != this->getDeck().end(); it++) {

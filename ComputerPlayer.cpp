@@ -2,22 +2,22 @@
 #include <list>
 #include "Card.h"
 #include <stdlib.h>
-#include "PlayersComputer.h"
+#include "ComputerPlayer.h"
 
 using namespace std;
 
-PlayersComputer::PlayersComputer() {}
+ComputerPlayer::ComputerPlayer() {}
 
-PlayersComputer::~PlayersComputer() {}
+ComputerPlayer::~ComputerPlayer() {}
 
-PlayersComputer::PlayersComputer(Players& copyPlayer1 ):Players(copyPlayer1) {}
+ComputerPlayer::ComputerPlayer(Player& copyPlayer1 ):Player(copyPlayer1) {}
 
 bool isLegal (Card *first, Card *second) {
 	return first->getRank() == SEVEN ||
           (first->getSuit() == second->getSuit() && abs(first->getRank() - second->getRank()) <= 1);
 }
 
-Card* PlayersComputer::firstLegalCardInDeck (Table &table, bool &firstTurn) {
+Card* ComputerPlayer::firstLegalCardInDeck (Table &table, bool &firstTurn) {
 	Card *sevenSpade = new Card(SPADE, SEVEN);
     if (firstTurn) {
         firstTurn = false;
@@ -38,11 +38,11 @@ Card* PlayersComputer::firstLegalCardInDeck (Table &table, bool &firstTurn) {
 	return NULL;
 }
 
-void PlayersComputer::makeMove (Table &table, bool &firstTurn, int &theChosenOne){
+void ComputerPlayer::makeMove (Table &table, bool &firstTurn, int &theChosenOne){
 	Card *newCard = firstLegalCardInDeck (table, firstTurn);
 	if (newCard != NULL) { //there is a legal card in deck
-        Players::playCard(*newCard, table, theChosenOne);
+        Player::playCard(*newCard, table, theChosenOne);
 	} else {
-        Players::discardCard(**(this->getDeck().begin()), table, theChosenOne);
+        Player::discardCard(**(this->getDeck().begin()), table, theChosenOne);
 	}
 }

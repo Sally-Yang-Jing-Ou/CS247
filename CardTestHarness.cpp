@@ -9,9 +9,9 @@
 #include <vector>
 #include "Card.h"
 #include "Command.h"
-#include "Players.h"
-#include "PlayersHuman.h"
-#include "PlayersComputer.h"
+#include "Player.h"
+#include "HumanPlayer.h"
+#include "ComputerPlayer.h"
 #include "GameLogic.h"
 
 using namespace std;
@@ -31,7 +31,7 @@ int main(int argc, char const *argv[])
 		cout << ">";
 		char playerChoice;
 		cin >> playerChoice;
-		newGame->invitePlayers(playerChoice, i);
+		newGame->invitePlayer(playerChoice, i);
 	}
 
 	while (!newGame->gameOver()) {
