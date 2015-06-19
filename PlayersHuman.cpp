@@ -104,6 +104,8 @@ void PlayersHuman::printOutTable (Table &table, bool firstTurn) {
 }
 
 void PlayersHuman::doActionPlay ( Command &command, Table &table, bool &firstTurn, int theChosenOne ){
+	//bool notInHand = true;
+
 	if (!isLegalPlayInCommand(command.card, table, firstTurn)){
 		throw "This is not a legal play.";
 	}
@@ -111,24 +113,34 @@ void PlayersHuman::doActionPlay ( Command &command, Table &table, bool &firstTur
 	for (std::list<Card*>::iterator it = this->getDeck().begin(); it != this->getDeck().end(); it++) {
         if ((**it) == command.card){
             eraseCardFromHand(*it); // delete this card from the hand
+           // notInHand = false;
             break;
         }
 	}
+
+	// if (notInHand) {
+	// 	assert(false);
+	// }
 
 	cout << "Player " << theChosenOne + 1 << " plays " << command.card << "." << endl;
 }
 
 
 void PlayersHuman::doActionDiscard (Table &table, int theChosenOne, Command &command){
+	//bool notInHand = true;
 	if (checkLegalPlaysInDeck(this->getDeck(), table)){
 		throw "You have a legal play. You may not discard.";
 	}
 	for (std::list<Card*>::iterator it = this->getDeck().begin(); it != this->getDeck().end(); it++) {
         if ((**it) == command.card) {
             eraseCardFromHand(*it);
+            //notInHand = false;
             break;
         }
 	}
+	// if (notInHand) {
+	// 	assert(false);
+	// }
 
 	Card *newDiscard = new Card((command.card).getSuit(), (command.card).getRank());
 	this->getDiscards().push_back(newDiscard);

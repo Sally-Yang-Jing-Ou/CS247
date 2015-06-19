@@ -39,7 +39,7 @@ int main(int argc, char const *argv[])
 
 	vector<int> winners = newGame->winners();
 
-	for(int i = 0; i < winners.size(); i++) {
+	for(size_t i = 0; i < winners.size(); i++) {
 		cout << "Player " << winners[i] << " wins!" << endl;
 	}
 
