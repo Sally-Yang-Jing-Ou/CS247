@@ -31,8 +31,8 @@ void PlayersHuman::discardCard (Card card, int &theChosenOne){
         }
     }
 
-    Card *newDiscard = new Card((card).getSuit(), (card).getRank());
-    this->getDeck().push_back(newDiscard); 
+    Card *newDiscard = new Card(card.getSuit(), card.getRank());
+    this->getDiscards().push_back(newDiscard);
 
     cout << "Player " << theChosenOne + 1 << " discards " << card << "." << endl;
     theChosenOne = (theChosenOne + 1) % 4;
