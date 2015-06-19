@@ -200,7 +200,7 @@ void GameLogic::playTurn(Players * player, bool shouldDisplayOptions) {
 
 void GameLogic::beginGame() {
 	table_.clearTable();
-        cout << "A new round begins. It's player " << theChosenOne_ + 1 << "'s turn to play" << endl;
+        cout << "A new round begins. It's player " << theChosenOne_ + 1 << "'s turn to play." << endl;
 	this->firstTurn_ = true;
 	while (!(allPlayers_[theChosenOne_]->isDeckEmpty())) { //continue to play game if no players have run out the cards
 		playTurn(allPlayers_[theChosenOne_], true);
