@@ -15,7 +15,7 @@ class GameLogic {
 public:
 	GameLogic();
 	~GameLogic();
-	void invitePlayers(char playerChoice, int i); 
+	void invitePlayers(char playerChoice, int i);
 	Deck &deck();
 	Table &table();
 	int &theChosenOne ();
@@ -30,11 +30,11 @@ private:
 	Deck deck_;
 	Table table_;
 	int theChosenOne_;
-	int allPlayersScores_[4];	
+	int allPlayersScores_[4];
 	bool firstTurn_;
-	bool isLegalPlayInCommandHelper (Card theCard);
-	bool isLegalPlayHelper (int itRank, int it2Rank, int itSuit, int it2Suit);
-	void printLegalPlaysHelper (std::list<Card*> currentPlayerDeck);
+	bool isLegalPlayInCommand (Card theCard);
+	bool isLegalPlay (int itRank, int it2Rank, int itSuit, int it2Suit);
+	void printLegalPlays (std::list<Card*> currentPlayerDeck);
 	void printOptions (std::list<Card*> currentPlayerDeck);
 	bool legalPlayInDeckExists (std::list<Card*> currentPlayerDeck, Table &table);
 	void playTurn(Players * player, bool shouldDisplayOptions);

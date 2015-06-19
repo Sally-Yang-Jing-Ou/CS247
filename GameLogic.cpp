@@ -23,7 +23,7 @@ int &GameLogic::theChosenOne() {
 	return theChosenOne_;
 }
 
-bool GameLogic::isLegalPlayHelper (int itRank, int it2Rank, int itSuit, int it2Suit) {
+bool GameLogic::isLegalPlay (int itRank, int it2Rank, int itSuit, int it2Suit) {
 	if (itRank == 7 - 1 ||
 	(itRank -1 == it2Rank && itSuit == it2Suit) ||
 	(itRank +1 == it2Rank && itSuit == it2Suit)) {
@@ -32,7 +32,7 @@ bool GameLogic::isLegalPlayHelper (int itRank, int it2Rank, int itSuit, int it2S
 	return false;
 }
 
-bool GameLogic::isLegalPlayInCommandHelper (Card theCard) {
+bool GameLogic::isLegalPlayInCommand (Card theCard) {
 	for (int i = 0; i < 4; i++) {
 		vector<Card*>* setOfSuit = this->table().returnArrayOfSets()->at(i);
 		if (!setOfSuit->empty()) {
@@ -53,7 +53,7 @@ bool GameLogic::isLegalPlayInCommandHelper (Card theCard) {
 		vector<Card*>* setOfSuit = this->table_.returnArrayOfSets()->at(i);
 		if (!setOfSuit->empty()) {
 			for (std::vector<Card*>::iterator it2 = setOfSuit->begin(); it2 != setOfSuit->end(); it2++) {
-				if (isLegalPlayHelper((int)theCard.getRank(), (int)(*it2)->getRank(), (int)theCard.getSuit(), (int)(*it2)->getSuit())) {
+				if (isLegalPlay((int)theCard.getRank(), (int)(*it2)->getRank(), (int)theCard.getSuit(), (int)(*it2)->getSuit())) {
 					return true;
 				}
 			}
@@ -62,7 +62,7 @@ bool GameLogic::isLegalPlayInCommandHelper (Card theCard) {
 	return false;
 }
 
-void GameLogic::printLegalPlaysHelper (std::list<Card*> currentPlayerDeck) {
+void GameLogic::printLegalPlays (std::list<Card*> currentPlayerDeck) {
 	for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
 		if (this->firstTurn_) {
 			cout << " " << "7S";
@@ -74,7 +74,7 @@ void GameLogic::printLegalPlaysHelper (std::list<Card*> currentPlayerDeck) {
 			if (!setOfSuit->empty() && !options_printed) {
 
 				for (std::vector<Card*>::iterator it2 = setOfSuit->begin(); it2 != setOfSuit->end(); it2++) {
-					if (isLegalPlayHelper((int)((*it)->getRank()), (int)((*it2)->getRank()), (int)((*it)->getSuit()), (int)((*it2)->getSuit()))) {
+					if (isLegalPlay((int)((*it)->getRank()), (int)((*it2)->getRank()), (int)((*it)->getSuit()), (int)((*it2)->getSuit()))) {
 						cout << " " << (**it);
 						options_printed = true;
 						break;
@@ -99,7 +99,7 @@ void GameLogic::printOptions (std::list<Card*> currentPlayerDeck) {
 
 	cout << "Legal plays:";
 	if (!currentPlayerDeck.empty()) {
-		printLegalPlaysHelper(currentPlayerDeck);
+		printLegalPlays(currentPlayerDeck);
 		cout << endl;
 	} else {
 		cout << "" << endl;
@@ -116,7 +116,7 @@ bool GameLogic::legalPlayInDeckExists (std::list<Card*> currentPlayerDeck, Table
 			vector<Card*>* setOfSuit = table.returnArrayOfSets()->at(i);
 			if (!setOfSuit->empty()) {
 				for (std::vector<Card*>::iterator it2 = setOfSuit->begin(); it2 != setOfSuit->end(); it2++) {
-					if (isLegalPlayHelper((int)((*it)->getRank()), (int)((*it2)->getRank()), (int)((*it)->getSuit()), (int)((*it2)->getSuit()))) {
+					if (isLegalPlay((int)((*it)->getRank()), (int)((*it2)->getRank()), (int)((*it)->getSuit()), (int)((*it2)->getSuit()))) {
 						return true;
 					}
 				}
@@ -170,7 +170,7 @@ void GameLogic::playTurn(Players * player, bool shouldDisplayOptions) {
 		cin >> command;
 
 		if (command.type == PLAY) { //a) play <card>
-			if (isLegalPlayInCommandHelper(command.card)) {
+			if (isLegalPlayInCommand(command.card)) {
 				player->playCard(command.card, this->table(), theChosenOne_);
 			} else {
 				cout << "This is not a legal play." << endl;
