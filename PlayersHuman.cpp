@@ -105,7 +105,7 @@ void PlayersHuman::printOutTable (Table &table, bool firstTurn) {
 
 void PlayersHuman::doActionPlay ( Command &command, Table &table, bool &firstTurn, int theChosenOne ){
 	if (!isLegalPlayInCommand(command.card, table, firstTurn)){
-		cout << "This is not a legal play." << endl;
+		throw "This is not a legal play.";
 	}
 
 	for (std::list<Card*>::iterator it = this->getDeck().begin(); it != this->getDeck().end(); it++) {
@@ -120,9 +120,8 @@ void PlayersHuman::doActionPlay ( Command &command, Table &table, bool &firstTur
 
 
 void PlayersHuman::doActionDiscard (Table &table, int theChosenOne, Command &command){
-	while (checkLegalPlaysInDeck(this->getDeck(), table)){
-		cout << "You have a legal play. You may not discard." << endl;
-		cin >> command;
+	if (checkLegalPlaysInDeck(this->getDeck(), table)){
+		throw "You have a legal play. You may not discard.";
 	}
 	for (std::list<Card*>::iterator it = this->getDeck().begin(); it != this->getDeck().end(); it++) {
         if ((**it) == command.card) {
@@ -141,18 +140,27 @@ void PlayersHuman::doAction (Table &table, bool &firstTurn, int theChosenOne, ve
 
     
     printOutTable(table, firstTurn);
-	bool print = false;
+	bool print;
     do {
+    	print = false;
     	cout << '>';
     	Command command;
     	cin >> command;
 		if (command.type == PLAY) { //a) play <card>
-			doActionPlay(command, table, firstTurn, theChosenOne);
-			print = false;
+			try {
+				doActionPlay(command, table, firstTurn, theChosenOne);
+			} catch (const char* &message) {
+				cout << message << endl;
+				print = true;
+			}
 	
-		} else if (command.type == DISCARD) { //b) discard <card>
-			doActionDiscard(table, theChosenOne, command);
-			print = false;
+		} else if (command.type == DISCARD) { //b) discard <card>		
+			try {
+				doActionDiscard(table, theChosenOne, command);
+			} catch (const char* &message) {
+				cout << message << endl;
+				print = true;
+			}
 	
 		} else if (command.type == DECK) { //c) print out the deck
 			for (int i = 0; i < 52; i ++) {
@@ -178,7 +186,7 @@ void PlayersHuman::doAction (Table &table, bool &firstTurn, int theChosenOne, ve
 			PlayersComputer* computerPlayer = new PlayersComputer(*allPlayers[theChosenOne]);
 			allPlayers[theChosenOne] = computerPlayer;
 			cout << "Player " << theChosenOne + 1 << " ragequits. A computer will now take over." << endl;
-			print = false;
+			computerPlayer->doAction(table, firstTurn, theChosenOne, allPlayers, myDeck);
 		}
     } while (print);
 
