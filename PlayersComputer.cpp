@@ -43,6 +43,6 @@ void PlayersComputer::makeMove (Table &table, bool &firstTurn, int &theChosenOne
 	if (newCard != NULL) { //there is a legal card in deck
         Players::playCard(*newCard, theChosenOne);
 	} else {
-        Players::discardCard(**(this->getDeck().begin()), theChosenOne);
+        Players::discardCard(**(this->getDeck().begin()), table, theChosenOne);
 	}
 }

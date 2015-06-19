@@ -43,7 +43,7 @@ bool GameLogic::isLegalPlayInCommandHelper (Card theCard) { //TODO: this functio
 
 	for (int i = 0; i < 4; i++) {
 		vector<Card*>* setOfSuit = this->table_.returnArrayOfSets()->at(i);
-		if (!setOfSuit->empty()) { 
+		if (!setOfSuit->empty()) {
 			for (std::vector<Card*>::iterator it2 = setOfSuit->begin(); it2 != setOfSuit->end(); it2++) {
 				if (isLegalPlayHelper((int)theCard.getRank(), (int)(*it2)->getRank(), (int)theCard.getSuit(), (int)(*it2)->getSuit())) {
 					this->table_.placeCard(newCard); //insert into the sets, legal play, tuck this card into one of the sets
@@ -60,7 +60,7 @@ void GameLogic::printLegalPlaysHelper (std::list<Card*> currentPlayerDeck) {
 		if (this->firstTurn_) {
 			cout << " " << "7S";
 			break;
-		} 
+		}
 		options_printed = false;
 		for (int i = 0; i < 4; i ++) {
 			vector<Card*>* setOfSuit = this->table().returnArrayOfSets()->at(i);
@@ -130,12 +130,12 @@ void GameLogic::invitePlayers(char playerChoice, int i){
 
 void GameLogic::dealCards() {
 	deck_.shuffle(); //shuffle the cards
-	Players* currentPlayer; 
+	Players* currentPlayer;
 	vector<Card*> deck = deck_.getMyDeck();
 	for (int i = 0; i < 4; i ++) {
 		currentPlayer = allPlayers_[i]; //cards for each player
 		for (int j = 0; j < 13; j ++) {
-			currentPlayer->getDeck().push_back (deck[i*13+j]); 
+			currentPlayer->getDeck().push_back (deck[i*13+j]);
 		}
 	}
 	//determine who gets to go first
@@ -154,7 +154,7 @@ void GameLogic::playTurn(Players * player, bool shouldDisplayOptions) {
 		if (shouldDisplayOptions) {
 			printOptions(player->getDeck());
 		}
-		
+
 		cout << ">";
 		Command command;
 		cin >> command;
@@ -163,15 +163,15 @@ void GameLogic::playTurn(Players * player, bool shouldDisplayOptions) {
 			if (isLegalPlayInCommandHelper(command.card)) {
 				player->playCard(command.card, theChosenOne_);
 			} else {
-				cout << "This is not a legal play." << endl;	
+				cout << "This is not a legal play." << endl;
 				return playTurn(player, false);
 			}
 		} else if (command.type == DISCARD) { //b) discard <card>
 			if (!legalPlayInDeckExists(player->getDeck(), table())) {
-				player->discardCard(command.card, theChosenOne_);
+				player->discardCard(command.card, this->table(), theChosenOne_);
 			} else {
 				cout << "You have a legal play. You may not discard." << endl;
-				return playTurn(player, false);			
+				return playTurn(player, false);
 			}
 		} else if (command.type == DECK) { //c) print out the deck
 			this->deck_.print();
@@ -179,7 +179,7 @@ void GameLogic::playTurn(Players * player, bool shouldDisplayOptions) {
 		} else if (command.type == QUIT) { //quit: clean up memory first
 			for(int i=0; i<4; i++) {
 				delete this->allPlayers_[i];
-			}	    
+			}
 			for (int i=0; i<52; i++) {
 				delete deck_.getMyDeck()[i];
 			}
@@ -240,5 +240,3 @@ vector<int> GameLogic::winners() const {
 
 	return winningPlayerNumbers;
 }
-
-

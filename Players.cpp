@@ -1,7 +1,8 @@
 #include <list>
 #include "Players.h"
-#include <stdlib.h>
+#include <cstdlib>
 #include <algorithm>
+#include <cassert>
 
 using namespace std;
 
@@ -75,22 +76,27 @@ void Players::addCardToDiscards (Card *card) {
 	playersDiscards_.push_back(card);
 }
 
-void Players::playCard ( Card card, int &theChosenOne ){
+void Players::playCard ( Card card, int &theChosenOne ) {
+	bool inHand = true;
+
     for (std::list<Card*>::iterator it = this->getDeck().begin(); it != this->getDeck().end(); it++) {
         if ((**it) == card){
             eraseCardFromHand(*it); // delete this card from the hand
+			inHand = false;
             break;
         }
     }
 
+	assert(!inHand);
     cout << "Player " << theChosenOne + 1 << " plays " << card << "." << endl;
     theChosenOne = (theChosenOne + 1) % 4;
 }
 
-void Players::discardCard (Card card, int &theChosenOne){
+void Players::discardCard (Card card, Table &table, int &theChosenOne){
     for (std::list<Card*>::iterator it = this->getDeck().begin(); it != this->getDeck().end(); it++) {
         if ((**it) == card) {
             eraseCardFromHand(*it);
+			table.placeCard(*it);
             break;
         }
     }
