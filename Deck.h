@@ -11,6 +11,7 @@ public:
 	Deck();
 	std::vector<Card*> &getMyDeck() ;	// getter for the deck
 	void shuffle();
+        void print();
 private:
 	void init();
 	std::vector<Card*> myDeck_;

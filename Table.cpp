@@ -2,7 +2,7 @@
 #include <cassert>
 #include <algorithm>
 
-using namespace std;	
+using namespace std;
 
 Table::Table() : arrayOfSets_(new vector<vector<Card*>* >()) {
     for (int i = 0; i < 4; i++) {

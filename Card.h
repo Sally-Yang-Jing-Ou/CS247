@@ -17,7 +17,7 @@ public:
 	Suit getSuit() const;
 	Rank getRank() const;
 	std::string getRankInString () const;
-	
+
 private:
 	Suit suit_;
 	Rank rank_;

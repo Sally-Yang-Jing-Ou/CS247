@@ -9,7 +9,7 @@
 #include "Table.h"
 
 class Players {
-public: 
+public:
 	Players();// constructor
     virtual ~Players();  // destructor
     Players( Players& copyPlayer );  // copy constructor
@@ -22,10 +22,9 @@ public:
     void roundEndsMessage(int i);
     void eraseCardFromHand (Card *card);
     void addCardToDiscards (Card *card);
-    
-	virtual void doAction (Table &table, bool &firstTurn, int theChosenOne, std::vector<Players*> &allPlayers, std::vector<Card*> &myDeck) = 0;
-
-private: 
+    void playCard(Card card, Table &table, int &theChosenOne);
+    void discardCard(Card card, Table &table, int &theChosenOne);
+private:
 	std::list<Card*> playersDeck_; //each player's deck of cards
 	std::list<Card*> playersDiscards_; //each player's deck of discards
 	int oldScore_;

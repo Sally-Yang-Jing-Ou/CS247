@@ -15,11 +15,6 @@ class PlayersHuman : public Players { //inherits from Players
 public:
 	PlayersHuman();
 	~PlayersHuman();
-    void printOutTable (Table &table, bool firstTurn);
-    void doActionPlay ( Command &command, Table &table, bool &firstTurn, int theChosenOne);
-    void doActionDiscard ( Table &table, int theChosenOne, Command &command);
-    void doAction (Table &table, bool &firstTurn, int theChosenOne, std::vector<Players*> &allPlayers, std::vector<Card*> &myDeck);
-
 private: 
 
 };
