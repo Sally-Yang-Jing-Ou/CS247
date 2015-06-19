@@ -191,9 +191,8 @@ void GameLogic::playTurn(Players * player, bool shouldDisplayOptions) {
 			cout << "Player " << this->theChosenOne_ + 1 << " ragequits. A computer will now take over." << endl;
 		}
 	} else {
-		// do computer stuff
+		static_cast<PlayersComputer*>(player)->makeMove(this->table(), this->firstTurn_, theChosenOne_);
 	}
-	
 }
 
 void GameLogic::beginGame() {

@@ -38,23 +38,11 @@ Card* PlayersComputer::firstLegalCardInDeck (Table &table, bool &firstTurn) {
 	return NULL;
 }
 
-void PlayersComputer::doAction (Table &table, bool &firstTurn, int theChosenOne, std::vector<Players*> &allPlayers, std::vector<Card*> &myDeck){
+void PlayersComputer::makeMove (Table &table, bool &firstTurn, int &theChosenOne){
 	Card *newCard = firstLegalCardInDeck (table, firstTurn);
-	if (newCard!=NULL) { //there is a legal card in deck
-		table.placeCard(newCard);
-		for (std::list<Card*>::iterator it = this->getDeck().begin(); it != this->getDeck().end(); it++) {
-			if ((**it) == *newCard) {
-				eraseCardFromHand(*it); // delete this card from the hand
-				break;
-			}
-		}
-		cout << "Player " << theChosenOne + 1<< " plays " << *newCard << "." << endl;
-		theChosenOne = (theChosenOne + 1) % 4;
+	if (newCard != NULL) { //there is a legal card in deck
+        Players::playCard(*newCard, theChosenOne);
 	} else {
-		list<Card*>::iterator it = this->getDeck().begin();	//discard the first card on hand
-		eraseCardFromHand(*it);
-		addCardToDiscards(*it);
-		cout << "Player " << theChosenOne + 1 << " discards " << (**it) << "." << endl;
-		theChosenOne = (theChosenOne + 1) % 4;
+        Players::discardCard(**(this->getDeck().begin()), theChosenOne);
 	}
 }

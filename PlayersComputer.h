@@ -15,7 +15,7 @@ public:
 	~PlayersComputer();
     Card* firstLegalCardInDeck (Table &table, bool &firstTurn);
 	PlayersComputer( Players& copyPlayer );
-    void doAction (Table &table, bool &firstTurn, int theChosenOne, std::vector<Players*> &allPlayers, std::vector<Card*> &myDeck);
+    void makeMove(Table &table, bool &firstTurn, int &theChosenOne);
 };
 
 #endif
