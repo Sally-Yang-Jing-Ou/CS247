@@ -25,7 +25,7 @@ int main(int argc, char const *argv[])
 	if (argc > 1) {
 		seed = atoi(argv[1]); //0. Command Line Parameter
 	}
-	
+
 	for (int i = 0; i < 4; i++){
 		cout << "Is player " << i + 1<< " a human(h) or a computer(c)?" << endl;
 		cout << ">";
@@ -33,7 +33,7 @@ int main(int argc, char const *argv[])
 		cin >> playerChoice;
 		newGame->invitePlayers(playerChoice, i);
 	}
-	
+
 	while (!newGame->gameOver()) {
 		newGame->dealCards();
 		newGame->beginGame();
@@ -41,7 +41,7 @@ int main(int argc, char const *argv[])
 
 	vector<int> winners = newGame->winners();
 
-	for(int i = 0; i < winners.size(); i++) {
+	for(size_t i = 0; i < winners.size(); i++) {
 		cout << "Player " << winners[i] << " wins!" << endl;
 	}
 

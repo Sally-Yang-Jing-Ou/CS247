@@ -22,7 +22,7 @@ public:
     void roundEndsMessage(int i);
     void eraseCardFromHand (Card *card);
     void addCardToDiscards (Card *card);
-    void playCard(Card card, int &theChosenOne);
+    void playCard(Card card, Table &table, int &theChosenOne);
     void discardCard(Card card, Table &table, int &theChosenOne);
 private:
 	std::list<Card*> playersDeck_; //each player's deck of cards

@@ -101,6 +101,10 @@ void GameLogic::printOptions (std::list<Card*> currentPlayerDeck) {
 
 bool GameLogic::legalPlayInDeckExists (std::list<Card*> currentPlayerDeck, Table &table) {
 	for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
+		if ((*it)->getRank()==SEVEN) {
+        	return true;
+        }
+
 		for (int i = 0; i < 4; i ++) {
 			vector<Card*>* setOfSuit = table.returnArrayOfSets()->at(i);
 			if (!setOfSuit->empty()) {
@@ -149,7 +153,6 @@ void GameLogic::dealCards() {
 
 void GameLogic::playTurn(Players * player, bool shouldDisplayOptions) {
 	bool isPlayerComputer = dynamic_cast<PlayersComputer*>(player) ? true : false;
-
 	if (!isPlayerComputer) {
 		if (shouldDisplayOptions) {
 			printOptions(player->getDeck());
@@ -161,7 +164,7 @@ void GameLogic::playTurn(Players * player, bool shouldDisplayOptions) {
 
 		if (command.type == PLAY) { //a) play <card>
 			if (isLegalPlayInCommandHelper(command.card)) {
-				player->playCard(command.card, theChosenOne_);
+				player->playCard(command.card, this->table(), theChosenOne_);
 			} else {
 				cout << "This is not a legal play." << endl;
 				return playTurn(player, false);
