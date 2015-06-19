@@ -32,7 +32,17 @@ bool GameLogic::isLegalPlayHelper (int itRank, int it2Rank, int itSuit, int it2S
 	return false;
 }
 
-bool GameLogic::isLegalPlayInCommandHelper (Card theCard) { //TODO: this function is a liar
+bool GameLogic::isLegalPlayInCommandHelper (Card theCard) {
+	for (int i = 0; i < 4; i++) {
+		vector<Card*>* setOfSuit = this->table().returnArrayOfSets()->at(i);
+		if (!setOfSuit->empty()) {
+			for (std::vector<Card*>::iterator it2 = setOfSuit->begin(); it2 != setOfSuit->end(); it2++) {
+				if (**it2 == theCard) {
+					return false;
+				}
+			}
+		}
+	}
 	Card sevenSpade = Card(SPADE, SEVEN);
 	Card *newCard = new Card(theCard.getSuit(), theCard.getRank());
 	if (this->firstTurn_ && theCard == sevenSpade) {

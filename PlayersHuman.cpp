@@ -10,4 +10,3 @@ bool printed = false;
 PlayersHuman::PlayersHuman() {}
 
 PlayersHuman::~PlayersHuman() {}
-
