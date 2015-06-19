@@ -68,7 +68,10 @@ void printLegalPlays (std::list<Card*> currentPlayerDeck, Table &table, bool fir
 
 bool checkLegalPlaysInDeck (std::list<Card*> currentPlayerDeck, Table &table) {
 	for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
-		for (int i = 0; i < 4; i ++) {
+        if ((*it)->getRank()==SEVEN) {
+            return true;
+        }
+        for (int i = 0; i < 4; i ++) {
 			vector<Card*>* setOfSuit = table.returnArrayOfSets()->at(i);
 			if (!setOfSuit->empty()) {
 				for (std::vector<Card*>::iterator it2 = setOfSuit->begin(); it2 != setOfSuit->end(); it2++) {
@@ -104,7 +107,7 @@ void PlayersHuman::printOutTable (Table &table, bool firstTurn) {
 }
 
 void PlayersHuman::doActionPlay ( Command &command, Table &table, bool &firstTurn, int theChosenOne ){
-	//bool notInHand = true;
+	bool notInHand = true;
 
 	if (!isLegalPlayInCommand(command.card, table, firstTurn)){
 		throw "This is not a legal play.";
@@ -113,34 +116,30 @@ void PlayersHuman::doActionPlay ( Command &command, Table &table, bool &firstTur
 	for (std::list<Card*>::iterator it = this->getDeck().begin(); it != this->getDeck().end(); it++) {
         if ((**it) == command.card){
             eraseCardFromHand(*it); // delete this card from the hand
-           // notInHand = false;
+           	notInHand = false;
             break;
         }
 	}
 
-	// if (notInHand) {
-	// 	assert(false);
-	// }
+    assert(!notInHand);
 
 	cout << "Player " << theChosenOne + 1 << " plays " << command.card << "." << endl;
 }
 
 
 void PlayersHuman::doActionDiscard (Table &table, int theChosenOne, Command &command){
-	//bool notInHand = true;
+	bool notInHand = true;
 	if (checkLegalPlaysInDeck(this->getDeck(), table)){
 		throw "You have a legal play. You may not discard.";
 	}
 	for (std::list<Card*>::iterator it = this->getDeck().begin(); it != this->getDeck().end(); it++) {
         if ((**it) == command.card) {
             eraseCardFromHand(*it);
-            //notInHand = false;
+            notInHand = false;
             break;
         }
 	}
-	// if (notInHand) {
-	// 	assert(false);
-	// }
+    assert(!notInHand);
 
 	Card *newDiscard = new Card((command.card).getSuit(), (command.card).getRank());
 	this->getDiscards().push_back(newDiscard);
