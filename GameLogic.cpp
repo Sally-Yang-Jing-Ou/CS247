@@ -44,10 +44,8 @@ bool GameLogic::isLegalPlayInCommandHelper (Card theCard) {
 		}
 	}
 	Card sevenSpade = Card(SPADE, SEVEN);
-	Card *newCard = new Card(theCard.getSuit(), theCard.getRank());
 	if (this->firstTurn_ && theCard == sevenSpade) {
 		this->firstTurn_ = false;
-		this->table_.placeCard(newCard); //insert sevenSpade into setOfSpade
 		return true;
 	}
 
@@ -56,7 +54,6 @@ bool GameLogic::isLegalPlayInCommandHelper (Card theCard) {
 		if (!setOfSuit->empty()) {
 			for (std::vector<Card*>::iterator it2 = setOfSuit->begin(); it2 != setOfSuit->end(); it2++) {
 				if (isLegalPlayHelper((int)theCard.getRank(), (int)(*it2)->getRank(), (int)theCard.getSuit(), (int)(*it2)->getSuit())) {
-					this->table_.placeCard(newCard); //insert into the sets, legal play, tuck this card into one of the sets
 					return true;
 				}
 			}
