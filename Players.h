@@ -22,6 +22,8 @@ public:
     void roundEndsMessage(int i);
     void eraseCardFromHand (Card *card);
     void addCardToDiscards (Card *card);
+    void playCard(Card card, int &theChosenOne);
+    void discardCard(Card card, int &theChosenOne);
 private: 
 	std::list<Card*> playersDeck_; //each player's deck of cards
 	std::list<Card*> playersDiscards_; //each player's deck of discards

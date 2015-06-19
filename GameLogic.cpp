@@ -161,14 +161,14 @@ void GameLogic::playTurn(Players * player, bool shouldDisplayOptions) {
 
 		if (command.type == PLAY) { //a) play <card>
 			if (isLegalPlayInCommandHelper(command.card)) {
-				static_cast<PlayersHuman*>(player)->playCard(command.card, theChosenOne_);
+				player->playCard(command.card, theChosenOne_);
 			} else {
 				cout << "This is not a legal play." << endl;	
 				return playTurn(player, false);
 			}
 		} else if (command.type == DISCARD) { //b) discard <card>
 			if (!legalPlayInDeckExists(player->getDeck(), table())) {
-				static_cast<PlayersHuman*>(player)->discardCard(command.card, theChosenOne_);
+				player->discardCard(command.card, theChosenOne_);
 			} else {
 				cout << "You have a legal play. You may not discard." << endl;
 				return playTurn(player, false);			
