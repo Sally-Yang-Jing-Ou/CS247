@@ -78,8 +78,8 @@ void GameLogic::printLegalPlaysHelper (std::list<Card*> currentPlayerDeck) {
 	}
 }
 
-void GameLogic::printOptions (Table &table, std::list<Card*> currentPlayerDeck) {
-	table.printTable();
+void GameLogic::printOptions (std::list<Card*> currentPlayerDeck) {
+	this->table_.printTable();
 	cout << "Your hand:";
 	if (!currentPlayerDeck.empty()) {
 		for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
@@ -152,7 +152,7 @@ void GameLogic::playTurn(Players * player, bool shouldDisplayOptions) {
 
 	if (!isPlayerComputer) {
 		if (shouldDisplayOptions) {
-			printOptions(table(), player->getDeck());	
+			printOptions(player->getDeck());
 		}
 		
 		cout << ">";
