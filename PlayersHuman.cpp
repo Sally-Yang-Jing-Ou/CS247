@@ -21,6 +21,16 @@ bool isLegalPlay (int itRank, int it2Rank, int itSuit, int it2Suit) {
 }
 
 bool isLegalPlayInCommand (Card theCard, Table &table, bool &firstTurn) {
+	for (int i = 0; i < 4; i++) {
+		vector<Card*>* setOfSuit = table.returnArrayOfSets()->at(i);
+		if (!setOfSuit->empty()) {
+			for (std::vector<Card*>::iterator it2 = setOfSuit->begin(); it2 != setOfSuit->end(); it2++) {
+				if (**it2 == theCard) {
+					return false;
+				}
+			}
+		}
+	}
 	Card sevenSpade = Card(SPADE, SEVEN);
 	Card *newCard = new Card(theCard.getSuit(), theCard.getRank());
 	if (firstTurn && theCard == sevenSpade) {
