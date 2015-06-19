@@ -1,6 +1,5 @@
 #include "PlayersComputer.h"
 #include "PlayersHuman.h"
-#include "shuffle.h"
 #include "GameLogic.h"
 #include <typeinfo>
 
@@ -43,9 +42,9 @@ bool GameLogic::isLegalPlayInCommandHelper (Card theCard) { //TODO: this functio
 	}
 
 	for (int i = 0; i < 4; i++) {
-		vector<Card*> setOfSuit = this->table_.returnArrayOfSets()[i];
-		if (!setOfSuit.empty()) { 
-			for (std::vector<Card*>::iterator it2 = setOfSuit.begin(); it2 != setOfSuit.end(); it2++) {
+		vector<Card*>* setOfSuit = this->table_.returnArrayOfSets()->at(i);
+		if (!setOfSuit->empty()) { 
+			for (std::vector<Card*>::iterator it2 = setOfSuit->begin(); it2 != setOfSuit->end(); it2++) {
 				if (isLegalPlayHelper((int)theCard.getRank(), (int)(*it2)->getRank(), (int)theCard.getSuit(), (int)(*it2)->getSuit())) {
 					this->table_.placeCard(newCard); //insert into the sets, legal play, tuck this card into one of the sets
 					return true;
@@ -64,10 +63,10 @@ void GameLogic::printLegalPlaysHelper (std::list<Card*> currentPlayerDeck) {
 		} 
 		options_printed = false;
 		for (int i = 0; i < 4; i ++) {
-			vector<Card*> setOfSuit = this->table().returnArrayOfSets()[i];
-			if (!setOfSuit.empty() && !options_printed) {
+			vector<Card*>* setOfSuit = this->table().returnArrayOfSets()->at(i);
+			if (!setOfSuit->empty() && !options_printed) {
 
-				for (std::vector<Card*>::iterator it2 = setOfSuit.begin(); it2 != setOfSuit.end(); it2++) {
+				for (std::vector<Card*>::iterator it2 = setOfSuit->begin(); it2 != setOfSuit->end(); it2++) {
 					if (isLegalPlayHelper((int)((*it)->getRank()), (int)((*it2)->getRank()), (int)((*it)->getSuit()), (int)((*it2)->getSuit()))) {
 						cout << " " << (**it);
 						options_printed = true;
@@ -103,9 +102,9 @@ void GameLogic::printOptions (Table &table, std::list<Card*> currentPlayerDeck) 
 bool GameLogic::legalPlayInDeckExists (std::list<Card*> currentPlayerDeck, Table &table) {
 	for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
 		for (int i = 0; i < 4; i ++) {
-			vector<Card*> setOfSuit = table.returnArrayOfSets()[i];
-			if (!setOfSuit.empty()) {
-				for (std::vector<Card*>::iterator it2 = setOfSuit.begin(); it2 != setOfSuit.end(); it2++) {
+			vector<Card*>* setOfSuit = table.returnArrayOfSets()->at(i);
+			if (!setOfSuit->empty()) {
+				for (std::vector<Card*>::iterator it2 = setOfSuit->begin(); it2 != setOfSuit->end(); it2++) {
 					if (isLegalPlayHelper((int)((*it)->getRank()), (int)((*it2)->getRank()), (int)((*it)->getSuit()), (int)((*it2)->getSuit()))) {
 						return true;
 					}
@@ -120,10 +119,10 @@ void GameLogic::invitePlayers(char playerChoice, int i){
 	Players* newPlayer;
 	if (playerChoice == 'h') { //human player
 		newPlayer = new PlayersHuman();
-		allPlayers_[i] = newPlayer; //put it in the array
+		allPlayers_.push_back(newPlayer); //put it in the array
 	} else if (playerChoice == 'c') { //computer player
 		newPlayer = new PlayersComputer();
-		allPlayers_[i] = newPlayer;
+		allPlayers_.push_back(newPlayer);
 	} else {
 		cerr << "invalid command" << endl;
 	}
@@ -132,7 +131,7 @@ void GameLogic::invitePlayers(char playerChoice, int i){
 void GameLogic::dealCards() {
 	deck_.shuffle(); //shuffle the cards
 	Players* currentPlayer; 
-	array<Card*, 52> deck = deck_.getMyDeck();
+	vector<Card*> deck = deck_.getMyDeck();
 	for (int i = 0; i < 4; i ++) {
 		currentPlayer = allPlayers_[i]; //cards for each player
 		for (int j = 0; j < 13; j ++) {
@@ -198,7 +197,8 @@ void GameLogic::playTurn(Players * player, bool shouldDisplayOptions) {
 }
 
 void GameLogic::beginGame() {
-	cout << "A new round begins. It's player " << theChosenOne_ + 1 << "'s turn to play" << endl;
+	table_.clearTable();
+        cout << "A new round begins. It's player " << theChosenOne_ + 1 << "'s turn to play" << endl;
 	this->firstTurn_ = true;
 	while (!(allPlayers_[theChosenOne_]->isDeckEmpty())) { //continue to play game if no players have run out the cards
 		playTurn(allPlayers_[theChosenOne_], true);
@@ -207,11 +207,9 @@ void GameLogic::beginGame() {
 	for (int i = 0; i < PLAYER_COUNT; i ++) {
 		allPlayers_[i]->roundEndsMessage(i);
 		allPlayers_[i]->getDiscards().clear(); //destruct
-		(table_.returnArrayOfSets())[i].clear();
+                table_.returnArrayOfSets()->at(i)->clear();
 		allPlayersScores_[i] = allPlayers_[i]->getOldScore();
 	}
-
-	table_ = Table();
 }
 
 bool GameLogic::gameOver () {

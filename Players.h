@@ -1,9 +1,8 @@
 #ifndef _PLAYERS_
 #define _PLAYERS_
 
-#include <istream>
+#include <iostream>
 #include <list>
-#include <array>
 #include <vector>
 #include "Card.h"
 #include "Command.h"

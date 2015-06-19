@@ -1,6 +1,7 @@
-#include <iostream>
 #include <list>
 #include "Players.h"
+#include <stdlib.h>
+#include <algorithm>
 
 using namespace std;
 

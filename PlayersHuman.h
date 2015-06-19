@@ -4,7 +4,6 @@
 #include <iostream>
 #include <string>
 #include <list>
-#include <array>
 #include <vector>
 #include "Players.h"
 #include "Card.h"

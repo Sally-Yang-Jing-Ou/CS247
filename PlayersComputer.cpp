@@ -1,6 +1,7 @@
 #include <istream>
 #include <list>
 #include "Card.h"
+#include <stdlib.h>
 #include "PlayersComputer.h"
 
 using namespace std;
@@ -9,29 +10,25 @@ PlayersComputer::PlayersComputer() {}
 
 PlayersComputer::~PlayersComputer() {}
 
-PlayersComputer::PlayersComputer( Players& copyPlayer1 ):Players(copyPlayer1) {}
+PlayersComputer::PlayersComputer(Players& copyPlayer1 ):Players(copyPlayer1) {}
 
-bool isLegal (int itRank, int it2Rank, int itSuit, int it2Suit) {
-	if (itRank == 7 - 1||
-	(itRank -1 == it2Rank && itSuit == it2Suit) ||
-	(itRank +1 == it2Rank && itSuit == it2Suit)) {
-		return true;
-	}
-	return false;
+bool isLegal (Card *first, Card *second) {
+	return first->getRank() == SEVEN ||
+          (first->getSuit() == second->getSuit() && abs(first->getRank() - second->getRank()) <= 1);
 }
 
-Card* firstLegalCardInDeck (std::list<Card*> currentPlayerDeck, Table &table, bool &firstTurn) {
+Card* PlayersComputer::firstLegalCardInDeck (Table &table, bool &firstTurn) {
 	Card *sevenSpade = new Card(SPADE, SEVEN);
     if (firstTurn) {
         firstTurn = false;
         return sevenSpade;
     }
-	for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
+	for (std::list<Card*>::iterator it = this->getDeck().begin(); it != this->getDeck().end(); it++) {
 		for (int i = 0; i < 4; i ++) {
-			vector<Card*> setOfSuit = table.returnArrayOfSets()[i];
-			if (!setOfSuit.empty()) {
-				for (std::vector<Card*> ::iterator it2 = setOfSuit.begin(); it2 != setOfSuit.end(); it2++) {
-					if (isLegal((int)((*it)->getRank()), (int)((*it2)->getRank()), (int)((*it)->getSuit()), (int)((*it2)->getSuit()))) {
+			vector<Card*>* setOfSuit = table.returnArrayOfSets()->at(i);
+			if (setOfSuit->size() > 0) {
+                for (int j = 0; j < setOfSuit->size(); j ++) {
+					if (isLegal(*it, setOfSuit->at(j))) {
                         return (*it);
                     }
 				}
@@ -41,12 +38,11 @@ Card* firstLegalCardInDeck (std::list<Card*> currentPlayerDeck, Table &table, bo
 	return NULL;
 }
 
-void PlayersComputer::DoAction (Table &table, bool &firstTurn, std::list<Card*> &currentPlayerDeck,
-								std::list<Card*> &currentPlayerDiscards, int &theChosenOne, array<Players*, 4> &allPlayers, array<Card*, 52> myDeck) {
-	Card *newCard = firstLegalCardInDeck (currentPlayerDeck, table, firstTurn);
+void PlayersComputer::doAction (Table &table, bool &firstTurn, int theChosenOne, std::vector<Players*> &allPlayers, std::vector<Card*> &myDeck){
+	Card *newCard = firstLegalCardInDeck (table, firstTurn);
 	if (newCard!=NULL) { //there is a legal card in deck
 		table.placeCard(newCard);
-		for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
+		for (std::list<Card*>::iterator it = this->getDeck().begin(); it != this->getDeck().end(); it++) {
 			if ((**it) == *newCard) {
 				eraseCardFromHand(*it); // delete this card from the hand
 				break;
@@ -55,7 +51,7 @@ void PlayersComputer::DoAction (Table &table, bool &firstTurn, std::list<Card*> 
 		cout << "Player " << theChosenOne + 1<< " plays " << *newCard << "." << endl;
 		theChosenOne = (theChosenOne + 1) % 4;
 	} else {
-		list<Card*>::iterator it = currentPlayerDeck.begin();	//discard the first card on hand
+		list<Card*>::iterator it = this->getDeck().begin();	//discard the first card on hand
 		eraseCardFromHand(*it);
 		addCardToDiscards(*it);
 		cout << "Player " << theChosenOne + 1 << " discards " << (**it) << "." << endl;

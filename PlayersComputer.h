@@ -4,7 +4,6 @@
 #include <iostream>
 #include <string>
 #include <list>
-#include <array>
 #include "Players.h"
 #include "Card.h"
 #include "Command.h"
@@ -14,9 +13,9 @@ class PlayersComputer : public Players { //inherits from Players
 public:
 	PlayersComputer();
 	~PlayersComputer();
+    Card* firstLegalCardInDeck (Table &table, bool &firstTurn);
 	PlayersComputer( Players& copyPlayer );
-	void DoAction (Table &table, bool &firstTurn, std::list<Card*> &currentPlayerDeck,
-					std::list<Card*> &currentPlayerDiscards, int &theChosenOne, std::array<Players*, 4> &allPlayers, std::array<Card*, 52> myDeck); 
+    void doAction (Table &table, bool &firstTurn, int theChosenOne, std::vector<Players*> &allPlayers, std::vector<Card*> &myDeck);
 };
 
 #endif

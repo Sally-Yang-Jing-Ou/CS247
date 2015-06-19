@@ -38,4 +38,3 @@ void PlayersHuman::discardCard (Card card, int &theChosenOne){
     theChosenOne = (theChosenOne + 1) % 4;
 }
 
-
