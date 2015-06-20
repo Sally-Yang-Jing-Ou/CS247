@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.3">
+  <zoom_level>6</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>594</x>
+      <y>48</y>
+      <w>126</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>main()
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>426</x>
+      <y>372</y>
+      <w>264</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>ComputerPlayer
+--
++ ComputerPlayer()
++ ~ComputerPlayer() {destructor}
++ ComputerPlayer(player: Player&amp;)
++ firstLegalCardInDeck(table: Table&amp;, isFirstTurn: bool): Card*
++ makeMove(table: Table&amp;, isFirstTurn: bool): void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>552</x>
+      <y>114</y>
+      <w>210</w>
+      <h>186</h>
+    </coordinates>
+    <panel_attributes>Player {abstract}
+--
+- playersDeck_: list&lt;Card*&gt;
+- playersDiscards_: list&lt;Card*&gt;
+- oldScore_: int
+--
++ Player()
++ ~Player() {destructor}
++ Players(copyPlayer: Player)
++ getDeck(): list&lt;Card*&gt; {query} 
++ getDiscards(): list&lt;Card*&gt; {query}
++ getOldScore(): int
++ setNewScore(): void
++ isDeckEmpty(): bool
++ scoreGained(): int
++ roundEndsMessage(int i): void
++ eraseCardFromHand(card: Card): void
++ addCardToDiscards(card: Card): void
++ playCard(card: Card, table: Table&amp;): void
++ discardCard(card: Card, table: Table&amp;): void 
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>696</x>
+      <y>366</y>
+      <w>150</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>HumanPlayer
+--
++ HumanPlayer()
++ ~HumanPlayer() {destructor}</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>426</x>
+      <y>468</y>
+      <w>330</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>Game
+--
+_- PLAYER_COUNT: int {readOnly}_
+- allPlayers_: vector&lt;Players*&gt;
+- deck_: Deck
+- table_: Table
+- theChosenOne_: int
+- allPlayerScores_: int[4]
+- firstTurn_: bool
+- isLegalPlayInCommand(card: Card): bool
+- isLegalPlay(rank: int, rank2: int, suit: int, suit2: int): bool	
+- printLegalPlays(currentPlayerDeck: list&lt;Card*&gt;): void
+- printOptions(currentPlayerDeck: list&lt;Card*&gt;): void
+- legalPlayInDecksExists(currentPlayerDeck: list&lt;Card*&gt;, table: Table&amp;): bool
+- playTurn(player: Player*, shouldDisplayOptions: bool): void
+--
++ Game()
++ ~GameLogic() {destructor}
++ invitePlayers(playerType: char, index: int): void
++ deck(): Deck {query}
++ table(): Table {query}
++ theChosenOne(): int {query}
++ dealCards(): void
++ gameOver(): void
++ beginGame(): void
++ winners(): vector&lt;int&gt; {query}</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>108</x>
+      <y>546</y>
+      <w>216</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>Table
+--
+setsCollection_: vector&lt;vector&lt;Card*&gt;*&gt;*
+--
++ Table()
++ ~Table()
++ printTable(): void
++ placeCard(card: Card*): void
++ clearTable(): void
++ setsCollection(): vector&lt;vector&lt;Card*&gt;*&gt;*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>114</x>
+      <y>144</y>
+      <w>234</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>Card
+--
+- suit_: Suit
+- rank_: Rank
+--
++ Card(suit: Suit, rank: Rank)
++ getSuit(): Suit {query}
++ getRank(): Rank {query}
++ getRankInString(): string {query}
++ operator==(card1: Card&amp;, card2: Card&amp;): bool
++ operator&lt;&lt;(stream: ostream&amp;, card: Card&amp;): ostream&amp;
++ operator&gt;&gt;(stream: istream&amp;, card: Card&amp;): istream&amp;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>186</x>
+      <y>354</y>
+      <w>180</w>
+      <h>78</h>
+    </coordinates>
+    <panel_attributes>Deck
+--
+- init(): void
+- myDeck_: vector&lt;Card*&gt;
+--
++ Deck()
++ getMyDeck(): array&lt;Card*, 52&gt; {query}
++ shuffle(): void
++ print(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>588</x>
+      <y>294</y>
+      <w>66</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>90.0;10.0;90.0;90.0;10.0;90.0;10.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>636</x>
+      <y>294</y>
+      <w>120</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0;180.0;90.0;180.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>138</x>
+      <y>246</y>
+      <w>60</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1= *
+m2=52</panel_attributes>
+    <additional_attributes>80.0;250.0;10.0;250.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>750</x>
+      <y>420</y>
+      <w>168</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;190.0;260.0;190.0;260.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>756</x>
+      <y>174</y>
+      <w>162</w>
+      <h>264</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=4</panel_attributes>
+    <additional_attributes>10.0;10.0;250.0;10.0;250.0;420.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>300</x>
+      <y>108</y>
+      <w>264</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m2= 0...13</panel_attributes>
+    <additional_attributes>420.0;40.0;180.0;40.0;180.0;10.0;10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>342</x>
+      <y>138</y>
+      <w>222</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m2= 0...13</panel_attributes>
+    <additional_attributes>350.0;10.0;110.0;10.0;110.0;50.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>312</x>
+      <y>426</y>
+      <w>126</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;140.0;190.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>234</x>
+      <y>510</y>
+      <w>204</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;10.0;320.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>60</x>
+      <y>180</y>
+      <w>66</w>
+      <h>456</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m2=0...52</panel_attributes>
+    <additional_attributes>80.0;740.0;10.0;740.0;10.0;10.0;90.0;10.0</additional_attributes>
+  </element>
+</diagram>
