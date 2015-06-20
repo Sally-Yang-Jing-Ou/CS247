@@ -2,6 +2,7 @@
 #include "HumanPlayer.h"
 #include "GameLogic.h"
 #include <typeinfo>
+#include <cassert>
 
 using namespace std;
 
@@ -127,6 +128,7 @@ bool GameLogic::legalPlayInDeckExists (std::list<Card*> currentPlayerDeck, Table
 }
 
 void GameLogic::invitePlayer(char playerChoice, int i){
+	assert(playerChoice == 'c' || playerChoice == 'h');
 	Player* newPlayer;
 	if (playerChoice == 'h') { //human player
 		newPlayer = new HumanPlayer();

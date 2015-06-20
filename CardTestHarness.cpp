@@ -29,9 +29,9 @@ int main(int argc, char const *argv[])
 	for (int i = 0; i < 4; i++){
 		cout << "Is player " << i + 1<< " a human(h) or a computer(c)?" << endl;
 		cout << ">";
-		char playerChoice;
-		cin >> playerChoice;
-		newGame->invitePlayer(playerChoice, i);
+		string choice;
+		getline (cin, choice);
+		newGame->invitePlayer(choice.at(0), i);
 	}
 
 	while (!newGame->gameOver()) {
