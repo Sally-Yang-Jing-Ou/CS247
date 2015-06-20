@@ -27,7 +27,7 @@ Card* ComputerPlayer::firstLegalCardInDeck (Table &table, bool &firstTurn) {
 		for (int i = 0; i < 4; i ++) {
 			vector<Card*>* setOfSuit = table.returnArrayOfSets()->at(i);
 			if (setOfSuit->size() > 0) {
-                for (int j = 0; j < setOfSuit->size(); j ++) {
+                for (size_t j = 0; j < setOfSuit->size(); j ++) {
 					if (isLegal(*it, setOfSuit->at(j))) {
                         return (*it);
                     }
