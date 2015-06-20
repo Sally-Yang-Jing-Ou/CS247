@@ -5,10 +5,9 @@ DEPENDS = ${OBJECTS:.o=.d}
 EXEC = straights
 
 ${EXEC} : ${OBJECTS}
-	@mkdir -p bin
-	${CXX} ${CXXFLAGS} ${OBJECTS} -o bin/${EXEC}
+	${CXX} ${CXXFLAGS} ${OBJECTS} -o ${EXEC}
 
 clean :
-	rm -rf ${DEPENDS} ${OBJECTS} bin/
+	rm -rf ${DEPENDS} ${OBJECTS} ${EXEC}
 
 -include ${DEPENDS}
