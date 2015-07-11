@@ -23,22 +23,21 @@ int seed = 0;
 int main(int argc, char ** argv)
 {
 	Gtk::Main kit(argc, argv);
-	View view;
-	Gtk::Main::run(view);
-
 	GameLogic* newGame = new GameLogic();
+	View view(newGame);
+	Gtk::Main::run(view);
 
 	if (argc > 1) {
 		seed = atoi(argv[1]); //0. Command Line Parameter
 	}
 
-	for (int i = 0; i < 4; i++){
-		cout << "Is player " << i + 1<< " a human(h) or a computer(c)?" << endl;
-		cout << ">";
-		string choice;
-		getline (cin, choice);
-		newGame->invitePlayer(choice.at(0), i);
-	}
+	// for (int i = 0; i < 4; i++){
+	// 	cout << "Is player " << i + 1<< " a human(h) or a computer(c)?" << endl;
+	// 	cout << ">";
+	// 	string choice;
+	// 	getline (cin, choice);
+	// 	newGame->invitePlayer(choice.at(0), i);
+	// }
 
 	while (!newGame->gameOver()) {
 		newGame->dealCards();
