@@ -65,6 +65,12 @@ void View::onStartButtonClicked() {
     	int result = dialog.run();
         controller_->onPlayerOptionChosen(result);
     }
+
+    gameLogic_->dealCards();
+}
+
+void View::update() {
+    
 }
 
 View::~View() {}

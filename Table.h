@@ -5,8 +5,9 @@
 #include <set>
 #include <vector>
 #include "Card.h"
+#include "Subject.h"
 
-class Table {
+class Table : public Subject {
 public:
 	Table();
 	~Table();
@@ -20,4 +21,3 @@ private:
 };
 
 #endif
-

@@ -5,11 +5,13 @@
 #include "DeckGUI.h"
 #include "GameLogic.h"
 #include "Controller.h"
+#include "Observer.h"
 
-class View : public Gtk::Window {
+class View : public Gtk::Window, public Observer {
 public:
         View(Controller * controller, GameLogic * gameLogic); // where gameLogic is the common interface using facade pattern
         virtual ~View();
+        virtual void update();
 private:
         Gtk::VBox container_;
         Gtk::HBox menuBox_;
@@ -24,7 +26,6 @@ private:
 
         GameLogic * gameLogic_;
         Controller * controller_;
-
 };
 
 #endif
