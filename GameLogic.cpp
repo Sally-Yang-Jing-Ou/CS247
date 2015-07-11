@@ -252,3 +252,7 @@ vector<int> GameLogic::winners() const {
 
 	return winningPlayerNumbers;
 }
+
+void GameLogic::setSeed(int seed) {
+	deck().setSeed(seed);
+}

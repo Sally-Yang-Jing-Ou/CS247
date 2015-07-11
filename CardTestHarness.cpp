@@ -27,10 +27,6 @@ int main(int argc, char ** argv)
 	View view(&controller, &gameLogic);
 	Gtk::Main::run(view);
 
-	if (argc > 1) {
-		seed = atoi(argv[1]); //0. Command Line Parameter
-	}
-
 	while (!gameLogic.gameOver()) {
 		gameLogic.dealCards();
 		gameLogic.beginGame();

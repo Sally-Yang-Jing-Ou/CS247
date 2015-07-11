@@ -15,6 +15,10 @@ vector<Card*> &Deck::getMyDeck() {
 	return myDeck_;
 }
 
+void Deck::setSeed(int seed) {
+	seed_ = seed;
+}
+
 void Deck::init() {
 	int i = 0;
 	for (int suit = 0; suit < 4; suit ++ ){	//making an ordered deck of cards
@@ -27,7 +31,7 @@ void Deck::init() {
 }
 
 void Deck::shuffle(){
-    static mt19937 rng(seed);
+    static mt19937 rng(seed_);
 
 	int n = CARD_COUNT;
 

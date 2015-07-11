@@ -23,6 +23,7 @@ public:
 	bool gameOver();
 	void beginGame();
 	std::vector<int> winners() const;
+	void setSeed(int seed);
 private:
 	static const int PLAYER_COUNT = 4;
 	std::vector<Player*> allPlayer_; //keep track of all 4 players
