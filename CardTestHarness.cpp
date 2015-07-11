@@ -13,13 +13,19 @@
 #include "HumanPlayer.h"
 #include "ComputerPlayer.h"
 #include "GameLogic.h"
+#include <gtkmm/main.h>
+#include "view.h"
 
 using namespace std;
 
 int seed = 0;
 
-int main(int argc, char const *argv[])
+int main(int argc, char ** argv)
 {
+	Gtk::Main kit(argc, argv);
+	View view;
+	Gtk::Main::run(view);
+
 	GameLogic* newGame = new GameLogic();
 
 	if (argc > 1) {
