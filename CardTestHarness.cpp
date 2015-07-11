@@ -19,8 +19,6 @@
 
 using namespace std;
 
-int seed = 0;
-
 int main(int argc, char ** argv)
 {
 	Gtk::Main kit(argc, argv);
@@ -32,14 +30,6 @@ int main(int argc, char ** argv)
 	if (argc > 1) {
 		seed = atoi(argv[1]); //0. Command Line Parameter
 	}
-
-	// for (int i = 0; i < 4; i++){
-	// 	cout << "Is player " << i + 1<< " a human(h) or a computer(c)?" << endl;
-	// 	cout << ">";
-	// 	string choice;
-	// 	getline (cin, choice);
-	// 	newGame->invitePlayer(choice.at(0), i);
-	// }
 
 	while (!gameLogic.gameOver()) {
 		gameLogic.dealCards();

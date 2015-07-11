@@ -59,19 +59,6 @@ void View::onStartButtonClicked() {
 
     	int result = dialog.run();
         controller_->onPlayerOptionChosen(result);
-
-        // switch (result) {
-        //     case 0:
-        //         cout << "Human player!" << endl;
-        //
-        //         break;
-        //     case 1:
-        //         cout << "Computer player!" << endl;
-        //         break;
-        //     default:
-        //         std::cout << "Unexpected button clicked." << std::endl;
-        //         break;
-        // }
     }
 }
 
