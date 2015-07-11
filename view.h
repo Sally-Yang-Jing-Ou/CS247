@@ -4,10 +4,11 @@
 #include <gtkmm.h>
 #include "DeckGUI.h"
 #include "GameLogic.h"
+#include "Controller.h"
 
 class View : public Gtk::Window {
 public:
-        View(GameLogic * gameLogic); // where gameLogic is the common interface using facade pattern
+        View(Controller * controller, GameLogic * gameLogic); // where gameLogic is the common interface using facade pattern
         virtual ~View();
 private:
         Gtk::VBox container_;
@@ -19,7 +20,11 @@ private:
         Gtk::Entry seedField_;
         Gtk::Label seedLabel_;
 
-        virtual void onStartButtonClicked();
+        void onStartButtonClicked();
+
+        GameLogic * gameLogic_;
+        Controller * controller_;
+
 };
 
 #endif

@@ -15,7 +15,7 @@ class GameLogic {
 public:
 	GameLogic();
 	~GameLogic();
-	void invitePlayer(char playerChoice, int i);
+	void invitePlayer(int playerChoice);
 	Deck &deck();
 	Table &table();
 	int &theChosenOne ();

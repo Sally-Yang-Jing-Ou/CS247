@@ -127,13 +127,13 @@ bool GameLogic::legalPlayInDeckExists (std::list<Card*> currentPlayerDeck, Table
 	return false;
 }
 
-void GameLogic::invitePlayer(char playerChoice, int i){
-	assert(playerChoice == 'c' || playerChoice == 'h');
+void GameLogic::invitePlayer(int playerChoice){
+	assert(playerChoice == 0 || playerChoice == 1);
 	Player* newPlayer;
-	if (playerChoice == 'h') { //human player
+	if (playerChoice == 0) { //human player
 		newPlayer = new HumanPlayer();
 		allPlayer_.push_back(newPlayer); //put it in the array
-	} else if (playerChoice == 'c') { //computer player
+	} else if (playerChoice == 1) { //computer player
 		newPlayer = new ComputerPlayer();
 		allPlayer_.push_back(newPlayer);
 	} else {

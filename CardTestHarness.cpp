@@ -14,7 +14,8 @@
 #include "ComputerPlayer.h"
 #include "GameLogic.h"
 #include <gtkmm/main.h>
-#include "view.h"
+#include "View.h"
+#include "Controller.h"
 
 using namespace std;
 
@@ -23,8 +24,9 @@ int seed = 0;
 int main(int argc, char ** argv)
 {
 	Gtk::Main kit(argc, argv);
-	GameLogic* newGame = new GameLogic();
-	View view(newGame);
+	GameLogic gameLogic;
+	Controller controller(&gameLogic);
+	View view(&controller, &gameLogic);
 	Gtk::Main::run(view);
 
 	if (argc > 1) {
@@ -39,17 +41,16 @@ int main(int argc, char ** argv)
 	// 	newGame->invitePlayer(choice.at(0), i);
 	// }
 
-	while (!newGame->gameOver()) {
-		newGame->dealCards();
-		newGame->beginGame();
+	while (!gameLogic.gameOver()) {
+		gameLogic.dealCards();
+		gameLogic.beginGame();
 	}
 
-	vector<int> winners = newGame->winners();
+	vector<int> winners = gameLogic.winners();
 
 	for(size_t i = 0; i < winners.size(); i++) {
 		cout << "Player " << winners[i] << " wins!" << endl;
 	}
 
-	delete newGame;
 	return 0;
 }

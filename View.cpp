@@ -5,7 +5,7 @@
 
 using namespace std;
 
-View::View(GameLogic * gameLogic) : container_(true, 10), handBox_(true, 10), startButton_("Start game"), seedLabel_("Seed: ") {
+View::View(Controller * controller, GameLogic * gameLogic) : gameLogic_(gameLogic), controller_(controller), container_(true, 10), handBox_(true, 10), startButton_("Start game"), seedLabel_("Seed: ") {
     set_title("Straights");
 
     seedField_.set_text("0");
@@ -54,22 +54,24 @@ void View::onStartButtonClicked() {
         contentArea->pack_start(prompt, true, false);
         prompt.show();
 
-        dialog.add_button("Human", 0); //enum?
+        dialog.add_button("Human", 0);
         dialog.add_button("Computer", 1);
 
     	int result = dialog.run();
-        switch (result) {
-            case 0:
-                cout << "Human player!" << endl;
-                
-                break;
-            case 1:
-                cout << "Computer player!" << endl;
-                break;
-            default:
-                std::cout << "Unexpected button clicked." << std::endl;
-                break;
-        }
+        controller_->onPlayerOptionChosen(result);
+
+        // switch (result) {
+        //     case 0:
+        //         cout << "Human player!" << endl;
+        //
+        //         break;
+        //     case 1:
+        //         cout << "Computer player!" << endl;
+        //         break;
+        //     default:
+        //         std::cout << "Unexpected button clicked." << std::endl;
+        //         break;
+        // }
     }
 }
 
