@@ -26,6 +26,7 @@ View::View(Controller * controller, GameLogic * gameLogic) : gameLogic_(gameLogi
 
     add(container_);
     show_all();
+    gameLogic_->subscribe(this);
 }
 
 void View::onStartButtonClicked() {
@@ -52,7 +53,7 @@ void View::onStartButtonClicked() {
         controller_->onPlayerOptionChosen(result);
     }
 
-    gameLogic_->addSubscriptions(this);
+    //gameLogic_->addSubscriptions(this);
     gameLogic_->beginGame();
 }
 

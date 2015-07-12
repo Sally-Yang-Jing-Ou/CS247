@@ -9,7 +9,7 @@
 #include "Table.h"
 #include "Subject.h"
 
-class Player : public Subject {
+class Player {
 public:
 	Player();// constructor
     virtual ~Player();  // destructor
@@ -26,7 +26,7 @@ public:
     void playCard(Card card, Table &table, int &theChosenOne);
     void discardCard(Card card, Table &table, int &theChosenOne);
 	void addCardToHand(Card* card);
-	void setAsCurrent();
+	//void setAsCurrent();
 private:
 	std::list<Card*> PlayerDeck_; //each player's deck of cards
 	std::list<Card*> PlayerDiscards_; //each player's deck of discards

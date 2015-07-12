@@ -11,8 +11,9 @@
 #include "../Card.h"
 #include "../Command.h"
 #include "../View/Observer.h"
+#include "Subject.h"
 
-class GameLogic {
+class GameLogic: public Subject {//This is the model
 public:
 	GameLogic();
 	~GameLogic();
@@ -25,7 +26,7 @@ public:
 	void beginGame();
 	std::vector<int> winners() const;
 	void setSeed(int seed);
-	void addSubscriptions (Observer* mainView);
+	//void addSubscriptions (Observer* mainView);
 	std::list<Card*> getHandForCurrentPlayer();
 private:
 	static const int PLAYER_COUNT = 4;

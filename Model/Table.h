@@ -7,7 +7,7 @@
 #include "../Card.h"
 #include "Subject.h"
 
-class Table : public Subject {
+class Table {
 public:
 	Table();
 	~Table();

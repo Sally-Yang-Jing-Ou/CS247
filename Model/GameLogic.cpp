@@ -162,12 +162,11 @@ void GameLogic::dealCards() {
 			theChosenOne_ = i/13;
 		}
 	}
-
-	allPlayer_[theChosenOne_]->setAsCurrent();
+	//allPlayer_[theChosenOne_]->setAsCurrent();
 }
 
 void GameLogic::playTurn(Player * player, bool shouldDisplayOptions) {
-	player->setAsCurrent();
+	//player->setAsCurrent();
 	bool isPlayerComputer = dynamic_cast<ComputerPlayer*>(player) ? true : false;
 	if (!isPlayerComputer) {
 		if (shouldDisplayOptions) {
@@ -238,7 +237,8 @@ void GameLogic::beginGame() {
 	dealCards();
 	table_.clearTable();
 	this->firstTurn_ = true;
-	playTurn(allPlayer_[theChosenOne_], true);
+	notify();
+	//playTurn(allPlayer_[theChosenOne_], true);
 }
 
 bool GameLogic::gameOver () {
@@ -275,12 +275,12 @@ void GameLogic::setSeed(int seed) {
 	deck().setSeed(seed);
 }
 
-void GameLogic::addSubscriptions (Observer* mainView) {
-	table_.subscribe(mainView);
-	for (int i = 0; i < 4; i ++) {
-		allPlayer_[i]->subscribe(mainView);
-	}
-}
+// void GameLogic::addSubscriptions (Observer* mainView) {
+// 	table_.subscribe(mainView);
+// 	for (int i = 0; i < 4; i ++) {
+// 		allPlayer_[i]->subscribe(mainView);
+// 	}
+// }
 
 std::list<Card*> GameLogic::getHandForCurrentPlayer() {
 	return allPlayer_[theChosenOne_]->getDeck();
