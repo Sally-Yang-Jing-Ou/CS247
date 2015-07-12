@@ -17,13 +17,14 @@ public:
 
 protected:
         virtual void onStartButtonClicked();
-        // virtual void onCardClicked(int index);
-        // virtual void onRageClicked();
-        // virtual void onEndButtonClicked();
+        virtual void onCardClicked(int index);
+        virtual void onEndButtonClicked();
 
 private:
         static const int NUMBER_OF_CARDS = 13;
         static const int NUMBER_OF_PLAYERS = 4;
+
+        Gtk::Table table;
 
         DeckGUI deck_;
 
@@ -50,8 +51,8 @@ private:
         //Hand
         Gtk::HBox handBox_;
         Gtk::Frame handBoxFrame_;
-        Gtk::Button handButton[NUMBER_OF_CARDS];
-        Gtk::Image *hand[NUMBER_OF_CARDS];
+        Gtk::Button handButton_[NUMBER_OF_CARDS];
+        Gtk::Image *hand_[NUMBER_OF_CARDS];
 
         //model and controller
         GameLogic * gameLogic_;
@@ -59,25 +60,3 @@ private:
 };
 
 #endif
-                
-                // Gtk::Table outerTable;
-
-                // //Top Row
-                // Gtk::HBox menuHBox;
-                // Gtk::Button startGameButton;
-                // Gtk::Button endGameButton;
-                // Gtk::Entry seedEntry;
-                
-                // //Card Table Display
-                // Gtk::Frame cardFrame;
-                // Gtk::Table cardTable;
-                // Gtk::Image *clubs[NUMBER_OF_CARDS_IN_ROW];
-                // Gtk::Image *diamonds[NUMBER_OF_CARDS_IN_ROW];
-                // Gtk::Image *hearts[NUMBER_OF_CARDS_IN_ROW];
-                // Gtk::Image *spades[NUMBER_OF_CARDS_IN_ROW];
-                
-                // //Player Views
-                // PlayerFrame playerFrames[NUMBER_OF_PLAYERS];
-                // Gtk::HBox playerHBox;           
-
-                // void reset();
