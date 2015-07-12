@@ -15,29 +15,15 @@ View::View(Controller * controller, GameLogic * gameLogic) : gameLogic_(gameLogi
     startButton_.signal_clicked().connect( sigc::mem_fun( *this, &View::onStartButtonClicked ) );
 
     container_.pack_start(menuBox_);
-    // vector< Glib::RefPtr<Gdk::Pixbuf> > handImages;
-    // Gtk::Image * card[13];
-    //
-    // for (int i=0; i<13; ++i) {
-    //     handImages.push_back(this->deck_.image((Rank)(i % 13), (Suit)(i % 4)));
-    // }
-    //
-	// set_border_width( 10 );
-    //
-    // cout << Gtk::ALIGN_TOP << endl;
-	// handBoxFrame_.set_label( "Hand:" );
-	// handBoxFrame_.set_label_align( 0.5, Gtk::ALIGN_TOP +0.5);
-	// handBoxFrame_.set_shadow_type( Gtk::SHADOW_ETCHED_OUT );
-    //
-	// add( handBoxFrame_ );
-    //
-	// handBoxFrame_.add( handBox_ );
-    //
-	// for (int i = 0; i < 13; i++ ) {
-	// 	card[i] = new Gtk::Image( handImages.at(i) );
-	// 	handBox_.add( *card[i] );
-	// }
-    //
+
+	handBoxFrame_.set_label( "Hand:" );
+	handBoxFrame_.set_label_align( 0.5, Gtk::ALIGN_TOP +0.5);
+	handBoxFrame_.set_shadow_type( Gtk::SHADOW_ETCHED_OUT );
+    handBoxFrame_.add( handBox_ );
+    container_.pack_start(handBoxFrame_);
+
+
+
     add(container_);
     show_all();
 }
@@ -66,11 +52,29 @@ void View::onStartButtonClicked() {
         controller_->onPlayerOptionChosen(result);
     }
 
+    gameLogic_->addSubscriptions(this);
     gameLogic_->dealCards();
 }
 
 void View::update() {
-    
+    // cout << "clear" << endl;
+    // GList *children, *iter;
+    //
+    // children = gtk_container_get_children(GTK_CONTAINER(&handBox_));
+    // for(iter = children; iter != NULL; iter = g_list_next(iter)) {
+    //     gtk_widget_destroy(GTK_WIDGET(iter->data));
+    // }
+    // g_list_free(children);
+
+    list<Card*> currentHand = gameLogic_->getHandForCurrentPlayer();
+
+    for (std::list<Card*>::iterator it = currentHand.begin(); it != currentHand.end(); it++) {
+        Glib::RefPtr<Gdk::Pixbuf> buffer = this->deck_.image((*it)->getRank(), (*it)->getSuit());
+        Gtk::Image * card = new Gtk::Image( buffer );
+        handBox_.add( *card );
+    }
+
+    show_all();
 }
 
 View::~View() {}

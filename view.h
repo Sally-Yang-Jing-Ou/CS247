@@ -2,10 +2,12 @@
 #define VIEW_H
 
 #include <gtkmm.h>
+#include <list>
 #include "DeckGUI.h"
 #include "GameLogic.h"
 #include "Controller.h"
 #include "Observer.h"
+#include "Card.h"
 
 class View : public Gtk::Window, public Observer {
 public:

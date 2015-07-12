@@ -113,3 +113,11 @@ void Player::discardCard (Card card, Table &table, int &theChosenOne) {
     cout << "Player " << theChosenOne + 1 << " discards " << card << "." << endl;
     theChosenOne = (theChosenOne + 1) % 4;
 }
+
+void Player::addCardToHand (Card* card) {
+	PlayerDeck_.push_back(card);
+}
+
+void Player::setAsCurrent() {
+	notify();
+}

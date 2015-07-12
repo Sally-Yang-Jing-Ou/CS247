@@ -1,6 +1,8 @@
 #include <set>
+#include <iostream>
 #include "subject.h"
 #include "observer.h"
+using namespace std;
 
 void Subject::subscribe (Observer *newView) {
     observers_.insert(newView);

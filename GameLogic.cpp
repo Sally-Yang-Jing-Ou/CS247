@@ -148,7 +148,7 @@ void GameLogic::dealCards() {
 	for (int i = 0; i < 4; i ++) {
 		currentPlayer = allPlayer_[i]; //cards for each player
 		for (int j = 0; j < 13; j ++) {
-			currentPlayer->getDeck().push_back (deck[i*13+j]);
+			currentPlayer->addCardToHand(deck[i*13+j]);
 		}
 	}
 	//determine who gets to go first
@@ -158,9 +158,12 @@ void GameLogic::dealCards() {
 			theChosenOne_ = i/13;
 		}
 	}
+
+	allPlayer_[theChosenOne_]->setAsCurrent();
 }
 
 void GameLogic::playTurn(Player * player, bool shouldDisplayOptions) {
+	player->setAsCurrent();
 	bool isPlayerComputer = dynamic_cast<ComputerPlayer*>(player) ? true : false;
 	if (!isPlayerComputer) {
 		if (shouldDisplayOptions) {
@@ -255,4 +258,15 @@ vector<int> GameLogic::winners() const {
 
 void GameLogic::setSeed(int seed) {
 	deck().setSeed(seed);
+}
+
+void GameLogic::addSubscriptions (Observer* mainView) {
+	table_.subscribe(mainView);
+	for (int i = 0; i < 4; i ++) {
+		allPlayer_[i]->subscribe(mainView);
+	}
+}
+
+std::list<Card*> GameLogic::getHandForCurrentPlayer() {
+	return allPlayer_[theChosenOne_]->getDeck();
 }

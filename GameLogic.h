@@ -10,6 +10,7 @@
 #include "Table.h"
 #include "Card.h"
 #include "Command.h"
+#include "Observer.h"
 
 class GameLogic {
 public:
@@ -24,6 +25,8 @@ public:
 	void beginGame();
 	std::vector<int> winners() const;
 	void setSeed(int seed);
+	void addSubscriptions (Observer* mainView);
+	std::list<Card*> getHandForCurrentPlayer();
 private:
 	static const int PLAYER_COUNT = 4;
 	std::vector<Player*> allPlayer_; //keep track of all 4 players
