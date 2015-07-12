@@ -47,6 +47,14 @@ View::View(Controller * controller, GameLogic * gameLogic) : gameLogic_(gameLogi
 	handBoxFrame_.set_shadow_type( Gtk::SHADOW_ETCHED_OUT );
     //container_.pack_start(handBoxFrame_);
 
+    for (int i = 0; i < 4; i++) {
+        playerBox_[i].rageButton().signal_clicked().connect(sigc::mem_fun(*this, &View::onRageButtonClicked));
+        stringstream stream;
+        stream << (i+1);
+        string currentPlayer = "Player " + stream.str();
+        playerBox_[i].set_label(currentPlayer);
+        playerHBox_.add(playerBox_[i]);
+    }
 
     //Setup the hand
     for (int i = 0; i < NUMBER_OF_CARDS; i++) {
@@ -58,6 +66,7 @@ View::View(Controller * controller, GameLogic * gameLogic) : gameLogic_(gameLogi
 
     handBoxFrame_.add( handBox_ );
 
+    table.attach(playerHBox_, 0, 1, 2, 3);
     table.attach(cardFrame_, 0, 1, 1, 2);
     table.attach(handBoxFrame_, 0, 1, 3, 4);
     add(table);
@@ -120,6 +129,10 @@ void View::onEndButtonClicked() {
 }
 
 void View::onCardClicked(int index){
+
+}
+
+void View::onRageButtonClicked(){
 
 }
 
