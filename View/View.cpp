@@ -28,16 +28,15 @@ View::View(Controller * controller, GameLogic * gameLogic) : gameLogic_(gameLogi
     cardTableView_.set_col_spacings(1);
     cardTableView_.set_row_spacings(2);
 
-    //table view for cards
-    for(int r = ACE; r < RANK_COUNT; r++) {
-        clubs[r] = new Gtk::Image(deck_.null());
-        cardTableView_.attach(*clubs[r], r, r+1, CLUB, CLUB+1);
-        diamonds[r] = new Gtk::Image(deck_.null());
-        cardTableView_.attach(*diamonds[r], r, r+1, DIAMOND, DIAMOND+1);
-        hearts[r] = new Gtk::Image(deck_.null());
-        cardTableView_.attach(*hearts[r], r, r+1, HEART, HEART+1);
-        spades[r] = new Gtk::Image(deck_.null());
-        cardTableView_.attach(*spades[r], r, r+1, SPADE, SPADE+1);
+    for(int i = ACE; i < RANK_COUNT; i++) {
+        clubs_[i] = new Gtk::Image(deck_.null());
+        cardTableView_.attach(*clubs_[i], i, i+1, CLUB, CLUB+1);
+        diamonds_[i] = new Gtk::Image(deck_.null());
+        cardTableView_.attach(*diamonds_[i], i, i+1, DIAMOND, DIAMOND+1);
+        hearts_[i] = new Gtk::Image(deck_.null());
+        cardTableView_.attach(*hearts_[i], i, i+1, HEART, HEART+1);
+        spades_[i] = new Gtk::Image(deck_.null());
+        cardTableView_.attach(*spades_[i], i, i+1, SPADE, SPADE+1);
     }
 
     cardFrame_.add(cardTableView_);
@@ -101,6 +100,8 @@ void View::onStartButtonClicked() {
     }
 
     //gameLogic_->addSubscriptions(this);
+   // gameLogic_->beginGame();
+    gameLogic_->dealCards();
     gameLogic_->beginGame();
 }
 
@@ -115,13 +116,12 @@ void View::update() {
     // g_list_free(children);
 
     list<Card*> currentHand = gameLogic_->getHandForCurrentPlayer();
+    int i = 0;
     for (std::list<Card*>::iterator it = currentHand.begin(); it != currentHand.end(); it++) {
-        Glib::RefPtr<Gdk::Pixbuf> buffer = this->deck_.image((*it)->getRank(), (*it)->getSuit());
-        Gtk::Image * card = new Gtk::Image( buffer );
-        handBox_.add( *card );
+        hand_[i]->set(deck_.image((*it)->getRank(), (*it)->getSuit()));
+        i++;
     }
 
-    show_all();
 }
 
 void View::onEndButtonClicked() {
@@ -134,6 +134,21 @@ void View::onCardClicked(int index){
 
 void View::onRageButtonClicked(){
 
+}
+
+void View::restart() {
+    for (int i = 0; i < 4; i++) {
+        playerBox_[i].discardsSetter("0");
+        playerBox_[i].activate(false);
+    }
+
+    for(int i = ACE; i < RANK_COUNT; i++) {
+        clubs_[i]->set(deck_.null());
+        diamonds_[i]->set(deck_.null());
+        hearts_[i]->set(deck_.null());
+        spades_[i]->set(deck_.null());
+        hand_[i]->set(deck_.null());
+    }
 }
 
 View::~View() {}

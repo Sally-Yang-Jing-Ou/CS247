@@ -38,10 +38,10 @@ private:
 
         Gtk::Frame cardFrame_; //table
         Gtk::Table cardTableView_;
-        Gtk::Image *clubs[NUMBER_OF_CARDS];
-        Gtk::Image *diamonds[NUMBER_OF_CARDS];
-        Gtk::Image *hearts[NUMBER_OF_CARDS];
-        Gtk::Image *spades[NUMBER_OF_CARDS];
+        Gtk::Image *clubs_[NUMBER_OF_CARDS];
+        Gtk::Image *diamonds_[NUMBER_OF_CARDS];
+        Gtk::Image *hearts_[NUMBER_OF_CARDS];
+        Gtk::Image *spades_[NUMBER_OF_CARDS];
 
         PlayerBox playerBox_[4]; //player stats and view
         Gtk::HBox playerHBox_;
@@ -54,6 +54,8 @@ private:
         //model and controller
         GameLogic * gameLogic_;
         Controller * controller_;
+
+        void restart();
 };
 
 #endif
