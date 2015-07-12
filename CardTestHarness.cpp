@@ -9,13 +9,13 @@
 #include <vector>
 #include "Card.h"
 #include "Command.h"
-#include "Player.h"
-#include "HumanPlayer.h"
-#include "ComputerPlayer.h"
-#include "GameLogic.h"
+#include "Model/Player.h"
+#include "Model/HumanPlayer.h"
+#include "Model/ComputerPlayer.h"
+#include "Model/GameLogic.h"
 #include <gtkmm/main.h>
-#include "View.h"
-#include "Controller.h"
+#include "View/View.h"
+#include "Controller/Controller.h"
 
 using namespace std;
 

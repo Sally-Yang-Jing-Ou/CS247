@@ -6,8 +6,8 @@
 #include <list>
 #include <vector>
 #include "Player.h"
-#include "Card.h"
-#include "Command.h"
+#include "../Card.h"
+#include "../Command.h"
 #include "Table.h"
 
 

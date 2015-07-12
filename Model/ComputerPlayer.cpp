@@ -1,6 +1,5 @@
 #include <istream>
 #include <list>
-#include "Card.h"
 #include <stdlib.h>
 #include "ComputerPlayer.h"
 

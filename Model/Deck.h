@@ -1,7 +1,7 @@
 #ifndef _DECK_
 #define _DECK_
 
-#include "Card.h"
+#include "../Card.h"
 #include <vector>
 
 class Deck {

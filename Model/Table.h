@@ -4,7 +4,7 @@
 #include <iostream>
 #include <set>
 #include <vector>
-#include "Card.h"
+#include "../Card.h"
 #include "Subject.h"
 
 class Table : public Subject {

@@ -8,9 +8,9 @@
 #include "Player.h"
 #include "Deck.h"
 #include "Table.h"
-#include "Card.h"
-#include "Command.h"
-#include "Observer.h"
+#include "../Card.h"
+#include "../Command.h"
+#include "../View/Observer.h"
 
 class GameLogic {
 public:

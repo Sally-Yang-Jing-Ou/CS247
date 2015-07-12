@@ -5,8 +5,8 @@
 #include <string>
 #include <list>
 #include "Player.h"
-#include "Card.h"
-#include "Command.h"
+#include "../Card.h"
+#include "../Command.h"
 #include "Table.h"
 
 class ComputerPlayer : public Player { //inherits from Player

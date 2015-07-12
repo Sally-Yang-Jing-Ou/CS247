@@ -2,7 +2,7 @@
 #define __DECK_GUI_H
 #include <gdkmm/pixbuf.h>
 #include <vector>
-#include "card.h"
+#include "../Card.h"
 
 class DeckGUI {
 public:

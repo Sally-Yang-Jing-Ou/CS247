@@ -4,10 +4,10 @@
 #include <gtkmm.h>
 #include <list>
 #include "DeckGUI.h"
-#include "GameLogic.h"
-#include "Controller.h"
+#include "../Model/GameLogic.h"
+#include "../Controller/Controller.h"
 #include "Observer.h"
-#include "Card.h"
+#include "../Card.h"
 
 class View : public Gtk::Window, public Observer {
 public:

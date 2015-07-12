@@ -1,7 +1,7 @@
 #include <set>
 #include <iostream>
 #include "subject.h"
-#include "observer.h"
+#include "../View/Observer.h"
 using namespace std;
 
 void Subject::subscribe (Observer *newView) {

@@ -1,7 +1,7 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-#include "GameLogic.h"
+#include "../Model/GameLogic.h"
 
 class Controller {
 public:
