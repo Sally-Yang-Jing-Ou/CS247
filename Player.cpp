@@ -89,6 +89,7 @@ void Player::playCard ( Card card, Table &table, int &theChosenOne ) {
     }
 
 	assert(!inHand);
+	notify();
 
     cout << "Player " << theChosenOne + 1 << " plays " << card << "." << endl;
     theChosenOne = (theChosenOne + 1) % 4;
@@ -106,6 +107,7 @@ void Player::discardCard (Card card, Table &table, int &theChosenOne) {
     }
 
 	assert(!inHand);
+	notify();
 
     Card *newDiscard = new Card(card.getSuit(), card.getRank());
     this->getDiscards().push_back(newDiscard);

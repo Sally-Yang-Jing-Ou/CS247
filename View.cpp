@@ -53,7 +53,7 @@ void View::onStartButtonClicked() {
     }
 
     gameLogic_->addSubscriptions(this);
-    gameLogic_->dealCards();
+    gameLogic_->beginGame();
 }
 
 void View::update() {
@@ -67,7 +67,6 @@ void View::update() {
     // g_list_free(children);
 
     list<Card*> currentHand = gameLogic_->getHandForCurrentPlayer();
-
     for (std::list<Card*>::iterator it = currentHand.begin(); it != currentHand.end(); it++) {
         Glib::RefPtr<Gdk::Pixbuf> buffer = this->deck_.image((*it)->getRank(), (*it)->getSuit());
         Gtk::Image * card = new Gtk::Image( buffer );

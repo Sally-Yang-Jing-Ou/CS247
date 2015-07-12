@@ -8,7 +8,11 @@ using namespace std;
 
 bool options_printed = false;
 
-GameLogic::GameLogic() {}
+GameLogic::GameLogic() {
+	for (int i = 0; i<4; ++i) {
+		allPlayerScores_[i]= 0;
+	}
+}
 
 GameLogic::~GameLogic() {}
 
@@ -208,22 +212,33 @@ void GameLogic::playTurn(Player * player, bool shouldDisplayOptions) {
 	} else {
 		static_cast<ComputerPlayer*>(player)->makeMove(this->table(), this->firstTurn_, theChosenOne_);
 	}
+
+	if (gameOver()) {
+		cout << "Game over" << endl;
+	} else if ((allPlayer_[theChosenOne_]->isDeckEmpty())) {
+		cout << "Round finished" << endl;
+		for (int i = 0; i < PLAYER_COUNT; i ++) {
+			allPlayer_[i]->roundEndsMessage(i);
+			allPlayer_[i]->getDiscards().clear(); //destruct
+		    table_.returnArrayOfSets()->at(i)->clear();
+			allPlayerScores_[i] = allPlayer_[i]->getOldScore();
+		}
+		if (gameOver()) {
+			cout << "Game over" << endl;
+		} else {
+			beginGame();
+		}
+	} else { //play next player's turn
+		playTurn(allPlayer_[theChosenOne_], false);
+	}
+
 }
 
 void GameLogic::beginGame() {
+	dealCards();
 	table_.clearTable();
-        cout << "A new round begins. It's player " << theChosenOne_ + 1 << "'s turn to play." << endl;
 	this->firstTurn_ = true;
-	while (!(allPlayer_[theChosenOne_]->isDeckEmpty())) { //continue to play game if no players have run out the cards
-		playTurn(allPlayer_[theChosenOne_], true);
-	}
-
-	for (int i = 0; i < PLAYER_COUNT; i ++) {
-		allPlayer_[i]->roundEndsMessage(i);
-		allPlayer_[i]->getDiscards().clear(); //destruct
-                table_.returnArrayOfSets()->at(i)->clear();
-		allPlayerScores_[i] = allPlayer_[i]->getOldScore();
-	}
+	playTurn(allPlayer_[theChosenOne_], true);
 }
 
 bool GameLogic::gameOver () {
