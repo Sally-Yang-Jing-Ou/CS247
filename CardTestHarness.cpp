@@ -27,16 +27,10 @@ int main(int argc, char ** argv)
 	View view(&controller, &gameLogic);
 	Gtk::Main::run(view);
 
-	while (!gameLogic.gameOver()) {
-		gameLogic.dealCards();
-		gameLogic.beginGame();
-	}
-
-	vector<int> winners = gameLogic.winners();
-
-	for(size_t i = 0; i < winners.size(); i++) {
-		cout << "Player " << winners[i] << " wins!" << endl;
-	}
+	// while (!gameLogic.gameOver()) {
+	// 	gameLogic.dealCards();
+	// 	gameLogic.beginGame();
+	// }
 
 	return 0;
 }
