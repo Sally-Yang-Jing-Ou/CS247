@@ -2,10 +2,11 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include <sstream>
 
 using namespace std;
 
-View::View(Controller * controller, GameLogic * gameLogic) : gameLogic_(gameLogic), controller_(controller), container_(true, 10), handBox_(true, 10), startButton_("Start game"), endButton_("End Current Game"), 
+View::View(Controller * controller, GameLogic * gameLogic) : gameLogic_(gameLogic), controller_(controller), container_(true, 10), handBox_(true, 10), startButton_("Start game"), endButton_("End Game"), 
                                                             seedLabel_("Seed: "), cardTableView_(4, NUMBER_OF_CARDS, true), menuBox_(true,2), table(4) {
     set_title("Straights");
 
@@ -55,7 +56,7 @@ View::View(Controller * controller, GameLogic * gameLogic) : gameLogic_(gameLogi
         playerHBox_.add(playerBox_[i]);
     }
 
-    //Setup the hand
+    //current hand
     for (int i = 0; i < NUMBER_OF_CARDS; i++) {
         hand_[i] = new Gtk::Image(deck_.null());
         handButton_[i].set_image(*hand_[i]);
@@ -98,22 +99,12 @@ void View::onStartButtonClicked() {
     	int result = dialog.run();
         controller_->onPlayerOptionChosen(result);
     }
-
-    //gameLogic_->addSubscriptions(this);
-   // gameLogic_->beginGame();
-    gameLogic_->dealCards();
-    gameLogic_->beginGame();
+    restart();
+    gameLogic_->restartGame(false);
+    controller_->onStartButtonClicked();
 }
 
 void View::update() {
-    // cout << "clear" << endl;
-    // GList *children, *iter;
-    //
-    // children = gtk_container_get_children(GTK_CONTAINER(&handBox_));
-    // for(iter = children; iter != NULL; iter = g_list_next(iter)) {
-    //     gtk_widget_destroy(GTK_WIDGET(iter->data));
-    // }
-    // g_list_free(children);
 
     list<Card*> currentHand = gameLogic_->getHandForCurrentPlayer();
     int i = 0;
@@ -122,14 +113,51 @@ void View::update() {
         i++;
     }
 
+    while(i < NUMBER_OF_CARDS) {
+        hand_[i]->set(deck_.null());
+        i++;
+    }
+
+    Card *mostRecentCard = gameLogic_->mostRecentCard();
+    if(mostRecentCard != NULL) { //update table if a legal play was made
+        Suit suit = mostRecentCard->getSuit();
+        Rank rank = mostRecentCard->getRank();
+        if (suit == CLUB){
+            clubs_[rank]->set(deck_.image(rank, suit));
+        } else if (suit == DIAMOND){
+            diamonds_[rank]->set(deck_.image(rank, suit));
+        } else if (suit == SPADE){
+            spades_[rank]->set(deck_.image(rank, suit));
+        } else if (suit == HEART){
+            hearts_[rank]->set(deck_.image(rank, suit));
+        }
+    } else { //update discards number
+        vector<int> discards = gameLogic_->discardsAmount();
+        for(int i = 0; i < 4; i++) {
+            stringstream ss;
+            ss << discards[i];
+            playerBox_[i].discardsSetter(ss.str());
+        }
+    }
+
+
+
 }
 
 void View::onEndButtonClicked() {
-
+    for(int i = 0; i < 4; i++) {
+        playerBox_[i].scoreSetter("0");
+    }
+    restart();
+    controller_->onEndButtonClicked();
 }
 
 void View::onCardClicked(int index){
-
+  // try{
+        controller_->onCardClicked(index);
+    // } catch (const std::exception &e) {
+    //     MessageDialogBox dialog(*this, "Illegal Move", e.what());
+    // }
 }
 
 void View::onRageButtonClicked(){
@@ -151,4 +179,6 @@ void View::restart() {
     }
 }
 
-View::~View() {}
+View::~View() {
+
+}

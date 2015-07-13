@@ -16,12 +16,6 @@ public:
         virtual ~View();
         virtual void update();
 
-protected:
-        virtual void onStartButtonClicked();
-        virtual void onCardClicked(int index);
-        virtual void onEndButtonClicked();
-        virtual void onRageButtonClicked();
-
 private:
         static const int NUMBER_OF_CARDS = 13;
 
@@ -56,6 +50,10 @@ private:
         Controller * controller_;
 
         void restart();
+        void onStartButtonClicked();
+        void onCardClicked(int index);
+        void onEndButtonClicked();
+        void onRageButtonClicked();
 };
 
 #endif
