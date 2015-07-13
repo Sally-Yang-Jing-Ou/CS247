@@ -4,6 +4,7 @@
 #include <iostream>
 #include <list>
 #include <vector>
+#include <string>
 #include "../Card.h"
 #include "../Command.h"
 #include "Table.h"
@@ -20,11 +21,11 @@ public:
     void setNewScore();
     bool isDeckEmpty();
     int scoreGained();
-    void roundEndsMessage(int i);
+    std::string roundEndsMessage(int i);
     void eraseCardFromHand (Card *card);
     void addCardToDiscards (Card *card);
-    void playCard(Card card, Table &table, int &theChosenOne);
-    void discardCard(Card card, Table &table, int &theChosenOne);
+    Card* playCard(Card card, Table &table, int &theChosenOne);
+    Card* discardCard(Card card, Table &table, int &theChosenOne);
 	void addCardToHand(Card* card);
 	//void setAsCurrent();
 private:

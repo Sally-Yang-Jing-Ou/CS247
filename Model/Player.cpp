@@ -76,26 +76,27 @@ void Player::addCardToDiscards (Card *card) {
 	PlayerDiscards_.push_back(card);
 }
 
-void Player::playCard ( Card card, Table &table, int &theChosenOne ) {
+Card* Player::playCard ( Card card, Table &table, int &theChosenOne ) {
 	bool inHand = true;
-
+	Card* card1;
     for (std::list<Card*>::iterator it = this->getDeck().begin(); it != this->getDeck().end(); it++) {
         if ((**it) == card){
             eraseCardFromHand(*it); // delete this card from the hand
 			table.placeCard(*it);
+			card1 = *it;
 			inHand = false;
             break;
         }
     }
 
 	assert(!inHand);
-	//notify();
 
     cout << "Player " << theChosenOne + 1 << " plays " << card << "." << endl;
     theChosenOne = (theChosenOne + 1) % 4;
+    return card1;
 }
 
-void Player::discardCard (Card card, Table &table, int &theChosenOne) {
+Card* Player::discardCard (Card card, Table &table, int &theChosenOne) {
 	bool inHand = true;
 
     for (std::list<Card*>::iterator it = this->getDeck().begin(); it != this->getDeck().end(); it++) {
@@ -107,19 +108,15 @@ void Player::discardCard (Card card, Table &table, int &theChosenOne) {
     }
 
 	assert(!inHand);
-	//notify();
 
     Card *newDiscard = new Card(card.getSuit(), card.getRank());
     this->getDiscards().push_back(newDiscard);
 
     cout << "Player " << theChosenOne + 1 << " discards " << card << "." << endl;
     theChosenOne = (theChosenOne + 1) % 4;
+    return NULL;
 }
 
 void Player::addCardToHand (Card* card) {
 	PlayerDeck_.push_back(card);
 }
-
-// void Player::setAsCurrent() {
-// 	notify();
-// }

@@ -37,11 +37,11 @@ Card* ComputerPlayer::firstLegalCardInDeck (Table &table, bool &firstTurn) {
 	return NULL;
 }
 
-void ComputerPlayer::makeMove (Table &table, bool &firstTurn, int &theChosenOne){
+Card* ComputerPlayer::makeMove (Table &table, bool &firstTurn, int &theChosenOne){
 	Card *newCard = firstLegalCardInDeck (table, firstTurn);
 	if (newCard != NULL) { //there is a legal card in deck
-        Player::playCard(*newCard, table, theChosenOne);
+        return Player::playCard(*newCard, table, theChosenOne);
 	} else {
-        Player::discardCard(**(this->getDeck().begin()), table, theChosenOne);
+        return Player::discardCard(**(this->getDeck().begin()), table, theChosenOne);
 	}
 }

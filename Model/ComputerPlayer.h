@@ -15,7 +15,7 @@ public:
 	~ComputerPlayer();
     Card* firstLegalCardInDeck (Table &table, bool &firstTurn);
 	ComputerPlayer( Player& copyPlayer );
-    void makeMove(Table &table, bool &firstTurn, int &theChosenOne);
+    Card* makeMove(Table &table, bool &firstTurn, int &theChosenOne);
 };
 
 #endif
