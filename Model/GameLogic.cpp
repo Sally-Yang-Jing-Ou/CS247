@@ -3,18 +3,29 @@
 #include "GameLogic.h"
 #include <typeinfo>
 #include <cassert>
+#include <sstream>
 
 using namespace std;
 
 bool options_printed = false;
 
-GameLogic::GameLogic() {
+GameLogic::GameLogic() : isRoundFinished_(false), theChosenOne_(-1), mostRecentCard_(NULL)  {
 	for (int i = 0; i<4; ++i) {
 		allPlayerScores_[i]= 0;
 	}
 }
 
-GameLogic::~GameLogic() {}
+GameLogic::~GameLogic() {
+	if(mostRecentCard_ != NULL) {
+		delete mostRecentCard_;
+	}
+	for (int i = 0; i < 4; i++) {
+		Player *play = allPlayer_[i];
+		if(play != NULL) {
+			delete play;
+		}
+	}
+}
 
 Deck &GameLogic::deck() {
 	return deck_;
@@ -162,83 +173,83 @@ void GameLogic::dealCards() {
 			theChosenOne_ = i/13;
 		}
 	}
-	//allPlayer_[theChosenOne_]->setAsCurrent();
 }
 
-void GameLogic::playTurn(Player * player, bool shouldDisplayOptions) {
-	//player->setAsCurrent();
+void GameLogic::playTurn(int index) {
+	Player *player = allPlayer_[theChosenOne_];
 	bool isPlayerComputer = dynamic_cast<ComputerPlayer*>(player) ? true : false;
-	if (!isPlayerComputer) {
-		if (shouldDisplayOptions) {
-			printOptions(player->getDeck());
-		}
+	list<Card*> currentHand = player->getDeck();
 
-		cout << ">";
-		Command command;
-		cin >> command;
+	if (!isPlayerComputer && index < currentHand.size()) {
+    	list<Card*>::iterator it = currentHand.begin();
+    	advance(it, index);
+    	Card playedCard = **it;
 
-		if (command.type == PLAY) { //a) play <card>
-			if (isLegalPlayInCommand(command.card)) {
-				player->playCard(command.card, this->table(), theChosenOne_);
-			} else {
-				cout << "This is not a legal play." << endl;
-				return playTurn(player, false);
-			}
-		} else if (command.type == DISCARD) { //b) discard <card>
+		if (isLegalPlayInCommand(playedCard)) {
+			mostRecentCard_ = player->playCard(playedCard, this->table(), theChosenOne_);
+
+			notify();
+		} else {
 			if (!legalPlayInDeckExists(player->getDeck(), table())) {
-				player->discardCard(command.card, this->table(), theChosenOne_);
-			} else {
-				cout << "You have a legal play. You may not discard." << endl;
-				return playTurn(player, false);
-			}
-		} else if (command.type == DECK) { //c) print out the deck
-			this->deck_.print();
-			return playTurn(player, false);
-		} else if (command.type == QUIT) { //quit: clean up memory first
-			for(int i=0; i<4; i++) {
-				delete this->allPlayer_[i];
-			}
-			for (int i=0; i<52; i++) {
-				delete deck_.getMyDeck()[i];
-			}
+				mostRecentCard_ = player->discardCard(playedCard, this->table(), theChosenOne_);
 
-			exit(0);
-		} else if (command.type == RAGEQUIT) { //e) ragequit
-			ComputerPlayer* computerPlayer = new ComputerPlayer(*this->allPlayer_[this->theChosenOne_]);
-			this->allPlayer_[this->theChosenOne_] = computerPlayer;
-			cout << "Player " << this->theChosenOne_ + 1 << " ragequits. A computer will now take over." << endl;
+				notify();
+			} else {
+				//TODO: NEED EXCEPTIONS
+				cout << "You have a legal play. You may not discard." << endl;
+				//return playTurn(player, false);
+			}	
 		}
+	} else if (isPlayerComputer) {
+		mostRecentCard_ = static_cast<ComputerPlayer*>(player)->makeMove(this->table(), this->firstTurn_, theChosenOne_);
+		
+		notify();
 	} else {
-		static_cast<ComputerPlayer*>(player)->makeMove(this->table(), this->firstTurn_, theChosenOne_);
+		mostRecentCard_ = NULL;
 	}
 
-	if (gameOver()) {
-		cout << "Game over" << endl;
-	} else if ((allPlayer_[theChosenOne_]->isDeckEmpty())) {
+	player = allPlayer_[theChosenOne_];
+    
+    if ((player->isDeckEmpty())) {
 		cout << "Round finished" << endl;
-		for (int i = 0; i < PLAYER_COUNT; i ++) {
-			allPlayer_[i]->roundEndsMessage(i);
+
+		isRoundFinished_ = true;
+
+		for (int i = 0; i < 4; i ++) {
+			roundStats_ += allPlayer_[i]->roundEndsMessage(i);
 			allPlayer_[i]->getDiscards().clear(); //destruct
 		    table_.returnArrayOfSets()->at(i)->clear();
 			allPlayerScores_[i] = allPlayer_[i]->getOldScore();
 		}
+		mostRecentCard_ = NULL;
+
+		notify();
+
 		if (gameOver()) {
-			cout << "Game over" << endl;
+			restartGame();
+
 		} else {
+			dealCards();
 			beginGame();
 		}
-	} else { //play next player's turn
-		playTurn(allPlayer_[theChosenOne_], false);
+	}
+	
+	isPlayerComputer = dynamic_cast<ComputerPlayer*>(player) ? true : false;
+	if (isPlayerComputer) {
+		playTurn(-1);
 	}
 
 }
 
 void GameLogic::beginGame() {
-	dealCards();
 	table_.clearTable();
 	this->firstTurn_ = true;
 	notify();
-	//playTurn(allPlayer_[theChosenOne_], true);
+
+	bool isPlayerComputer = dynamic_cast<ComputerPlayer*>(allPlayer_[theChosenOne_]) ? true : false;
+	if (isPlayerComputer){
+		playTurn(-1);
+	}
 }
 
 bool GameLogic::gameOver () {
@@ -251,7 +262,7 @@ bool GameLogic::gameOver () {
 	return false;
 }
 
-vector<int> GameLogic::winners() const {
+string GameLogic::winners() const {
 	int min = allPlayerScores_[0];
 
 	for(int i = 1; i < PLAYER_COUNT; i++) {
@@ -268,20 +279,72 @@ vector<int> GameLogic::winners() const {
 		}
 	}
 
-	return winningPlayerNumbers;
+	stringstream winningPlayers;
+	for(int i = 0; i < winningPlayerNumbers.size(); i++) {
+		winningPlayers	<< "Player " << winningPlayerNumbers[i] << " wins!" << endl;
+	}
+	return winningPlayers.str();
 }
 
 void GameLogic::setSeed(int seed) {
 	deck().setSeed(seed);
 }
 
-// void GameLogic::addSubscriptions (Observer* mainView) {
-// 	table_.subscribe(mainView);
-// 	for (int i = 0; i < 4; i ++) {
-// 		allPlayer_[i]->subscribe(mainView);
-// 	}
-// }
-
 std::list<Card*> GameLogic::getHandForCurrentPlayer() {
 	return allPlayer_[theChosenOne_]->getDeck();
 }
+
+Card* GameLogic::mostRecentCard() const {
+	return mostRecentCard_;
+}	
+
+bool GameLogic::isRoundFinished() {
+	return isRoundFinished_;
+}	
+
+string GameLogic::roundStats() {
+	return roundStats_;
+}
+
+void GameLogic::restartGame(bool resetAll) {
+	for(int i = 0; i < 4; i++) {
+		
+		if (resetAll) { //resetting players and scores
+			if(allPlayer_[i] != NULL) {
+				delete allPlayer_[i];
+				allPlayer_[i] = NULL;
+			}
+		} else { //only resetting scores not players
+			if (allPlayer_[i] != NULL && allPlayer_[i]->getDeck().size() > 0) {
+				allPlayer_[i]->getDiscards().clear();
+				allPlayer_[i]->getDeck().clear();
+			}
+		}
+		allPlayerScores_[i] = 0;
+	}
+
+	//table_ = Table();
+	isRoundFinished_ = false;
+
+	if(mostRecentCard_ != NULL) {
+		delete mostRecentCard_;
+	}
+	mostRecentCard_ = NULL;
+}
+
+void GameLogic::ragequit() {
+	ComputerPlayer* computerPlayer = new ComputerPlayer(*this->allPlayer_[this->theChosenOne_]);
+	this->allPlayer_[this->theChosenOne_] = computerPlayer;
+	//cout << "Player " << this->theChosenOne_ + 1 << " ragequits. A computer will now take over." << endl;
+	playTurn(-1);
+}
+
+vector<int> GameLogic::discardsAmount() const {
+	vector<int> discards = vector<int>(4);
+	for(int i = 0; i < 4; i++) {
+		discards[i] = allPlayer_[i]->getDiscards().size();
+	}
+
+	return discards;
+}
+

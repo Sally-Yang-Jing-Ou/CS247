@@ -24,10 +24,17 @@ public:
 	void dealCards();
 	bool gameOver();
 	void beginGame();
-	std::vector<int> winners() const;
+	std::string winners() const;
 	void setSeed(int seed);
-	//void addSubscriptions (Observer* mainView);
+	Card* mostRecentCard() const;		
 	std::list<Card*> getHandForCurrentPlayer();
+	bool isRoundFinished();
+	std::string roundStats();
+	void restartGame(bool resetAll = true);	
+	void ragequit();
+	std::vector<int> discardsAmount() const;
+	void playTurn(int index);
+
 private:
 	static const int PLAYER_COUNT = 4;
 	std::vector<Player*> allPlayer_; //keep track of all 4 players
@@ -41,7 +48,11 @@ private:
 	void printLegalPlays (std::list<Card*> currentPlayerDeck);
 	void printOptions (std::list<Card*> currentPlayerDeck);
 	bool legalPlayInDeckExists (std::list<Card*> currentPlayerDeck, Table &table);
-	void playTurn(Player * player, bool shouldDisplayOptions);
+	Card *mostRecentCard_;
+	bool isRoundFinished_;
+	std::string roundStats_;
+
+
 };
 
 #endif
