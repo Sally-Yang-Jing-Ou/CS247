@@ -85,7 +85,7 @@ void View::onStartButtonClicked() {
     for (int i = 0; i < 4; i++) {
         Gtk::Dialog dialog( "Invite Players", *this );
         stringstream sstm;
-        sstm << "Is player " << i << " a human or computer player?";
+        sstm << "Is player " << i+1 << " a human or computer player?";
         string promptText = sstm.str();
         Gtk::Label prompt(promptText);
 

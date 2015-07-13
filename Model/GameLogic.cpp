@@ -221,7 +221,9 @@ void GameLogic::playTurn(int index) {
 		    table_.returnArrayOfSets()->at(i)->clear();
 			allPlayerScores_[i] = allPlayer_[i]->getOldScore();
 		}
+		cout << roundStats_<<endl;
 		mostRecentCard_ = NULL;
+		roundStats_="";
 
 		notify();
 

@@ -65,6 +65,7 @@ string Player::roundEndsMessage(int i) {
 	roundEndStats << getOldScore() << " + " << scoreGained() << " = ";
 	setNewScore();
  	roundEndStats << getOldScore() << endl;
+ 	//cout << roundEndStats.str();
  	return roundEndStats.str();
 }
 
