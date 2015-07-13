@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <algorithm>
 #include <cassert>
+#include <sstream>
 
 using namespace std;
 
@@ -49,20 +50,22 @@ int Player::scoreGained() {
 	return gains;
 }
 
-void Player::roundEndsMessage(int i) {
-	cout << "Player " << i + 1<< "'s discards:";
+string Player::roundEndsMessage(int i) {
+	stringstream roundEndStats;
+	roundEndStats << "Player " << i + 1<< "'s discards:";
 	if (!(getDiscards().empty())){
 		for (std::list<Card*>::iterator it = getDiscards().begin(); it != getDiscards().end(); it++) {
-			cout << " " << (**it); //list of discards
+			roundEndStats << " " << (**it); //list of discards
 		}
 	} else {
-		cout << "";
+		roundEndStats << "";
 	}
-	cout << endl;
-	cout << "Player " << i + 1<< "'s score: ";
-	cout << getOldScore() << " + " << scoreGained() << " = ";
+	roundEndStats << endl;
+	roundEndStats << "Player " << i + 1<< "'s score: ";
+	roundEndStats << getOldScore() << " + " << scoreGained() << " = ";
 	setNewScore();
- 	cout << getOldScore() << endl;
+ 	roundEndStats << getOldScore() << endl;
+ 	return roundEndStats.str();
 }
 
 void Player::eraseCardFromHand (Card *card) {
