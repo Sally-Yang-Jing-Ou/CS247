@@ -81,7 +81,8 @@ void View::onStartButtonClicked() {
     //set seed
     string seed = seedField_.get_text();
     gameLogic_->setSeed(atoi(seed.c_str()));
-
+    //remove current players if there are any
+    controller_->removeCurrentPlayers();
     //invite players
     for (int i = 0; i < 4; i++) {
         Gtk::Dialog dialog( "Invite Players", *this );

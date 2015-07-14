@@ -42,6 +42,7 @@ public:
         InvalidMoveException(std::string);
         std::string getMessage(){return message;}
     };
+    void removeCurrentPlayers();
 
 private:
 	static const int PLAYER_COUNT = 4;

@@ -11,6 +11,7 @@ public:
     void onStartButtonClicked();
     void onCardClicked(int index);
     void onEndButtonClicked();
+    void removeCurrentPlayers();
 
 private:
     GameLogic * gameLogic_;

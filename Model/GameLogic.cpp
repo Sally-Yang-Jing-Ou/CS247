@@ -16,15 +16,7 @@ GameLogic::GameLogic() : isRoundFinished_(false), theChosenOne_(-1), mostRecentC
 }
 
 GameLogic::~GameLogic() {
-	if(mostRecentCard_ != NULL) {
-		mostRecentCard_ = NULL;
-	}
-	for (int i = 0; i < 4; i++) {
-		Player *play = allPlayer_[i];
-		if(play != NULL) {
-			delete play;
-		}
-	}
+	removeCurrentPlayers();
 }
 
 GameLogic::InvalidMoveException::InvalidMoveException(std::string msg):
@@ -155,11 +147,11 @@ void GameLogic::invitePlayer(int playerChoice){
 	if (playerChoice == 0) { //human player
 		newPlayer = new HumanPlayer();
 		allPlayer_.push_back(newPlayer); //put it in the array
-		//cout << "invited!" << endl;
+		//cout << "invited human!" << endl;
 	} else if (playerChoice == 1) { //computer player
 		newPlayer = new ComputerPlayer();
 		allPlayer_.push_back(newPlayer);		
-		//cout << "invited!" << endl;
+		//cout << "invited computer!" << endl;
 
 	} else {
 		cerr << "invalid command" << endl;
@@ -183,6 +175,8 @@ void GameLogic::dealCards() {
 			theChosenOne_ = i/13;
 		}
 	}
+
+	//cout << "the chosen one " << theChosenOne_ << endl;
 }
 
 void GameLogic::playTurn(int index) {
@@ -263,6 +257,7 @@ void GameLogic::beginGame() {
 	notify();
 
 	bool isPlayerComputer = dynamic_cast<ComputerPlayer*>(allPlayer_[theChosenOne_]) ? true : false;
+
 	if (isPlayerComputer){
 		playTurn(-1);
 	}
@@ -324,12 +319,15 @@ string GameLogic::roundStats() {
 
 void GameLogic::restartGame(bool resetAll) {
 	for(int i = 0; i < 4; i++) {
-		
-		if (resetAll && allPlayer_[i] != NULL) { //resetting players and scores
-			delete allPlayer_[i];
-		} else if (allPlayer_[i] != NULL) { //only resetting scores not players
-			allPlayer_[i]->getDiscards().clear();
-			allPlayer_[i]->getDeck().clear();
+		if (allPlayer_.size() > 0){
+			if (resetAll && allPlayer_[i] != NULL) { //resetting players and scores
+				//cout << "clear everything" << endl;
+				delete allPlayer_[i];
+			} else if (allPlayer_[i] != NULL) { //only resetting scores not players
+				//cout << "reset all = false, clear discards + deck" << endl;
+				allPlayer_[i]->getDiscards().clear();
+				allPlayer_[i]->getDeck().clear();
+			}
 		}
 		allPlayerScores_[i] = 0;
 	}
@@ -360,4 +358,19 @@ vector<int> GameLogic::discardsAmount() const {
 
 	return discards;
 }
+
+void GameLogic::removeCurrentPlayers () {
+	if(mostRecentCard_ != NULL) {
+		mostRecentCard_ = NULL;
+	}
+	if (allPlayer_.size() > 0){
+		for (int i = 0; i < 4; i++) {
+			if(allPlayer_[i] != NULL) {
+				delete allPlayer_[i];
+			}
+		}
+		allPlayer_.clear();
+	}
+}
+
 

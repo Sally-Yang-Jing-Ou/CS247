@@ -27,3 +27,7 @@ void Controller::onCardClicked(int index) {
 void Controller::onEndButtonClicked() {
 	gameLogic_->restartGame();
 }
+
+void Controller::removeCurrentPlayers() {
+	gameLogic_->removeCurrentPlayers();
+}
