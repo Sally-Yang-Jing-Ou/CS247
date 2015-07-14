@@ -101,10 +101,7 @@ void View::onStartButtonClicked() {
         controller_->onPlayerOptionChosen(result);
     }
     restart();
-    cout << "did it get here" << endl;
     gameLogic_->restartGame(false);
-        cout << "did it get here2" << endl;
-
     controller_->onStartButtonClicked();
 }
 

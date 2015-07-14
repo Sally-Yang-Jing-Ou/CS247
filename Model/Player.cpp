@@ -120,12 +120,5 @@ Card* Player::discardCard (Card card, Table &table, int &theChosenOne) {
 }
 
 void Player::addCardToHand (Card* card) {
-	//cout << "trying to add card to deck" << endl;
-	//cout << (int64_t)PlayerDeck_ << endl;
-	//if (PlayerDeck_.size() > 0) {
-	//	cout << "it's not NULL" << endl;
-	//} else 
-	// 	cout << "awkward this is NULL" << endl;
-	// }
 	PlayerDeck_.push_back(card);
 }

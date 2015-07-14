@@ -155,9 +155,12 @@ void GameLogic::invitePlayer(int playerChoice){
 	if (playerChoice == 0) { //human player
 		newPlayer = new HumanPlayer();
 		allPlayer_.push_back(newPlayer); //put it in the array
+		//cout << "invited!" << endl;
 	} else if (playerChoice == 1) { //computer player
 		newPlayer = new ComputerPlayer();
-		allPlayer_.push_back(newPlayer);
+		allPlayer_.push_back(newPlayer);		
+		//cout << "invited!" << endl;
+
 	} else {
 		cerr << "invalid command" << endl;
 	}
@@ -190,6 +193,7 @@ void GameLogic::dealCards() {
 }
 
 void GameLogic::playTurn(int index) {
+	if (theChosenOne_ == -1) {return;}
 	Player *player = allPlayer_[theChosenOne_];
 	bool isPlayerComputer = dynamic_cast<ComputerPlayer*>(player) ? true : false;
 	list<Card*> &currentHand = player->getDeck();
@@ -224,6 +228,7 @@ void GameLogic::playTurn(int index) {
 	}
 
 	player = allPlayer_[theChosenOne_];
+	isPlayerComputer = dynamic_cast<ComputerPlayer*>(player) ? true : false;
     
     if ((player->isDeckEmpty())) {
 		cout << "Round finished" << endl;
@@ -240,10 +245,10 @@ void GameLogic::playTurn(int index) {
 		cout << roundStats_<<endl;
 		mostRecentCard_ = NULL;
 		
-
 		notify();
 
 		if (gameOver()) {
+			isPlayerComputer = false;
 			restartGame();
 
 		} else {
@@ -251,8 +256,7 @@ void GameLogic::playTurn(int index) {
 			beginGame();
 		}
 	}
-	
-	isPlayerComputer = dynamic_cast<ComputerPlayer*>(player) ? true : false;
+
 	if (isPlayerComputer) {
 		playTurn(-1);
 	}
@@ -337,8 +341,8 @@ void GameLogic::restartGame(bool resetAll) {
 		}
 		allPlayerScores_[i] = 0;
 	}
-
-	//table_ = Table();
+	allPlayer_.clear();
+	theChosenOne_ = -1;
 	isRoundFinished_ = false;
 
 	if(mostRecentCard_ != NULL) {
