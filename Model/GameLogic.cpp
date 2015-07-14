@@ -9,7 +9,7 @@ using namespace std;
 
 bool options_printed = false;
 
-GameLogic::GameLogic() : isRoundFinished_(false), theChosenOne_(-1), mostRecentCard_(NULL), firstTurn_(true)  {
+GameLogic::GameLogic() : isRoundFinished_(false), theChosenOne_(-1), mostRecentCard_(NULL), firstTurn_(true) {
 	for (int i = 0; i<4; ++i) {
 		allPlayerScores_[i]= 0;
 	}
@@ -170,18 +170,11 @@ void GameLogic::dealCards() {
 	deck_.shuffle(); //shuffle the cards
 	Player* currentPlayer;
 	vector<Card*> deck = deck_.getMyDeck();
-	//cout << "shuffle cards and dealing" << endl;
 	for (int i = 0; i < 4; i ++) {
 		currentPlayer = allPlayer_[i]; //cards for each player
 		for (int j = 0; j < 13; j ++) {
-			// currentPlayer->addCardToHand(deck[i*13+j]);
-			//cout << "did it crash here12" << endl;
-			//cout << *deck[i*13+j] << endl;
 			currentPlayer->addCardToHand(deck[i*13+j]);			
-			//cout << "what about here" << endl;
-
 		}
-		//cout << "did it crash here" << endl;
 	}
 	//determine who gets to go first
 	Card sevenSpade = Card(SPADE, SEVEN);
@@ -334,16 +327,19 @@ void GameLogic::restartGame(bool resetAll) {
 		
 		if (resetAll && allPlayer_[i] != NULL) { //resetting players and scores
 			delete allPlayer_[i];
-			allPlayer_[i] = NULL;
 		} else if (allPlayer_[i] != NULL) { //only resetting scores not players
-				allPlayer_[i]->getDiscards().clear();
-				allPlayer_[i]->getDeck().clear();
+			allPlayer_[i]->getDiscards().clear();
+			allPlayer_[i]->getDeck().clear();
 		}
 		allPlayerScores_[i] = 0;
 	}
-	allPlayer_.clear();
+	if (resetAll) {
+		allPlayer_.clear();
+	}
+	
 	theChosenOne_ = -1;
 	isRoundFinished_ = false;
+	deck().init();
 
 	if(mostRecentCard_ != NULL) {
 		mostRecentCard_ = NULL;

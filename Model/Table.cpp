@@ -19,15 +19,6 @@ Table::~Table() {
 //#define checkRep returnArrayOfSets
 
 vector<vector<Card*>* >* Table::returnArrayOfSets() {
-	// assert(arrayOfSets_);
-	// for (int i = 0; i < arrayOfSets_->size(); ++i)
-	// 	for (int j = 0; j < arrayOfSets_->at(i)->size(); ++j) {
-	// 		const Card *c = arrayOfSets_->at(i)->at(j);
-	// 		assert(c);
-	// 		int r = (int)c->getRank(), s = (int)c->getSuit();
-	// 		assert(0 <= r && r < 13);
-	// 		assert(0 <= s && s < 4);
-	// 	}
 	return arrayOfSets_;
 }
 
