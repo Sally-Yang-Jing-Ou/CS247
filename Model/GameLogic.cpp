@@ -27,6 +27,9 @@ GameLogic::~GameLogic() {
 	}
 }
 
+GameLogic::InvalidMoveException::InvalidMoveException(std::string msg):
+    message(msg){}
+
 Deck &GameLogic::deck() {
 	return deck_;
 }
@@ -164,11 +167,18 @@ void GameLogic::dealCards() {
 	deck_.shuffle(); //shuffle the cards
 	Player* currentPlayer;
 	vector<Card*> deck = deck_.getMyDeck();
+	//cout << "shuffle cards and dealing" << endl;
 	for (int i = 0; i < 4; i ++) {
 		currentPlayer = allPlayer_[i]; //cards for each player
 		for (int j = 0; j < 13; j ++) {
-			currentPlayer->addCardToHand(deck[i*13+j]);
+			// currentPlayer->addCardToHand(deck[i*13+j]);
+			//cout << "did it crash here12" << endl;
+			//cout << *deck[i*13+j] << endl;
+			currentPlayer->addCardToHand(deck[i*13+j]);			
+			//cout << "what about here" << endl;
+
 		}
+		//cout << "did it crash here" << endl;
 	}
 	//determine who gets to go first
 	Card sevenSpade = Card(SPADE, SEVEN);
@@ -199,9 +209,7 @@ void GameLogic::playTurn(int index) {
 
 				notify();
 			} else {
-				//TODO: NEED EXCEPTIONS
-				cout << "You have a legal play. You may not discard." << endl;
-				//return playTurn(player, false);
+				throw InvalidMoveException("Invalid Move! Try again!");
 			}	
 		}
 	} else if (isPlayerComputer) {
@@ -320,16 +328,12 @@ string GameLogic::roundStats() {
 void GameLogic::restartGame(bool resetAll) {
 	for(int i = 0; i < 4; i++) {
 		
-		if (resetAll) { //resetting players and scores
-			if(allPlayer_[i] != NULL) {
-				delete allPlayer_[i];
-				allPlayer_[i] = NULL;
-			}
-		} else { //only resetting scores not players
-			if (allPlayer_[i] != NULL && allPlayer_[i]->getDeck().size() > 0) {
+		if (resetAll && allPlayer_[i] != NULL) { //resetting players and scores
+			delete allPlayer_[i];
+			allPlayer_[i] = NULL;
+		} else if (allPlayer_[i] != NULL) { //only resetting scores not players
 				allPlayer_[i]->getDiscards().clear();
 				allPlayer_[i]->getDeck().clear();
-			}
 		}
 		allPlayerScores_[i] = 0;
 	}
@@ -345,7 +349,6 @@ void GameLogic::restartGame(bool resetAll) {
 void GameLogic::ragequit() {
 	ComputerPlayer* computerPlayer = new ComputerPlayer(*this->allPlayer_[this->theChosenOne_]);
 	this->allPlayer_[this->theChosenOne_] = computerPlayer;
-	//cout << "Player " << this->theChosenOne_ + 1 << " ragequits. A computer will now take over." << endl;
 	playTurn(-1);
 }
 

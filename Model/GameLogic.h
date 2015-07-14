@@ -35,6 +35,13 @@ public:
 	std::vector<int> discardsAmount() const;
 	void playTurn(int index);
 	int* allPlayerScores (); 
+	class InvalidMoveException{
+    private:
+        std::string message;
+    public:
+        InvalidMoveException(std::string);
+        std::string getMessage(){return message;}
+    };
 
 private:
 	static const int PLAYER_COUNT = 4;
