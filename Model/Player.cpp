@@ -112,7 +112,6 @@ Card* Player::discardCard (Card card, Table &table, int &theChosenOne) {
     assert(card1);
     eraseCardFromHand(card1);
 
-    //Card *newDiscard = new Card(card.getSuit(), card.getRank());
     this->getDiscards().push_back(card1);
 
     cout << "Player " << theChosenOne + 1 << " discards " << card << "." << endl;
@@ -121,5 +120,12 @@ Card* Player::discardCard (Card card, Table &table, int &theChosenOne) {
 }
 
 void Player::addCardToHand (Card* card) {
+	//cout << "trying to add card to deck" << endl;
+	//cout << (int64_t)PlayerDeck_ << endl;
+	//if (PlayerDeck_.size() > 0) {
+	//	cout << "it's not NULL" << endl;
+	//} else 
+	// 	cout << "awkward this is NULL" << endl;
+	// }
 	PlayerDeck_.push_back(card);
 }

@@ -43,9 +43,8 @@ private:
         Gtk::Button handButton_[13];
         Gtk::Image *hand_[13];
 
-        //model and controller
-        GameLogic * gameLogic_;
-        Controller * controller_;
+        GameLogic * gameLogic_; //game logic is the model
+        Controller * controller_; //controller
 
         void restart();
         void onStartButtonClicked();

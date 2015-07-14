@@ -27,7 +27,7 @@ public:
     Card* playCard(Card card, Table &table, int &theChosenOne);
     Card* discardCard(Card card, Table &table, int &theChosenOne);
 	void addCardToHand(Card* card);
-	//void setAsCurrent();
+
 private:
 	std::list<Card*> PlayerDeck_; //each player's deck of cards
 	std::list<Card*> PlayerDiscards_; //each player's deck of discards

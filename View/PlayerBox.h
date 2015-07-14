@@ -6,17 +6,15 @@
 
 class PlayerBox : public Gtk::Frame {
 public:
-	PlayerBox();
-	~PlayerBox();
-	
+	PlayerBox();	
 	void activate(bool active);
 	void scoreSetter(std::string score);
 	void discardsSetter(std::string discards);
 	Gtk::Button& rageButton();
 
 private:
-	Gtk::Label scoreLabel_;
-	Gtk::Label discardLabel_;
+	Gtk::Label score_;
+	Gtk::Label discard_;
 	Gtk::VBox playerVBox_;
 	Gtk::Button rageButton_;
 		

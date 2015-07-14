@@ -3,11 +3,12 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include "PopupMessage.h"
 
 using namespace std;
 
 View::View(Controller * controller, GameLogic * gameLogic) : gameLogic_(gameLogic), controller_(controller), container_(true, 10), handBox_(true, 10), startButton_("Start game"), endButton_("End Game"), 
-                                                            seedLabel_("Seed: "), cardTableView_(4, NUMBER_OF_CARDS, true), menuBox_(true,2), table(4) {
+                                                            seedLabel_("Seed: "), cardTableView_(4, 13, true), menuBox_(true,2), table(4) {
     set_title("Straights");
 
     seedField_.set_text("0");
@@ -29,15 +30,15 @@ View::View(Controller * controller, GameLogic * gameLogic) : gameLogic_(gameLogi
     cardTableView_.set_col_spacings(1);
     cardTableView_.set_row_spacings(2);
 
-    for(int i = ACE; i < RANK_COUNT; i++) {
+    for(int i = ACE; i < 13; i++) {
         clubs_[i] = new Gtk::Image(deck_.null());
-        cardTableView_.attach(*clubs_[i], i, i+1, CLUB, CLUB+1);
+        cardTableView_.attach(*clubs_[i], i, i+1, 0, 1);
         diamonds_[i] = new Gtk::Image(deck_.null());
-        cardTableView_.attach(*diamonds_[i], i, i+1, DIAMOND, DIAMOND+1);
+        cardTableView_.attach(*diamonds_[i], i, i+1, 1, 2);
         hearts_[i] = new Gtk::Image(deck_.null());
-        cardTableView_.attach(*hearts_[i], i, i+1, HEART, HEART+1);
+        cardTableView_.attach(*hearts_[i], i, i+1, 2, 3);
         spades_[i] = new Gtk::Image(deck_.null());
-        cardTableView_.attach(*spades_[i], i, i+1, SPADE, SPADE+1);
+        cardTableView_.attach(*spades_[i], i, i+1, 3, 4);
     }
 
     cardFrame_.add(cardTableView_);
@@ -49,15 +50,15 @@ View::View(Controller * controller, GameLogic * gameLogic) : gameLogic_(gameLogi
 
     for (int i = 0; i < 4; i++) {
         playerBox_[i].rageButton().signal_clicked().connect(sigc::mem_fun(*this, &View::onRageButtonClicked));
-        stringstream stream;
-        stream << (i+1);
-        string currentPlayer = "Player " + stream.str();
+        stringstream number;
+        number << (i+1);
+        string currentPlayer = "Player " + number.str();
         playerBox_[i].set_label(currentPlayer);
         playerHBox_.add(playerBox_[i]);
     }
 
     //current hand
-    for (int i = 0; i < NUMBER_OF_CARDS; i++) {
+    for (int i = 0; i < 13; i++) {
         hand_[i] = new Gtk::Image(deck_.null());
         handButton_[i].set_image(*hand_[i]);
         handButton_[i].signal_clicked().connect(sigc::bind<int>(sigc::mem_fun(*this, &View::onCardClicked), i));
@@ -100,7 +101,10 @@ void View::onStartButtonClicked() {
         controller_->onPlayerOptionChosen(result);
     }
     restart();
+    cout << "did it get here" << endl;
     gameLogic_->restartGame(false);
+        cout << "did it get here2" << endl;
+
     controller_->onStartButtonClicked();
 }
 
@@ -113,23 +117,21 @@ void View::update() {
         i++;
     }
 
-    while(i < NUMBER_OF_CARDS) {
+    while(i < 13) {
         hand_[i]->set(deck_.null());
         i++;
     }
 
     Card *mostRecentCard = gameLogic_->mostRecentCard();
     if(mostRecentCard != NULL) { //update table if a legal play was made
-        Suit suit = mostRecentCard->getSuit();
-        Rank rank = mostRecentCard->getRank();
-        if (suit == CLUB){
-            clubs_[rank]->set(deck_.image(rank, suit));
-        } else if (suit == DIAMOND){
-            diamonds_[rank]->set(deck_.image(rank, suit));
-        } else if (suit == SPADE){
-            spades_[rank]->set(deck_.image(rank, suit));
-        } else if (suit == HEART){
-            hearts_[rank]->set(deck_.image(rank, suit));
+        if (mostRecentCard->getSuit() == CLUB){
+            clubs_[mostRecentCard->getRank()]->set(deck_.image(mostRecentCard->getRank(), mostRecentCard->getSuit()));
+        } else if (mostRecentCard->getSuit() == DIAMOND){
+            diamonds_[mostRecentCard->getRank()]->set(deck_.image(mostRecentCard->getRank(), mostRecentCard->getSuit()));
+        } else if (mostRecentCard->getSuit() == SPADE){
+            spades_[mostRecentCard->getRank()]->set(deck_.image(mostRecentCard->getRank(), mostRecentCard->getSuit()));
+        } else if (mostRecentCard->getSuit() == HEART){
+            hearts_[mostRecentCard->getRank()]->set(deck_.image(mostRecentCard->getRank(), mostRecentCard->getSuit()));
         }
     } else { //update discards number
         vector<int> discards = gameLogic_->discardsAmount();
@@ -139,9 +141,31 @@ void View::update() {
             playerBox_[i].discardsSetter(ss.str());
         }
     }
+    //highlight current player, de-highlight others
+    int theChosenOne = gameLogic_->theChosenOne();
+    for(int i = 0; i < 4; i++) {
+        playerBox_[i].activate(false);  //set_sensitive
+        if (i == theChosenOne){
+            playerBox_[i].activate(true);
+        }
+    }
 
-
-
+    if (gameLogic_->isRoundFinished()) {
+        PopupMessage dialog(*this, "Round Finished", gameLogic_->roundStats());
+        int* allPlayerScores = gameLogic_ ->allPlayerScores();
+        for (int i = 0; i < 4; i++){
+            stringstream scores;
+            scores << allPlayerScores[i];
+            playerBox_[i].scoreSetter(scores.str());
+        } 
+        if (gameLogic_->gameOver()){
+            PopupMessage dialog(*this, "Game Over", gameLogic_->winners());
+            for (int i = 0; i < 4; i++){
+                playerBox_[i].scoreSetter("0");
+            } 
+        }
+        restart();
+    }
 }
 
 void View::onEndButtonClicked() {
@@ -153,15 +177,15 @@ void View::onEndButtonClicked() {
 }
 
 void View::onCardClicked(int index){
-  // try{
+    try{
         controller_->onCardClicked(index);
-    // } catch (const std::exception &e) {
-    //     MessageDialogBox dialog(*this, "Illegal Move", e.what());
-    // }
+     } catch (GameLogic::InvalidMoveException ex) {
+        PopupMessage dialog(*this, "Invalid Move", ex.getMessage());
+    }
 }
 
 void View::onRageButtonClicked(){
-
+    controller_->onRageButtonClicked();
 }
 
 void View::restart() {
@@ -180,5 +204,21 @@ void View::restart() {
 }
 
 View::~View() {
-
+    for(int i = 0; i < 13; i++) {     
+        if(clubs_[i] != NULL) {
+            delete clubs_[i];
+        }
+        if(diamonds_[i] != NULL) {
+            delete diamonds_[i];
+        }
+        if(hearts_[i] != NULL) {
+            delete hearts_[i];
+        }
+        if(spades_[i] != NULL) {
+            delete spades_[i];
+        }
+        if(hand_[i] != NULL) {
+            delete hand_[i];
+        }
+    }
 }
