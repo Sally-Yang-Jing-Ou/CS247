@@ -9,7 +9,7 @@ using namespace std;
 
 bool options_printed = false;
 
-GameLogic::GameLogic() : isRoundFinished_(false), theChosenOne_(-1), mostRecentCard_(NULL)  {
+GameLogic::GameLogic() : isRoundFinished_(false), theChosenOne_(-1), mostRecentCard_(NULL), firstTurn_(true)  {
 	for (int i = 0; i<4; ++i) {
 		allPlayerScores_[i]= 0;
 	}
@@ -17,7 +17,7 @@ GameLogic::GameLogic() : isRoundFinished_(false), theChosenOne_(-1), mostRecentC
 
 GameLogic::~GameLogic() {
 	if(mostRecentCard_ != NULL) {
-		delete mostRecentCard_;
+		mostRecentCard_ = NULL;
 	}
 	for (int i = 0; i < 4; i++) {
 		Player *play = allPlayer_[i];
@@ -37,6 +37,10 @@ Table &GameLogic::table() {
 
 int &GameLogic::theChosenOne() {
 	return theChosenOne_;
+}
+
+int* GameLogic::allPlayerScores() {
+	return allPlayerScores_;
 }
 
 bool GameLogic::isLegalPlay (int itRank, int it2Rank, int itSuit, int it2Suit) {
@@ -178,7 +182,7 @@ void GameLogic::dealCards() {
 void GameLogic::playTurn(int index) {
 	Player *player = allPlayer_[theChosenOne_];
 	bool isPlayerComputer = dynamic_cast<ComputerPlayer*>(player) ? true : false;
-	list<Card*> currentHand = player->getDeck();
+	list<Card*> &currentHand = player->getDeck();
 
 	if (!isPlayerComputer && index < currentHand.size()) {
     	list<Card*>::iterator it = currentHand.begin();
@@ -201,6 +205,9 @@ void GameLogic::playTurn(int index) {
 			}	
 		}
 	} else if (isPlayerComputer) {
+		if(mostRecentCard_ != NULL) {
+			mostRecentCard_=NULL;
+		}
 		mostRecentCard_ = static_cast<ComputerPlayer*>(player)->makeMove(this->table(), this->firstTurn_, theChosenOne_);
 		
 		notify();
@@ -214,8 +221,9 @@ void GameLogic::playTurn(int index) {
 		cout << "Round finished" << endl;
 
 		isRoundFinished_ = true;
-
+		roundStats_="";
 		for (int i = 0; i < 4; i ++) {
+
 			roundStats_ += allPlayer_[i]->roundEndsMessage(i);
 			allPlayer_[i]->getDiscards().clear(); //destruct
 		    table_.returnArrayOfSets()->at(i)->clear();
@@ -223,7 +231,7 @@ void GameLogic::playTurn(int index) {
 		}
 		cout << roundStats_<<endl;
 		mostRecentCard_ = NULL;
-		roundStats_="";
+		
 
 		notify();
 
@@ -246,6 +254,7 @@ void GameLogic::playTurn(int index) {
 void GameLogic::beginGame() {
 	table_.clearTable();
 	this->firstTurn_ = true;
+	isRoundFinished_ = false;
 	notify();
 
 	bool isPlayerComputer = dynamic_cast<ComputerPlayer*>(allPlayer_[theChosenOne_]) ? true : false;
@@ -329,9 +338,8 @@ void GameLogic::restartGame(bool resetAll) {
 	isRoundFinished_ = false;
 
 	if(mostRecentCard_ != NULL) {
-		delete mostRecentCard_;
+		mostRecentCard_ = NULL;
 	}
-	mostRecentCard_ = NULL;
 }
 
 void GameLogic::ragequit() {

@@ -84,6 +84,13 @@ Glib::RefPtr<Gdk::Pixbuf> DeckGUI::image( Rank f, Suit s ) {
 	return deck[ index ];
 }
 
+const char* DeckGUI::imageName(Rank f, Suit s) {
+	int index = ((int) f) + ((int) s )*13;
+	return image_names[index];
+}
+
+
+
 // Returns the image to use for the placeholder.
 Glib::RefPtr<Gdk::Pixbuf> DeckGUI::null() {
 	int size = deck.size();

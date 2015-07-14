@@ -2,7 +2,7 @@
 
 using namespace std;
 
-PlayerBox::PlayerBox() : playerVBox_(true, 1), rageButton_("Rage quit"), scoreLabel_("0 points", Gtk::ALIGN_CENTER),
+PlayerBox::PlayerBox() : playerVBox_(true, 1), rageButton_("Ragequit!"), scoreLabel_("0 points", Gtk::ALIGN_CENTER),
 						discardLabel_("0 discards", Gtk::ALIGN_CENTER) {
 
 	set_label_align(Gtk::ALIGN_CENTER, Gtk::ALIGN_TOP);

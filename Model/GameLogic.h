@@ -13,7 +13,7 @@
 #include "../View/Observer.h"
 #include "Subject.h"
 
-class GameLogic: public Subject {//This is the model
+class GameLogic: public Subject {
 public:
 	GameLogic();
 	~GameLogic();
@@ -34,6 +34,7 @@ public:
 	void ragequit();
 	std::vector<int> discardsAmount() const;
 	void playTurn(int index);
+	int* allPlayerScores (); 
 
 private:
 	static const int PLAYER_COUNT = 4;
@@ -51,7 +52,6 @@ private:
 	Card *mostRecentCard_;
 	bool isRoundFinished_;
 	std::string roundStats_;
-
 
 };
 

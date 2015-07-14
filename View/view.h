@@ -17,8 +17,6 @@ public:
         virtual void update();
 
 private:
-        static const int NUMBER_OF_CARDS = 13;
-
         Gtk::Table table;
 
         DeckGUI deck_;
@@ -32,18 +30,18 @@ private:
 
         Gtk::Frame cardFrame_; //table
         Gtk::Table cardTableView_;
-        Gtk::Image *clubs_[NUMBER_OF_CARDS];
-        Gtk::Image *diamonds_[NUMBER_OF_CARDS];
-        Gtk::Image *hearts_[NUMBER_OF_CARDS];
-        Gtk::Image *spades_[NUMBER_OF_CARDS];
+        Gtk::Image *clubs_[13];
+        Gtk::Image *diamonds_[13];
+        Gtk::Image *hearts_[13];
+        Gtk::Image *spades_[13];
 
         PlayerBox playerBox_[4]; //player stats and view
         Gtk::HBox playerHBox_;
 
         Gtk::HBox handBox_; //current hand
         Gtk::Frame handBoxFrame_;
-        Gtk::Button handButton_[NUMBER_OF_CARDS];
-        Gtk::Image *hand_[NUMBER_OF_CARDS];
+        Gtk::Button handButton_[13];
+        Gtk::Image *hand_[13];
 
         //model and controller
         GameLogic * gameLogic_;
