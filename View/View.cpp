@@ -6,35 +6,6 @@
 
 using namespace std;
 
-//constructor for playerBox - where each player's stats are
-View::PlayerBox::PlayerBox() : playerVBox_(true, 1), rageButton_("Ragequit!"), score_("0 points", Gtk::ALIGN_CENTER),
-                        discard_("0 discards", Gtk::ALIGN_CENTER) {
-
-    set_label_align(Gtk::ALIGN_CENTER, Gtk::ALIGN_TOP);
-    playerVBox_.add(rageButton_);
-    playerVBox_.add(score_);
-    playerVBox_.add(discard_);
-    rageButton_.set_sensitive(false);
-    add(playerVBox_);
-}
-
-void View::PlayerBox::activate(bool active) {
-    rageButton_.set_sensitive(active);
-}
-
-void View::PlayerBox::scoreSetter(string score) {
-    string label = score + " points";
-    score_.set_label(label);
-}
-
-void View::PlayerBox::discardsSetter(string discardCount) {
-    string label = discardCount + " discards";
-    discard_.set_label(label);
-}
-
-Gtk::Button& View::PlayerBox::rageButton() {
-    return rageButton_;
-}
 //constructor for popup dialog
 View::PopupMessage::PopupMessage(Gtk::Window &main, string title, string message): Dialog( title, main, true, true ), msg(message, Gtk::ALIGN_LEFT) {
     Gtk::VBox* contentArea = this->get_vbox();
