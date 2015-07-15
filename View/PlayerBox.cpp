@@ -19,12 +19,12 @@ void PlayerBox::activate(bool active) {
     rageButton_.set_sensitive(active);
 }
 
-void PlayerBox::scoreSetter(string score) {
+void PlayerBox::setScore(string score) {
     string label = score + " points";
     score_.set_label(label);
 }
 
-void PlayerBox::discardsSetter(string discardCount) {
+void PlayerBox::setDiscards(string discardCount) {
     string label = discardCount + " discards";
     discard_.set_label(label);
 }

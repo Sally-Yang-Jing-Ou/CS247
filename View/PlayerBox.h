@@ -7,8 +7,8 @@ class PlayerBox : public Gtk::Frame { //this is where the player's stats are dis
         public:
                 PlayerBox();    
                 void activate(bool active);
-                void scoreSetter(std::string score);
-                void discardsSetter(std::string discards);
+                void setScore(std::string score);
+                void setDiscards(std::string discards);
                 Gtk::Button& rageButton();
 
         private:

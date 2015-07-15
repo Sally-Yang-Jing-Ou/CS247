@@ -52,7 +52,7 @@ void View::update() {
         for(int i = 0; i < 4; i++) {
             stringstream ss;
             ss << discards[i];
-            playerBox_[i].discardsSetter(ss.str());
+            playerBox_[i].setDiscards(ss.str());
         }
     
         menuBox_->updateProgressBar(progress_/progressMax_);
@@ -79,12 +79,12 @@ void View::update() {
         for (int i = 0; i < 4; i++){
             stringstream scores;
             scores << allPlayerScores[i];
-            playerBox_[i].scoreSetter(scores.str());
+            playerBox_[i].setScore(scores.str());
         } 
         if (gameLogic_->gameOver()){
             PopupMessage dialog(*this, "Game Over", gameLogic_->winners());
             for (int i = 0; i < 4; i++){
-                playerBox_[i].scoreSetter("0");
+                playerBox_[i].setScore("0");
             } 
         }
         restart();
@@ -97,7 +97,7 @@ void View::onRageButtonClicked(){
 
 void View::restart() {
     for (int i = 0; i < 4; i++) {
-        playerBox_[i].discardsSetter("0");
+        playerBox_[i].setDiscards("0");
         playerBox_[i].activate(false);
     }
 

@@ -55,7 +55,7 @@ void MenuBox::onStartButtonClicked() {
 
 void MenuBox::onEndButtonClicked() {
     for(int i = 0; i < 4; i++) {
-        mainWindow_->getPlayerBox(i)->scoreSetter("0");
+        mainWindow_->getPlayerBox(i)->setScore("0");
     }
     mainWindow_->restart();
     controller_->onEndButtonClicked();
