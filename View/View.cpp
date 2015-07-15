@@ -14,25 +14,13 @@ View::PopupMessage::PopupMessage(Gtk::Window &main, string title, string message
     Gtk::Button * closeButton = add_button( Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
     show_all_children();
 
-    run ();
+    run();
 }
 
-
-View::View(Controller * controller, GameLogic * gameLogic) : gameLogic_(gameLogic), controller_(controller), handBox_(true, 10), startButton_("Start Game"), endButton_("End Game"), 
-                                                            seedLabel_("Seed: "), cardTableView_(4, 13, true), menuBox_(true,2), table(4), progressLabel_("Progress in Game ") {
+View::View(Controller * controller, GameLogic * gameLogic) : gameLogic_(gameLogic), controller_(controller), menuBox_(new MenuBox(controller, gameLogic, this)), handBox_(true, 10), cardTableView_(4, 13, true), table(4) {
     set_title("Straights");
 
-    seedField_.set_text("0");
-    menuBox_.pack_start(startButton_, false, false);
-    menuBox_.pack_start(seedLabel_, Gtk::PACK_SHRINK);
-    menuBox_.pack_start(seedField_, Gtk::PACK_SHRINK);
-    menuBox_.pack_start(progressLabel_, false, false);
-    menuBox_.pack_start(progressBar_);
-    menuBox_.pack_start(endButton_, false, false);
-    startButton_.signal_clicked().connect( sigc::mem_fun( *this, &View::onStartButtonClicked ) );
-    endButton_.signal_clicked().connect(sigc::mem_fun(*this, &View::onEndButtonClicked));
-
-    table.attach(menuBox_, 0, 1, 0, 1);
+    table.attach(*menuBox_, 0, 1, 0, 1);
     cardFrame_.set_label("Table");
     cardFrame_.set_label_align(Gtk::ALIGN_LEFT, Gtk::ALIGN_TOP);
     cardFrame_.set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
@@ -88,33 +76,8 @@ View::View(Controller * controller, GameLogic * gameLogic) : gameLogic_(gameLogi
     gameLogic_->subscribe(this);
 }
 
-void View::onStartButtonClicked() {
-    //set seed
-    string seed = seedField_.get_text();
-    gameLogic_->setSeed(atoi(seed.c_str()));
-    //remove current players if there are any
-    controller_->removeCurrentPlayers();
-    //invite players
-    for (int i = 0; i < 4; i++) {
-        Gtk::Dialog dialog( "Invite Players", *this );
-        stringstream sstm;
-        sstm << "Is player " << i+1 << " a human or computer player?";
-        string promptText = sstm.str();
-        Gtk::Label prompt(promptText);
-
-        Gtk::VBox* contentArea = dialog.get_vbox();
-        contentArea->pack_start(prompt, true, false);
-        prompt.show();
-
-        dialog.add_button("Human", 0);
-        dialog.add_button("Computer", 1);
-
-    	int result = dialog.run();
-        controller_->onPlayerOptionChosen(result);
-    }
-    restart();
-    gameLogic_->restartGame(false);
-    controller_->onStartButtonClicked();
+PlayerBox * View::getPlayerBox(int index) {
+    return &playerBox_[index];
 }
 
 void View::update() {
@@ -171,7 +134,8 @@ void View::update() {
         } else if (mostRecentCard->getSuit() == HEART){
             hearts_[mostRecentCard->getRank()]->set(deck_.image(mostRecentCard->getRank(), mostRecentCard->getSuit()));
         }
-        progressBar_.set_fraction(progress_/progressMax_);
+        
+        menuBox_->updateProgressBar(progress_/progressMax_);
         while(Gtk::Main::instance()->events_pending()){
             Gtk::Main::instance()->iteration();
         }
@@ -185,7 +149,8 @@ void View::update() {
             ss << discards[i];
             playerBox_[i].discardsSetter(ss.str());
         }
-        progressBar_.set_fraction(progress_/progressMax_);
+    
+        menuBox_->updateProgressBar(progress_/progressMax_);
         while(Gtk::Main::instance()->events_pending()){
             Gtk::Main::instance()->iteration();
         }
@@ -220,14 +185,6 @@ void View::update() {
     }
 }
 
-void View::onEndButtonClicked() {
-    for(int i = 0; i < 4; i++) {
-        playerBox_[i].scoreSetter("0");
-    }
-    restart();
-    controller_->onEndButtonClicked();
-}
-
 void View::onCardClicked(int index){
     try{
         controller_->onCardClicked(index);
@@ -254,7 +211,7 @@ void View::restart() {
         hand_[i]->set(deck_.null());
     }
     progress_=0;
-    progressBar_.set_fraction(progress_/progressMax_);
+    menuBox_->updateProgressBar(progress_/progressMax_);
 }
 
 View::~View() {

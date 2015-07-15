@@ -10,12 +10,17 @@
 #include "Observer.h"
 #include "../Card.h"
 #include "PlayerBox.h"
+#include "MenuBox.h"
+
+class MenuBox;
 
 class View : public Gtk::Window, public Observer {
 public:
         View(Controller * controller, GameLogic * gameLogic); // where gameLogic is the common interface using facade pattern
         virtual ~View();
         virtual void update();
+        void restart();
+        PlayerBox * getPlayerBox(int index);
 
 private:
         class PopupMessage : public Gtk::Dialog { //popup window/dialog for invalid moves or round finishes messages
@@ -33,11 +38,7 @@ private:
 
         DeckGUI deck_;
 
-        Gtk::HBox menuBox_;
-        Gtk::Entry seedField_;
-        Gtk::Label seedLabel_;
-        Gtk::Button startButton_;
-        Gtk::Button endButton_;
+        MenuBox * menuBox_; //inherits from HBox
 
         Gtk::Frame cardFrame_; //table
         Gtk::Table cardTableView_;
@@ -54,15 +55,10 @@ private:
         Gtk::Button handButton_[13];
         Gtk::Image *hand_[13];
 
-        Gtk::Label progressLabel_;
-        Gtk::ProgressBar progressBar_;
         const double progressMax_ = 52;
         double progress_ = 0;
 
-        void restart();
-        void onStartButtonClicked();
         void onCardClicked(int index);
-        void onEndButtonClicked();
         void onRageButtonClicked();
 };
 

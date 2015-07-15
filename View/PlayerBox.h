@@ -1,3 +1,6 @@
+#ifndef PLAYERBOX_H
+#define PLAYERBOX_H
+
 #include <gtkmm.h>
 
 class PlayerBox : public Gtk::Frame { //this is where the player's stats are displayed in
@@ -15,3 +18,5 @@ class PlayerBox : public Gtk::Frame { //this is where the player's stats are dis
                 Gtk::Button rageButton_;
                 
         };
+
+#endif
