@@ -9,11 +9,12 @@
 #include "../Card.h"
 #include "../Command.h"
 #include "Table.h"
+#include "Log.h"
 
 
 class HumanPlayer : public Player { //inherits from Player
 public:
-	HumanPlayer();
+	HumanPlayer(Log * log);
 	~HumanPlayer();
 private: 
 

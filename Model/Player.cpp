@@ -7,7 +7,7 @@
 
 using namespace std;
 
-Player::Player(): oldScore_(0) {}
+Player::Player(Log * log): oldScore_(0), log_(log) {}
 
 Player::~Player() {
 	PlayerDeck_.clear();
@@ -65,7 +65,6 @@ string Player::roundEndsMessage(int i) {
 	roundEndStats << getOldScore() << " + " << scoreGained() << " = ";
 	setNewScore();
  	roundEndStats << getOldScore() << endl;
- 	//cout << roundEndStats.str();
  	return roundEndStats.str();
 }
 
@@ -96,7 +95,12 @@ Card* Player::playCard ( Card card, Table &table, int &theChosenOne ) {
 			
 	assert(!inHand);
 
+    stringstream sstm;
+    sstm << "Player " << theChosenOne + 1 << " plays " << card << "." << endl;
+    log_->log(sstm.str());
+
     cout << "Player " << theChosenOne + 1 << " plays " << card << "." << endl;
+
     theChosenOne = (theChosenOne + 1) % 4;
     return card1;
 }
@@ -113,6 +117,10 @@ Card* Player::discardCard (Card card, Table &table, int &theChosenOne) {
     eraseCardFromHand(card1);
 
     this->getDiscards().push_back(card1);
+
+    stringstream sstm;
+    sstm << "Player " << theChosenOne + 1 << " discards " << card << "." << endl;
+    log_->log(sstm.str());
 
     cout << "Player " << theChosenOne + 1 << " discards " << card << "." << endl;
     theChosenOne = (theChosenOne + 1) % 4;

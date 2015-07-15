@@ -6,6 +6,7 @@
 #include <list>
 #include "DeckGUI.h"
 #include "../Model/GameLogic.h"
+#include "../Model/Log.h"
 #include "../Controller/Controller.h"
 #include "Observer.h"
 #include "../Card.h"
@@ -21,7 +22,7 @@ class HandBox;
 
 class View : public Gtk::Window, public Observer {
 public:
-        View(Controller * controller, GameLogic * gameLogic); // where gameLogic is the common interface using facade pattern
+        View(Controller * controller, GameLogic * gameLogic, Log * log); // where gameLogic is the common interface using facade pattern
         virtual ~View();
         virtual void update();
         void restart();

@@ -12,10 +12,11 @@
 #include "../Command.h"
 #include "../View/Observer.h"
 #include "Subject.h"
+#include "Log.h"
 
 class GameLogic: public Subject {
 public:
-	GameLogic();
+	GameLogic(Log * log);
 	~GameLogic();
 	void invitePlayer(int playerChoice);
 	Deck &deck();
@@ -61,7 +62,7 @@ private:
 	Card *mostRecentCard_;
 	bool isRoundFinished_;
 	std::string roundStats_;
-
+	Log * log_;
 };
 
 #endif

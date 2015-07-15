@@ -2,13 +2,11 @@
 
 using namespace std;
 
-Controller::Controller(GameLogic * gameLogic): gameLogic_(gameLogic)  {
-
+Controller::Controller(GameLogic * gameLogic, Log * log): gameLogic_(gameLogic), log_(log) {    
 }
 
 void Controller::onPlayerOptionChosen(int playerType) {
     gameLogic_->invitePlayer(playerType);
-
 }
 
 void Controller::onRageButtonClicked() {
@@ -16,6 +14,7 @@ void Controller::onRageButtonClicked() {
 }
 
 void Controller::onStartButtonClicked() {
+    log_->log("The game has been started.");
 	gameLogic_->dealCards();
 	gameLogic_->beginGame();
 }
@@ -25,6 +24,7 @@ void Controller::onCardClicked(int index) {
 }
 
 void Controller::onEndButtonClicked() {
+    log_->log("The game has been ended.");
 	gameLogic_->restartGame();
 }
 

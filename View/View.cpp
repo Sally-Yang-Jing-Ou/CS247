@@ -6,7 +6,7 @@
 
 using namespace std;
 
-View::View(Controller * controller, GameLogic * gameLogic) : gameLogic_(gameLogic), controller_(controller), menuBox_(new MenuBox(controller, gameLogic, this)), handBox_(new HandBox(controller, gameLogic, this, &deck_)), cardTable_(new CardTable(controller, gameLogic, &deck_)), logger_(new Logger(controller, gameLogic)), table(4,2,false) {
+View::View(Controller * controller, GameLogic * gameLogic, Log * log) : gameLogic_(gameLogic), controller_(controller), menuBox_(new MenuBox(controller, gameLogic, this)), handBox_(new HandBox(controller, gameLogic, this, &deck_)), cardTable_(new CardTable(controller, gameLogic, &deck_)), logger_(new Logger(controller, gameLogic, log)), table(4,2,false) {
     set_title("Straights");
 
     for (int i = 0; i < 4; i++) {

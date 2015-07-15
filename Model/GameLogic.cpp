@@ -9,7 +9,7 @@ using namespace std;
 
 bool options_printed = false;
 
-GameLogic::GameLogic() : isRoundFinished_(false), theChosenOne_(-1), mostRecentCard_(NULL), firstTurn_(true) {
+GameLogic::GameLogic(Log * log) : isRoundFinished_(false), theChosenOne_(-1), mostRecentCard_(NULL), firstTurn_(true), log_(log) {
 	for (int i = 0; i<4; ++i) {
 		allPlayerScores_[i]= 0;
 	}
@@ -152,14 +152,11 @@ void GameLogic::invitePlayer(int playerChoice){
 	assert(playerChoice == 0 || playerChoice == 1);
 	Player* newPlayer;
 	if (playerChoice == 0) { //human player
-		newPlayer = new HumanPlayer();
+		newPlayer = new HumanPlayer(log_);
 		allPlayer_.push_back(newPlayer); //put it in the array
-		//cout << "invited human!" << endl;
 	} else if (playerChoice == 1) { //computer player
-		newPlayer = new ComputerPlayer();
+		newPlayer = new ComputerPlayer(log_);
 		allPlayer_.push_back(newPlayer);		
-		//cout << "invited computer!" << endl;
-
 	} else {
 		cerr << "invalid command" << endl;
 	}

@@ -7,6 +7,6 @@ using namespace std;
 
 bool printed = false;
 
-HumanPlayer::HumanPlayer() {}
+HumanPlayer::HumanPlayer(Log * log): Player(log) {}
 
 HumanPlayer::~HumanPlayer() {}

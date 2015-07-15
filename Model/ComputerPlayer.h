@@ -8,10 +8,11 @@
 #include "../Card.h"
 #include "../Command.h"
 #include "Table.h"
+#include "Log.h"
 
 class ComputerPlayer : public Player { //inherits from Player
 public:
-	ComputerPlayer();
+	ComputerPlayer(Log * log);
 	~ComputerPlayer();
     Card* firstLegalCardInDeck (Table &table, bool &firstTurn);
 	ComputerPlayer( Player& copyPlayer );

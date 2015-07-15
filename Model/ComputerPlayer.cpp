@@ -5,7 +5,7 @@
 
 using namespace std;
 
-ComputerPlayer::ComputerPlayer() {}
+ComputerPlayer::ComputerPlayer(Log * log) : Player(log) {}
 
 ComputerPlayer::~ComputerPlayer() {}
 
