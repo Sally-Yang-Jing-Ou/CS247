@@ -11,8 +11,11 @@
 #include "../Card.h"
 #include "PlayerBox.h"
 #include "MenuBox.h"
+#include "HandBox.h"
+#include "PopupMessage.h"
 
 class MenuBox;
+class HandBox;
 
 class View : public Gtk::Window, public Observer {
 public:
@@ -23,14 +26,6 @@ public:
         PlayerBox * getPlayerBox(int index);
 
 private:
-        class PopupMessage : public Gtk::Dialog { //popup window/dialog for invalid moves or round finishes messages
-        public:
-                PopupMessage(Gtk::Window &main, std::string title, std::string message);
-                
-        private:
-                Gtk::Label msg;
-        };
-
         GameLogic * gameLogic_; //game logic is the model
         Controller * controller_; //controller
 
@@ -39,6 +34,7 @@ private:
         DeckGUI deck_;
 
         MenuBox * menuBox_; //inherits from HBox
+        HandBox * handBox_; //inherits from Frame
 
         Gtk::Frame cardFrame_; //table
         Gtk::Table cardTableView_;
@@ -50,15 +46,9 @@ private:
         PlayerBox playerBox_[4]; //player stats and view
         Gtk::HBox playerHBox_; //container for player boxes
 
-        Gtk::HBox handBox_; //container for current hand
-        Gtk::Frame handBoxFrame_;
-        Gtk::Button handButton_[13];
-        Gtk::Image *hand_[13];
-
         const double progressMax_ = 52;
         double progress_ = 0;
 
-        void onCardClicked(int index);
         void onRageButtonClicked();
 };
 

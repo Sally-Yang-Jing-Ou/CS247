@@ -11,7 +11,6 @@ class View;
 
 class MenuBox : public Gtk::HBox {
         public:
-            MenuBox() {};
             MenuBox(Controller * controller, GameLogic * gameLogic, View * window);
             void updateProgressBar(double increment);
             void setController(Controller * controller);

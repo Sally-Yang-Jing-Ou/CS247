@@ -5,10 +5,6 @@
 
 using namespace std;
 
-void MenuBox::setController(Controller * controller) {
-    controller_ = controller;
-}
-
 MenuBox::MenuBox(Controller * controller, GameLogic * gameLogic, View * window): HBox(true,2), gameLogic_(gameLogic), controller_(controller), startButton_("Start Game"), endButton_("End Game"), seedLabel_("Seed: "), progressLabel_("Progress in Game "), mainWindow_(window) {
     seedField_.set_text("0");
     pack_start(startButton_, false, false);
