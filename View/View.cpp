@@ -111,22 +111,7 @@ void View::restart() {
 }
 
 View::~View() {
-    for(int i = 0; i < 13; i++) {     
-        // if(clubs_[i] != NULL) {
-        //     delete clubs_[i];
-        // }
-        // if(diamonds_[i] != NULL) {
-        //     delete diamonds_[i];
-        // }
-        // if(hearts_[i] != NULL) {
-        //     delete hearts_[i];
-        // }
-        // if(spades_[i] != NULL) {
-        //     delete spades_[i];
-        // }
-        //TODO: handle delete
-        // if(hand_[i] != NULL) {
-            // delete hand_[i];
-        // }
-    }
+    delete menuBox_;
+    delete handBox_;
+    delete cardTable_;
 }

@@ -27,6 +27,23 @@ CardTable::CardTable(Controller * controller, GameLogic * gameLogic, DeckGUI * d
     add(cardTableView_);
 }
 
+CardTable::~CardTable() {
+    for (int i=0; i<13; ++i) {
+        if(clubs_[i] != NULL) {
+            delete clubs_[i];
+        }
+        if(diamonds_[i] != NULL) {
+            delete diamonds_[i];
+        }
+        if(hearts_[i] != NULL) {
+            delete hearts_[i];
+        }
+        if(spades_[i] != NULL) {
+            delete spades_[i];
+        }
+    }
+}
+
 void CardTable::update() {
     Card *mostRecentCard = gameLogic_->mostRecentCard();
 

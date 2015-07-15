@@ -18,6 +18,8 @@ MenuBox::MenuBox(Controller * controller, GameLogic * gameLogic, View * window):
     endButton_.signal_clicked().connect(sigc::mem_fun(*this, &MenuBox::onEndButtonClicked));
 }
 
+MenuBox::~MenuBox() {}
+
 void MenuBox::updateProgressBar(double increment) {
     progressBar_.set_fraction(increment);
 }

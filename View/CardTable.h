@@ -10,6 +10,7 @@
 class CardTable : public Gtk::Frame {
         public:
                 CardTable(Controller * controller, GameLogic * gameLogic, DeckGUI * deck);
+                ~CardTable();
                 virtual void update();
                 void prepareForRestart();
         private:

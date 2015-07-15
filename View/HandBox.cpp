@@ -22,6 +22,14 @@ HandBox::HandBox(Controller * controller, GameLogic * gameLogic, View * window, 
     add(handBox_);
 }
 
+HandBox::~HandBox() {
+    for(int i = 0; i < 13; i++) {     
+        if(hand_[i] != NULL) {
+            delete hand_[i];
+        }
+    }
+}
+
 void HandBox::setHand(int index, Glib::RefPtr<Gdk::Pixbuf> buffer) {
     hand_[index]->set(deck_->null());
 }

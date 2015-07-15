@@ -14,6 +14,7 @@ class View;
 class HandBox : public Gtk::Frame {
         public:
                 HandBox(Controller * controller, GameLogic * gameLogic, View * window, DeckGUI * deck);
+                virtual ~HandBox();
                 void setHand(int index, Glib::RefPtr<Gdk::Pixbuf> buffer);
                 virtual void update();
         private:
