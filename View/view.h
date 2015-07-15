@@ -7,7 +7,6 @@
 #include "../Model/GameLogic.h"
 #include "../Controller/Controller.h"
 #include "Observer.h"
-#include "PlayerBox.h"
 #include "../Card.h"
 
 class View : public Gtk::Window, public Observer {
@@ -17,6 +16,30 @@ public:
         virtual void update();
 
 private:
+        class PlayerBox : public Gtk::Frame { //this is where the player's stats are displayed in
+        public:
+                PlayerBox();    
+                void activate(bool active);
+                void scoreSetter(std::string score);
+                void discardsSetter(std::string discards);
+                Gtk::Button& rageButton();
+
+        private:
+                Gtk::Label score_;
+                Gtk::Label discard_;
+                Gtk::VBox playerVBox_;
+                Gtk::Button rageButton_;
+                
+        };
+
+        class PopupMessage : public Gtk::Dialog { //popup window/dialog for invalid moves or round finishes messages
+        public:
+                PopupMessage(Gtk::Window &main, std::string title, std::string message);
+                
+        private:
+                Gtk::Label msg;
+        };
+
         Gtk::Table table;
 
         DeckGUI deck_;
