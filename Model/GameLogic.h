@@ -34,7 +34,8 @@ public:
 	void ragequit();
 	std::vector<int> discardsAmount() const;
 	void playTurn(int index);
-	int* allPlayerScores (); 
+	int* allPlayerScores ();
+	bool isCardLegal(Card cardToCheck); 
 	class InvalidMoveException{
     private:
         std::string message;
@@ -52,7 +53,7 @@ private:
 	int theChosenOne_;
 	int allPlayerScores_[4];
 	bool firstTurn_;
-	bool isLegalPlayInCommand (Card theCard);
+	bool isLegalPlayInCommand (Card theCard, bool ghost); //if ghost is true, stop side effects from happening
 	bool isLegalPlay (int itRank, int it2Rank, int itSuit, int it2Suit);
 	void printLegalPlays (std::list<Card*> currentPlayerDeck);
 	void printOptions (std::list<Card*> currentPlayerDeck);

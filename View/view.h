@@ -2,6 +2,7 @@
 #define VIEW_H
 
 #include <gtkmm.h>
+#include <gdkmm.h>
 #include <list>
 #include "DeckGUI.h"
 #include "../Model/GameLogic.h"

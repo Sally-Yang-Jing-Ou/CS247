@@ -47,7 +47,7 @@ bool GameLogic::isLegalPlay (int itRank, int it2Rank, int itSuit, int it2Suit) {
 	return false;
 }
 
-bool GameLogic::isLegalPlayInCommand (Card theCard) {
+bool GameLogic::isLegalPlayInCommand (Card theCard, bool ghost) {
 	for (int i = 0; i < 4; i++) {
 		vector<Card*>* setOfSuit = this->table().returnArrayOfSets()->at(i);
 		if (!setOfSuit->empty()) {
@@ -60,7 +60,10 @@ bool GameLogic::isLegalPlayInCommand (Card theCard) {
 	}
 	Card sevenSpade = Card(SPADE, SEVEN);
 	if (this->firstTurn_ && theCard == sevenSpade) {
-		this->firstTurn_ = false;
+		if (!ghost) {
+			this->firstTurn_ = false;	
+		}
+		
 		return true;
 	}
 
@@ -75,6 +78,10 @@ bool GameLogic::isLegalPlayInCommand (Card theCard) {
 		}
 	}
 	return false;
+}
+
+bool GameLogic::isCardLegal(Card cardToCheck) {
+	return isLegalPlayInCommand(cardToCheck, true);
 }
 
 void GameLogic::printLegalPlays (std::list<Card*> currentPlayerDeck) {
@@ -190,7 +197,7 @@ void GameLogic::playTurn(int index) {
     	advance(it, index);
     	Card playedCard = **it;
 
-		if (isLegalPlayInCommand(playedCard)) {
+		if (isLegalPlayInCommand(playedCard, false)) {
 			mostRecentCard_ = player->playCard(playedCard, this->table(), theChosenOne_);
 
 			notify();
