@@ -13,6 +13,7 @@
 #include "MenuBox.h"
 #include "HandBox.h"
 #include "PopupMessage.h"
+#include "CardTable.h"
 
 class MenuBox;
 class HandBox;
@@ -35,13 +36,7 @@ private:
 
         MenuBox * menuBox_; //inherits from HBox
         HandBox * handBox_; //inherits from Frame
-
-        Gtk::Frame cardFrame_; //table
-        Gtk::Table cardTableView_;
-        Gtk::Image *clubs_[13];
-        Gtk::Image *diamonds_[13];
-        Gtk::Image *hearts_[13];
-        Gtk::Image *spades_[13];
+        CardTable * cardTable_; //inherits from Frame
 
         PlayerBox playerBox_[4]; //player stats and view
         Gtk::HBox playerHBox_; //container for player boxes
