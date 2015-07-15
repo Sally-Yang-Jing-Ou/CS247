@@ -6,10 +6,8 @@
 
 using namespace std;
 
-View::View(Controller * controller, GameLogic * gameLogic) : gameLogic_(gameLogic), controller_(controller), menuBox_(new MenuBox(controller, gameLogic, this)), handBox_(new HandBox(controller, gameLogic, this, &deck_)), cardTable_(new CardTable(controller, gameLogic, &deck_)), table(4) {
+View::View(Controller * controller, GameLogic * gameLogic) : gameLogic_(gameLogic), controller_(controller), menuBox_(new MenuBox(controller, gameLogic, this)), handBox_(new HandBox(controller, gameLogic, this, &deck_)), cardTable_(new CardTable(controller, gameLogic, &deck_)), logger_(new Logger(controller, gameLogic)), table(4,2,false) {
     set_title("Straights");
-
-    table.attach(*menuBox_, 0, 1, 0, 1);
 
     for (int i = 0; i < 4; i++) {
         playerBox_[i].rageButton().signal_clicked().connect(sigc::mem_fun(*this, &View::onRageButtonClicked));
@@ -20,9 +18,12 @@ View::View(Controller * controller, GameLogic * gameLogic) : gameLogic_(gameLogi
         playerHBox_.add(playerBox_[i]);
     }
 
-    table.attach(playerHBox_, 0, 1, 2, 3);
+    table.attach(*menuBox_, 0, 1, 0, 1);
     table.attach(*cardTable_, 0, 1, 1, 2);
+    table.attach(playerHBox_, 0, 1, 2, 3);
     table.attach(*handBox_, 0, 1, 3, 4);
+    table.attach(*logger_, 1, 2, 0, 4);
+
     add(table);
 
     show_all();

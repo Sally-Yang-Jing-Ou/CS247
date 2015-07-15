@@ -5,7 +5,6 @@
 #include "../Model/GameLogic.h"
 #include "../Controller/Controller.h"
 #include "DeckGUI.h"
-#include "CardTable.h"
 
 class CardTable : public Gtk::Frame {
         public:
