@@ -25,7 +25,10 @@ private:
                 Gtk::Label msg;
         };
 
-        Gtk::Table table;
+        GameLogic * gameLogic_; //game logic is the model
+        Controller * controller_; //controller
+
+        Gtk::Table table; //top level container
 
         DeckGUI deck_;
 
@@ -43,15 +46,12 @@ private:
         Gtk::Image *spades_[13];
 
         PlayerBox playerBox_[4]; //player stats and view
-        Gtk::HBox playerHBox_;
+        Gtk::HBox playerHBox_; //container for player boxes
 
-        Gtk::HBox handBox_; //current hand
+        Gtk::HBox handBox_; //container for current hand
         Gtk::Frame handBoxFrame_;
         Gtk::Button handButton_[13];
         Gtk::Image *hand_[13];
-
-        GameLogic * gameLogic_; //game logic is the model
-        Controller * controller_; //controller
 
         Gtk::Label progressLabel_;
         Gtk::ProgressBar progressBar_;
