@@ -69,6 +69,11 @@ private:
         GameLogic * gameLogic_; //game logic is the model
         Controller * controller_; //controller
 
+        Gtk::Label progressLabel_;
+        Gtk::ProgressBar progressBar_;
+        const double progressMax_ = 52;
+        double progress_ = 0;
+
         void restart();
         void onStartButtonClicked();
         void onCardClicked(int index);

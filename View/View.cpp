@@ -47,14 +47,16 @@ View::PopupMessage::PopupMessage(Gtk::Window &main, string title, string message
 }
 
 
-View::View(Controller * controller, GameLogic * gameLogic) : gameLogic_(gameLogic), controller_(controller), container_(true, 10), handBox_(true, 10), startButton_("Start game"), endButton_("End Game"), 
-                                                            seedLabel_("Seed: "), cardTableView_(4, 13, true), menuBox_(true,2), table(4) {
+View::View(Controller * controller, GameLogic * gameLogic) : gameLogic_(gameLogic), controller_(controller), container_(true, 10), handBox_(true, 10), startButton_("Start Game"), endButton_("End Game"), 
+                                                            seedLabel_("Seed: "), cardTableView_(4, 13, true), menuBox_(true,2), table(4), progressLabel_("Progress in Game ") {
     set_title("Straights");
 
     seedField_.set_text("0");
     menuBox_.pack_start(startButton_, false, false);
-    menuBox_.pack_start(seedLabel_, false, false);
-    menuBox_.pack_start(seedField_, false, false);
+    menuBox_.pack_start(seedLabel_, Gtk::PACK_SHRINK);
+    menuBox_.pack_start(seedField_, Gtk::PACK_SHRINK);
+    menuBox_.pack_start(progressLabel_, false, false);
+    menuBox_.pack_start(progressBar_);
     menuBox_.pack_start(endButton_, false, false);
     startButton_.signal_clicked().connect( sigc::mem_fun( *this, &View::onStartButtonClicked ) );
     endButton_.signal_clicked().connect(sigc::mem_fun(*this, &View::onEndButtonClicked));
@@ -171,12 +173,26 @@ void View::update() {
         } else if (mostRecentCard->getSuit() == HEART){
             hearts_[mostRecentCard->getRank()]->set(deck_.image(mostRecentCard->getRank(), mostRecentCard->getSuit()));
         }
+        progressBar_.set_fraction(progress_/progressMax_);
+        while(Gtk::Main::instance()->events_pending()){
+         Gtk::Main::instance()->iteration();
+        }
+        if(progress_<progressMax_){
+            progress_++;
+        }
     } else { //update discards number
         vector<int> discards = gameLogic_->discardsAmount();
         for(int i = 0; i < 4; i++) {
             stringstream ss;
             ss << discards[i];
             playerBox_[i].discardsSetter(ss.str());
+        }
+        progressBar_.set_fraction(progress_/progressMax_);
+        while(Gtk::Main::instance()->events_pending()){
+         Gtk::Main::instance()->iteration();
+        }
+        if(progress_<progressMax_){
+            progress_++;
         }
     }
     //highlight current player, de-highlight others
@@ -239,6 +255,8 @@ void View::restart() {
         spades_[i]->set(deck_.null());
         hand_[i]->set(deck_.null());
     }
+    progress_=0;
+    progressBar_.set_fraction(progress_/progressMax_);
 }
 
 View::~View() {
