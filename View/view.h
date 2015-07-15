@@ -29,7 +29,6 @@ private:
 
         DeckGUI deck_;
 
-        Gtk::VBox container_; //menu
         Gtk::HBox menuBox_;
         Gtk::Entry seedField_;
         Gtk::Label seedLabel_;

@@ -18,7 +18,7 @@ View::PopupMessage::PopupMessage(Gtk::Window &main, string title, string message
 }
 
 
-View::View(Controller * controller, GameLogic * gameLogic) : gameLogic_(gameLogic), controller_(controller), container_(true, 10), handBox_(true, 10), startButton_("Start Game"), endButton_("End Game"), 
+View::View(Controller * controller, GameLogic * gameLogic) : gameLogic_(gameLogic), controller_(controller), handBox_(true, 10), startButton_("Start Game"), endButton_("End Game"), 
                                                             seedLabel_("Seed: "), cardTableView_(4, 13, true), menuBox_(true,2), table(4), progressLabel_("Progress in Game ") {
     set_title("Straights");
 
@@ -31,8 +31,6 @@ View::View(Controller * controller, GameLogic * gameLogic) : gameLogic_(gameLogi
     menuBox_.pack_start(endButton_, false, false);
     startButton_.signal_clicked().connect( sigc::mem_fun( *this, &View::onStartButtonClicked ) );
     endButton_.signal_clicked().connect(sigc::mem_fun(*this, &View::onEndButtonClicked));
-
-    //container_.pack_start(menuBox_);
 
     table.attach(menuBox_, 0, 1, 0, 1);
 
@@ -59,7 +57,6 @@ View::View(Controller * controller, GameLogic * gameLogic) : gameLogic_(gameLogi
 	handBoxFrame_.set_label( "Hand:" );
 	handBoxFrame_.set_label_align( Gtk::ALIGN_LEFT, Gtk::ALIGN_TOP);
 	handBoxFrame_.set_shadow_type( Gtk::SHADOW_ETCHED_OUT );
-    //container_.pack_start(handBoxFrame_);
 
     for (int i = 0; i < 4; i++) {
         playerBox_[i].rageButton().signal_clicked().connect(sigc::mem_fun(*this, &View::onRageButtonClicked));
@@ -85,7 +82,6 @@ View::View(Controller * controller, GameLogic * gameLogic) : gameLogic_(gameLogi
     table.attach(handBoxFrame_, 0, 1, 3, 4);
     add(table);
 
-    //add(container_);
     show_all();
     gameLogic_->subscribe(this);
 }
