@@ -11,6 +11,7 @@ public:
     ~Log();
     std::string getOutput();
     void log(std::string text);
+    void clearLog();
 private:    
     std::stringstream output_;
 };

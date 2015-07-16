@@ -76,6 +76,7 @@ void View::update() {
 
     if (gameLogic_->isRoundFinished()) {
         PopupMessage dialog(*this, "Round Finished", gameLogic_->roundStats());
+        logger_->message("Round is now finished!");
         int* allPlayerScores = gameLogic_ ->allPlayerScores();
         for (int i = 0; i < 4; i++){
             stringstream scores;
@@ -84,6 +85,7 @@ void View::update() {
         } 
         if (gameLogic_->gameOver()){
             PopupMessage dialog(*this, "Game Over", gameLogic_->winners());
+            logger_->message("Game is now over!");
             for (int i = 0; i < 4; i++){
                 playerBox_[i].setScore("0");
             } 
@@ -97,6 +99,7 @@ void View::onRageButtonClicked(){
 }
 
 void View::restart() {
+    logger_->clearLog();
     for (int i = 0; i < 4; i++) {
         playerBox_[i].setDiscards("0");
         playerBox_[i].activate(false);
@@ -115,4 +118,5 @@ View::~View() {
     delete menuBox_;
     delete handBox_;
     delete cardTable_;
+    delete logger_;
 }

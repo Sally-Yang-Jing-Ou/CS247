@@ -11,6 +11,9 @@ class Logger : public Gtk::Frame, public Observer {
                 Logger(Controller * controller, GameLogic * gameLogic, Log * log);
                 ~Logger();
                 virtual void update();
+                void clearLog();
+                void message(std::string msg);
+
         private:
                 GameLogic * gameLogic_; 
                 Controller * controller_;

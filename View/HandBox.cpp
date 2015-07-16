@@ -83,3 +83,11 @@ void HandBox::update() {
         i++;
     }
 }
+
+void HandBox::resetColors () {
+    Gdk::Color dflt("white smoke");
+    for (int handIndex = 0; handIndex<13; ++handIndex) {
+        handButton_[handIndex].modify_bg(Gtk::STATE_NORMAL, dflt);
+        handButton_[handIndex].modify_bg(Gtk::STATE_PRELIGHT, dflt);
+    } 
+}

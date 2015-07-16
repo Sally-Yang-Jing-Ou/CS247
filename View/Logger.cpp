@@ -23,3 +23,12 @@ Logger::~Logger() {
 void Logger::update() {
     logView_.get_buffer()->set_text(log_->getOutput());
 }
+
+void Logger::clearLog() {
+	logView_.get_buffer()->set_text("");
+    log_->clearLog();
+}
+
+void Logger::message(string msg) {
+	logView_.get_buffer()->set_text(msg);
+}

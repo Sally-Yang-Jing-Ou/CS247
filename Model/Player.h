@@ -13,7 +13,7 @@
 
 class Player {
 public:
-	Player(Log * log);// constructor
+    Player(Log * log);// constructor
     virtual ~Player();  // destructor
     Player( Player& copyPlayer );  // copy constructor
     std::list<Card*> &getDeck(); //getter for player's deck
@@ -27,12 +27,12 @@ public:
     void addCardToDiscards (Card *card);
     Card* playCard(Card card, Table &table, int &theChosenOne);
     Card* discardCard(Card card, Table &table, int &theChosenOne);
-	void addCardToHand(Card* card);
+    void addCardToHand(Card* card);
 
 private:
-	std::list<Card*> PlayerDeck_; //each player's deck of cards
-	std::list<Card*> PlayerDiscards_; //each player's deck of discards
-	int oldScore_;
+    std::list<Card*> PlayerDeck_; //each player's deck of cards
+    std::list<Card*> PlayerDiscards_; //each player's deck of discards
+    int oldScore_;
     Log * log_;
 };
 

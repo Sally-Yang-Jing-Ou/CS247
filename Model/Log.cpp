@@ -14,3 +14,7 @@ void Log::log(string text) {
 string Log::getOutput() {
     return output_.str();
 }
+
+void Log::clearLog() {
+	output_.str("");
+}
