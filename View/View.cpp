@@ -108,7 +108,6 @@ void View::restart() {
     for(int i = ACE; i < RANK_COUNT; i++) {
         handBox_->setHand(i, deck_.null());
     }
-    handBox_->resetColors();
     cardTable_->prepareForRestart();
 
     progress_=0;

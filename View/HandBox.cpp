@@ -31,6 +31,9 @@ HandBox::~HandBox() {
 }
 
 void HandBox::setHand(int index, Glib::RefPtr<Gdk::Pixbuf> buffer) {
+    Gdk::Color dflt("white smoke");
+    handButton_[index].modify_bg(Gtk::STATE_NORMAL, dflt);  //resetting colors
+    handButton_[index].modify_bg(Gtk::STATE_PRELIGHT, dflt);
     hand_[index]->set(deck_->null());
 }
 
@@ -82,12 +85,4 @@ void HandBox::update() {
         hand_[i]->set(deck_->null());
         i++;
     }
-}
-
-void HandBox::resetColors () {
-    Gdk::Color dflt("white smoke");
-    for (int handIndex = 0; handIndex<13; ++handIndex) {
-        handButton_[handIndex].modify_bg(Gtk::STATE_NORMAL, dflt);
-        handButton_[handIndex].modify_bg(Gtk::STATE_PRELIGHT, dflt);
-    } 
 }

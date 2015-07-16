@@ -16,7 +16,6 @@ class HandBox : public Gtk::Frame {
                 HandBox(Controller * controller, GameLogic * gameLogic, View * window, DeckGUI * deck);
                 virtual ~HandBox();
                 void setHand(int index, Glib::RefPtr<Gdk::Pixbuf> buffer);
-                void resetColors();
                 virtual void update();
         private:
                 GameLogic * gameLogic_; //game logic is the model
