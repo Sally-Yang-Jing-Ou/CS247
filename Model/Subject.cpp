@@ -1,6 +1,6 @@
 #include <set>
 #include <iostream>
-#include "subject.h"
+#include "Subject.h"
 #include "../View/Observer.h"
 using namespace std;
 

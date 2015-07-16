@@ -3,7 +3,7 @@
 
 #include <gtkmm.h>
 #include <string>
-#include "view.h"
+#include "View.h"
 
 class View;
 

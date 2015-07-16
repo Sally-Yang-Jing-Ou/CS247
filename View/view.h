@@ -44,8 +44,8 @@ private:
         PlayerBox playerBox_[4]; //player stats and view
         Gtk::HBox playerHBox_; //container for player boxes
 
-        const double progressMax_ = 52;
-        double progress_ = 0;
+        static const int progressMax_ = 52;
+        int progress_ ;
 
         void onRageButtonClicked();
 };

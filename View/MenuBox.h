@@ -5,7 +5,7 @@
 #include "../Model/GameLogic.h"
 #include "../Controller/Controller.h"
 #include <gdkmm.h>
-#include "view.h"
+#include "View.h"
 
 class View;
 

@@ -1,4 +1,4 @@
-#include "view.h"
+#include "View.h"
 #include <vector>
 #include <iostream>
 #include <string>
@@ -6,7 +6,7 @@
 
 using namespace std;
 
-View::View(Controller * controller, GameLogic * gameLogic, Log * log) : gameLogic_(gameLogic), controller_(controller), menuBox_(new MenuBox(controller, gameLogic, this)), handBox_(new HandBox(controller, gameLogic, this, &deck_)), cardTable_(new CardTable(controller, gameLogic, &deck_)), logger_(new Logger(controller, gameLogic, log)), table(4,2,false) {
+View::View(Controller * controller, GameLogic * gameLogic, Log * log) : gameLogic_(gameLogic), controller_(controller), menuBox_(new MenuBox(controller, gameLogic, this)), handBox_(new HandBox(controller, gameLogic, this, &deck_)), cardTable_(new CardTable(controller, gameLogic, &deck_)), logger_(new Logger(controller, gameLogic, log)), table(4,2,false), progress_(0) {
     set_title("Straights");
 
     for (int i = 0; i < 4; i++) {
@@ -41,7 +41,7 @@ void View::update() {
     if(mostRecentCard != NULL) { //update table if a legal play was made
         cardTable_->update();
         
-        menuBox_->updateProgressBar(progress_/progressMax_);
+        menuBox_->updateProgressBar((double)progress_/(double)progressMax_);
         while(Gtk::Main::instance()->events_pending()){
             Gtk::Main::instance()->iteration();
         }
@@ -56,7 +56,7 @@ void View::update() {
             playerBox_[i].setDiscards(ss.str());
         }
     
-        menuBox_->updateProgressBar(progress_/progressMax_);
+        menuBox_->updateProgressBar((double)progress_/(double)progressMax_);
         while(Gtk::Main::instance()->events_pending()){
             Gtk::Main::instance()->iteration();
         }
@@ -75,14 +75,14 @@ void View::update() {
     }
 
     if (gameLogic_->isRoundFinished()) {
-        PopupMessage dialog(*this, "Round Finished", gameLogic_->roundStats());
-        logger_->message("Round is now finished!");
         int* allPlayerScores = gameLogic_ ->allPlayerScores();
         for (int i = 0; i < 4; i++){
             stringstream scores;
             scores << allPlayerScores[i];
             playerBox_[i].setScore(scores.str());
         } 
+        PopupMessage dialog(*this, "Round Finished", gameLogic_->roundStats());
+        logger_->message("Round is now finished!");
         if (gameLogic_->gameOver()){
             PopupMessage dialog(*this, "Game Over", gameLogic_->winners());
             logger_->message("Game is now over!");
@@ -111,7 +111,7 @@ void View::restart() {
     cardTable_->prepareForRestart();
 
     progress_=0;
-    menuBox_->updateProgressBar(progress_/progressMax_);
+    menuBox_->updateProgressBar(progress_/(double)progressMax_);
 }
 
 View::~View() {
