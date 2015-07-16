@@ -84,50 +84,6 @@ bool GameLogic::isCardLegal(Card cardToCheck) {
 	return isLegalPlayInCommand(cardToCheck, true);
 }
 
-void GameLogic::printLegalPlays (std::list<Card*> currentPlayerDeck) {
-	for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
-		if (this->firstTurn_) {
-			cout << " " << "7S";
-			break;
-		}
-		options_printed = false;
-		for (int i = 0; i < 4; i ++) {
-			vector<Card*>* setOfSuit = this->table().returnArrayOfSets()->at(i);
-			if (!setOfSuit->empty() && !options_printed) {
-
-				for (std::vector<Card*>::iterator it2 = setOfSuit->begin(); it2 != setOfSuit->end(); it2++) {
-					if (isLegalPlay((int)((*it)->getRank()), (int)((*it2)->getRank()), (int)((*it)->getSuit()), (int)((*it2)->getSuit()))) {
-						cout << " " << (**it);
-						options_printed = true;
-						break;
-					}
-				}
-			}
-		}
-	}
-}
-
-void GameLogic::printOptions (std::list<Card*> currentPlayerDeck) {
-	this->table_.printTable();
-	cout << "Your hand:";
-	if (!currentPlayerDeck.empty()) {
-		for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
-			cout << " " << (**it);
-		}
-		cout << endl;
-	} else {
-		cout << "" << endl;
-	}
-
-	cout << "Legal plays:";
-	if (!currentPlayerDeck.empty()) {
-		printLegalPlays(currentPlayerDeck);
-		cout << endl;
-	} else {
-		cout << "" << endl;
-	}
-}
-
 bool GameLogic::legalPlayInDeckExists (std::list<Card*> currentPlayerDeck, Table &table) {
 	for (std::list<Card*>::iterator it = currentPlayerDeck.begin(); it != currentPlayerDeck.end(); it++) {
 		if ((*it)->getRank()==SEVEN) {
@@ -271,7 +227,6 @@ bool GameLogic::gameOver () {
 			return true;
 		}
 	}
-
 	return false;
 }
 

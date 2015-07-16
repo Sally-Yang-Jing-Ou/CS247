@@ -16,24 +16,18 @@ Table::~Table() {
     delete arrayOfSets_;
 };
 
-//#define checkRep returnArrayOfSets
-
 vector<vector<Card*>* >* Table::returnArrayOfSets() {
 	return arrayOfSets_;
 }
 
 void Table::placeCard(Card *card) {
-    //checkRep();
     arrayOfSets_->at(card->getSuit())->push_back(card);
-    //checkRep();
 }
 
 void Table::clearTable() {
-    //checkRep();
     for (int i = 0; i < 4; i++) {
         arrayOfSets_->at(i)->clear();
     }
-    //checkRep();
 }
 
 bool lessThan(const Card *lhs, const Card *rhs)
@@ -42,7 +36,6 @@ bool lessThan(const Card *lhs, const Card *rhs)
 }
 
 void Table::printTable() {
-    //checkRep();
 	cout << "Cards on the table:" << endl;
 	cout << "Clubs:";
 	vector<vector<Card*>* >* arrayOfSets = returnArrayOfSets();
@@ -61,5 +54,4 @@ void Table::printTable() {
 			cout << "" << endl;
 		}
 	}
-    //checkRep();
 }

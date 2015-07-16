@@ -9,7 +9,6 @@
 #include "Deck.h"
 #include "Table.h"
 #include "../Card.h"
-#include "../Command.h"
 #include "../View/Observer.h"
 #include "Subject.h"
 #include "Log.h"
@@ -56,8 +55,6 @@ private:
 	bool firstTurn_;
 	bool isLegalPlayInCommand (Card theCard, bool ghost); //if ghost is true, stop side effects from happening
 	bool isLegalPlay (int itRank, int it2Rank, int itSuit, int it2Suit);
-	void printLegalPlays (std::list<Card*> currentPlayerDeck);
-	void printOptions (std::list<Card*> currentPlayerDeck);
 	bool legalPlayInDeckExists (std::list<Card*> currentPlayerDeck, Table &table);
 	Card *mostRecentCard_;
 	bool isRoundFinished_;

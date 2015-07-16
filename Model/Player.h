@@ -6,7 +6,6 @@
 #include <vector>
 #include <string>
 #include "../Card.h"
-#include "../Command.h"
 #include "Table.h"
 #include "Subject.h"
 #include "Log.h"
