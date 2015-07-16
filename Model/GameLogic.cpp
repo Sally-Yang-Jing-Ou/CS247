@@ -179,8 +179,6 @@ void GameLogic::dealCards() {
 			theChosenOne_ = i/13;
 		}
 	}
-
-	//cout << "the chosen one " << theChosenOne_ << endl;
 }
 
 void GameLogic::playTurn(int index) {
@@ -350,6 +348,9 @@ void GameLogic::restartGame(bool resetAll) {
 
 void GameLogic::ragequit() {
 	ComputerPlayer* computerPlayer = new ComputerPlayer(*this->allPlayer_[this->theChosenOne_]);
+	if (this->allPlayer_[this->theChosenOne_] != NULL){
+		delete this->allPlayer_[this->theChosenOne_];
+	}
 	this->allPlayer_[this->theChosenOne_] = computerPlayer;
 	playTurn(-1);
 }
@@ -376,5 +377,3 @@ void GameLogic::removeCurrentPlayers () {
 		allPlayer_.clear();
 	}
 }
-
-

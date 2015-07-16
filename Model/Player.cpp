@@ -18,6 +18,7 @@ Player::Player( Player& copyPlayer ) {
 	PlayerDeck_ = copyPlayer.getDeck();
 	PlayerDiscards_ = copyPlayer.getDiscards();
 	oldScore_ = copyPlayer.getOldScore();
+	log_ = copyPlayer.log_;
 }
 
 std::list<Card*> &Player::getDeck() {
@@ -95,11 +96,13 @@ Card* Player::playCard ( Card card, Table &table, int &theChosenOne ) {
 			
 	assert(!inHand);
 
-    stringstream sstm;
-    sstm << "Player " << theChosenOne + 1 << " plays " << card << "." << endl;
-    log_->log(sstm.str());
-
     cout << "Player " << theChosenOne + 1 << " plays " << card << "." << endl;
+
+    stringstream sstm;
+    sstm << "Player " << theChosenOne + 1 << " plays " << card << ".";
+    string sendThis = sstm.str();
+    log_->log(sendThis);
+
 
     theChosenOne = (theChosenOne + 1) % 4;
     return card1;
@@ -118,11 +121,13 @@ Card* Player::discardCard (Card card, Table &table, int &theChosenOne) {
 
     this->getDiscards().push_back(card1);
 
-    stringstream sstm;
-    sstm << "Player " << theChosenOne + 1 << " discards " << card << "." << endl;
-    log_->log(sstm.str());
-
     cout << "Player " << theChosenOne + 1 << " discards " << card << "." << endl;
+
+    stringstream sstm;
+    sstm << "Player " << theChosenOne + 1 << " discards " << card << ".";
+    string sendThis = sstm.str();
+    log_->log(sendThis);
+
     theChosenOne = (theChosenOne + 1) % 4;
     return NULL;
 }
