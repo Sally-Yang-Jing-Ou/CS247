@@ -1,0 +1,8 @@
+Bonus Feature #1: Progress Bar
+In our straights application, there is a progress bar near the top that shows the current progress of the game. It works based on how many cards have been played. Thus, whenever a player finishes their move, the progress bar will increment.
+
+Bonus Feature #2: Previous Plays Log
+On the right hand side of the application, there is an uneditable text region that displays all the moves the players have made in the current game up until the current turn. Every time a player makes a move, then the log would be updated and display the new move. Upon game over, this record would be cleared.
+
+Bonus Feature #3: Plays Indicator
+Our application tells the players what plays are possible using visual aids. In the bottom of the application where the current player's hand is displayed, there are three possible border colours for the cards. A green border indicates that the play is legal and by clicking the card, that card will be "played" to the table. A red border indicates that the play is legal, and by clicking the card, that card will be "discarded". A light gray border indicates that the play is not legal, and if that card is clicked, then an alert indicating "Invalid move" will be displayed.
