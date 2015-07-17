@@ -7,12 +7,13 @@ using namespace std;
 
 MenuBox::MenuBox(Controller * controller, GameLogic * gameLogic, View * window): HBox(true,2), gameLogic_(gameLogic), controller_(controller), startButton_("Start Game"), endButton_("End Game"), seedLabel_("Seed: "), progressLabel_("Progress in Game "), mainWindow_(window) {
     seedField_.set_text("0");
-    pack_start(startButton_, false, false);
+    
+    pack_start(startButton_);
+    pack_end(endButton_);
     pack_start(seedLabel_, Gtk::PACK_SHRINK);
-    pack_start(seedField_, Gtk::PACK_SHRINK);
-    pack_start(progressLabel_, false, false);
-    pack_start(progressBar_);
-    pack_start(endButton_, false, false);
+    pack_start(seedField_);
+    pack_end(progressBar_);
+    pack_end(progressLabel_, Gtk::PACK_SHRINK);
 
     startButton_.signal_clicked().connect( sigc::mem_fun( *this, &MenuBox::onStartButtonClicked ) );
     endButton_.signal_clicked().connect(sigc::mem_fun(*this, &MenuBox::onEndButtonClicked));
