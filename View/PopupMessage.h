@@ -9,10 +9,10 @@ class View;
 
 class PopupMessage : public Gtk::Dialog { //popup window/dialog for invalid moves or round finishes messages
 public:
-    PopupMessage(Gtk::Window &main, std::string title, std::string message);
+    PopupMessage(Gtk::Window &main, std::string title, std::string message); //constructor
         
 private:
-    Gtk::Label msg;
+    Gtk::Label msg; //message to display
 };
 
 #endif

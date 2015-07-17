@@ -11,7 +11,7 @@ public:
        void unsubscribe( Observer* );
 
 protected:
-       void notify();
+       void notify(); //notify views of model change
 
 private:
        typedef std::set< Observer* > Observers;

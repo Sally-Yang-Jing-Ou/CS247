@@ -7,15 +7,15 @@
 
 class Deck {
 public:
-	Deck();
+	Deck(); //constructor
 	std::vector<Card*> &getMyDeck() ;	// getter for the deck
-	void shuffle();
-    void print();
-    void init();
-	void setSeed(int seed);
+	void shuffle(); //shuffles the deck
+    void print(); //outputs deck in console
+    void init(); //initializes deck
+	void setSeed(int seed); //setter for rng seed
 private:
-	std::vector<Card*> myDeck_;
-	int seed_;
+	std::vector<Card*> myDeck_; //backing data structure for deck
+	int seed_; //seed that'll be passed to mt19937 for rng
 	std::mt19937 rng_;
 };
 

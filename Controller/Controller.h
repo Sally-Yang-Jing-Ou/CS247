@@ -7,12 +7,12 @@
 class Controller {
 public:
     Controller(GameLogic * gameLogic, Log * log);
-    void onPlayerOptionChosen(int playerType); //0 for human, 1 for computer
-    void onRageButtonClicked();
-    void onStartButtonClicked();
-    void onCardClicked(int index);
-    void onEndButtonClicked();
-    void removeCurrentPlayers();
+    void onPlayerOptionChosen(int playerType); //handles when user selects whether a player is human/computer
+    void onRageButtonClicked(); //handles when the ragequit button is clicked
+    void onStartButtonClicked(); //handles when the start button is clicked
+    void onCardClicked(int index); //handles when a card is clicked
+    void onEndButtonClicked(); //handles when the end button is clicked
+    void removeCurrentPlayers(); //cleans up current players
 
 private:
     GameLogic * gameLogic_;

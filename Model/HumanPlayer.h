@@ -7,8 +7,8 @@
 
 class HumanPlayer : public Player { //inherits from Player
 public:
-	HumanPlayer(Log * log);
-	~HumanPlayer();
+	HumanPlayer(Log * log); //constructor
+	~HumanPlayer(); //destructor
 private: 
 
 };

@@ -23,10 +23,10 @@ class HandBox;
 class View : public Gtk::Window, public Observer {
 public:
         View(Controller * controller, GameLogic * gameLogic, Log * log); // where gameLogic is the common interface using facade pattern
-        virtual ~View();
-        virtual void update();
-        void restart();
-        PlayerBox * getPlayerBox(int index);
+        virtual ~View(); //destructor
+        virtual void update(); //updates view
+        void restart(); //restarts game/resets view
+        PlayerBox * getPlayerBox(int index); //getter for PlayerBox
 
 private:
         GameLogic * gameLogic_; //game logic is the model
@@ -34,7 +34,7 @@ private:
 
         Gtk::Table table; //top level container
 
-        DeckGUI deck_;
+        DeckGUI deck_; //allows access to images
 
         MenuBox * menuBox_; //inherits from HBox
         HandBox * handBox_; //inherits from Frame
@@ -47,7 +47,7 @@ private:
         static const int progressMax_ = 52;
         int progress_ ;
 
-        void onRageButtonClicked();
+        void onRageButtonClicked(); //handler for clicking rage button
 };
 
 #endif

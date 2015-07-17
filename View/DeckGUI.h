@@ -6,8 +6,8 @@
 
 class DeckGUI {
 public:
-	DeckGUI();
-	virtual ~DeckGUI();
+	DeckGUI(); //constructor
+	virtual ~DeckGUI(); //destructor
 	Glib::RefPtr<Gdk::Pixbuf> image( Rank f, Suit s ); // Returns the image for the specified card.
 	Glib::RefPtr<Gdk::Pixbuf> null(); // Returns the image to use for the placeholder.
 	const char* imageName(Rank f, Suit s); 

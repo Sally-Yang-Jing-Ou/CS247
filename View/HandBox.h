@@ -13,10 +13,10 @@ class View;
 
 class HandBox : public Gtk::Frame {
         public:
-                HandBox(Controller * controller, GameLogic * gameLogic, View * window, DeckGUI * deck);
-                virtual ~HandBox();
-                void setHand(int index, Glib::RefPtr<Gdk::Pixbuf> buffer);
-                virtual void update();
+                HandBox(Controller * controller, GameLogic * gameLogic, View * window, DeckGUI * deck); //constructor
+                virtual ~HandBox(); //destructor
+                void setHand(int index, Glib::RefPtr<Gdk::Pixbuf> buffer); //sets card image for a specific card in the hand
+                virtual void update(); //updates view
         private:
                 GameLogic * gameLogic_; //game logic is the model
                 Controller * controller_; //controller
@@ -24,12 +24,12 @@ class HandBox : public Gtk::Frame {
                 View * mainWindow_; //handle to main window
 
                 Gtk::HBox handBox_; //container for current hand
-                Gtk::Button handButton_[13];
-                Gtk::Image *hand_[13];
+                Gtk::Button handButton_[13]; //buttons for each card in the hand
+                Gtk::Image *hand_[13]; //images for each button
 
-                DeckGUI * deck_;
+                DeckGUI * deck_; // provides card images
 
-                void onCardClicked(int index);
+                void onCardClicked(int index); //handler for card clicked
         };
 
 #endif
