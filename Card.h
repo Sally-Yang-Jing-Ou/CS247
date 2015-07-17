@@ -13,10 +13,10 @@ class Card{
 	friend std::istream &operator>>(std::istream &, Card &);
 
 public:
-	Card(Suit, Rank);
-	Suit getSuit() const;
-	Rank getRank() const;
-	std::string getRankInString () const;
+	Card(Suit, Rank); //constructor
+	Suit getSuit() const; //getter for suit
+	Rank getRank() const; //getter for rank
+	std::string getRankInString () const; //getter for rank casted to string
 
 private:
 	Suit suit_;
