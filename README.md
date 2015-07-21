@@ -1,8 +1,23 @@
-# CS247
+#Straights Card Game in C++
 
-## MOTIVATION:
+Straights is a card game implemented in C++ for CS 247 project.
 
-##Just pretend this project is a hackathon where you're building data structures in C++
+How to play [Straights] (https://www.student.cs.uwaterloo.ca/~cs247/current/Assignments/P1/HowToPlayStraights.pdf)
 
-i cri evrytiem
+Run it yourself
+---------------
+
+Install gtkmm (for the UI), a graphics library for C++.
+
+To run the executable:
+
+    make
+    ./straights
+
+
+
+    
+
+
+
 
